@@ -77,17 +77,17 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnNhanVien5" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnPhieuTra" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnSach" alignment="1" max="32767" attributes="0"/>
-                      <Component id="btnNhanVien4" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnNhanVien1" alignment="1" max="32767" attributes="0"/>
-                      <Component id="btnNhanVien2" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnNhanVien3" alignment="1" pref="209" max="32767" attributes="0"/>
-                      <Component id="btnMuon1" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnHocSinh1" alignment="1" max="32767" attributes="0"/>
+                      <Component id="btnTheLoai" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnThongKe" alignment="1" max="32767" attributes="0"/>
+                      <Component id="btnSuKien" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnMuonPhong" alignment="1" pref="209" max="32767" attributes="0"/>
+                      <Component id="btnNhaXuatBan" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnTaiKhoan" alignment="1" max="32767" attributes="0"/>
                       <Component id="btnNhanVien" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnSach1" alignment="1" max="32767" attributes="0"/>
-                      <Component id="btnMuon" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnTacGia" alignment="1" max="32767" attributes="0"/>
+                      <Component id="btnPhieuMuon" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnHocSinh" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -99,27 +99,27 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="btnSach" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnMuon" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnPhieuMuon" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnHocSinh" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnNhanVien" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnSach1" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnTacGia" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnMuon1" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnNhaXuatBan" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnHocSinh1" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnTaiKhoan" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnNhanVien2" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnSuKien" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnNhanVien3" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnMuonPhong" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnNhanVien4" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnTheLoai" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnNhanVien1" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnThongKe" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnNhanVien5" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnPhieuTra" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace pref="102" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -166,7 +166,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSachActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnMuon">
+        <Component class="javax.swing.JButton" name="btnPhieuMuon">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="59" green="47" red="2a" type="rgb"/>
@@ -183,7 +183,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMuonActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPhieuMuonActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnHocSinh">
@@ -206,7 +206,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHocSinhActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnNhanVien1">
+        <Component class="javax.swing.JButton" name="btnThongKe">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="59" green="47" red="2a" type="rgb"/>
@@ -223,10 +223,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNhanVien1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnThongKeActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnHocSinh1">
+        <Component class="javax.swing.JButton" name="btnTaiKhoan">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="59" green="47" red="2a" type="rgb"/>
@@ -243,10 +243,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHocSinh1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTaiKhoanActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnMuon1">
+        <Component class="javax.swing.JButton" name="btnNhaXuatBan">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="59" green="47" red="2a" type="rgb"/>
@@ -263,10 +263,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMuon1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNhaXuatBanActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnSach1">
+        <Component class="javax.swing.JButton" name="btnTacGia">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="59" green="47" red="2a" type="rgb"/>
@@ -283,10 +283,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSach1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTacGiaActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnNhanVien2">
+        <Component class="javax.swing.JButton" name="btnSuKien">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="59" green="47" red="2a" type="rgb"/>
@@ -303,10 +303,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNhanVien2ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSuKienActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnNhanVien3">
+        <Component class="javax.swing.JButton" name="btnMuonPhong">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="59" green="47" red="2a" type="rgb"/>
@@ -323,10 +323,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNhanVien3ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMuonPhongActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnNhanVien4">
+        <Component class="javax.swing.JButton" name="btnTheLoai">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="59" green="47" red="2a" type="rgb"/>
@@ -343,10 +343,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNhanVien4ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTheLoaiActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnNhanVien5">
+        <Component class="javax.swing.JButton" name="btnPhieuTra">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="59" green="47" red="2a" type="rgb"/>
@@ -363,7 +363,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNhanVien5ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPhieuTraActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

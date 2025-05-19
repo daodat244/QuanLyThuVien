@@ -32,4 +32,41 @@ public class TacGiaDAO {
         }
         return tacGiaList;
     }
+    
+    // Phương thức thêm mới tác giả
+    public boolean addTacGia(TacGia tacGia) throws SQLException {
+        String query = "INSERT INTO tacgia (tentacgia, namsinh, quequan, mota) VALUES (?, ?, ?, ?)";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, tacGia.getTentacgia());
+            stmt.setInt(2, tacGia.getNamsinh());
+            stmt.setString(3, tacGia.getQuequan());
+            stmt.setString(4, tacGia.getMota());
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    // Phương thức cập nhật thông tin tác giả
+    public boolean updateTacGia(TacGia tacGia) throws SQLException {
+        String query = "UPDATE tacgia SET tentacgia = ?, namsinh = ?, quequan = ?, mota = ? WHERE matacgia = ?";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, tacGia.getTentacgia());
+            stmt.setInt(2, tacGia.getNamsinh());
+            stmt.setString(3, tacGia.getQuequan());
+            stmt.setString(4, tacGia.getMota());
+            stmt.setInt(5, tacGia.getMatacgia());
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    // Phương thức xóa tác giả
+    public boolean deleteTacGia(int matacgia) throws SQLException {
+        String query = "DELETE FROM tacgia WHERE matacgia = ?";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, matacgia);
+            return stmt.executeUpdate() > 0;
+        }
+    }
 }
