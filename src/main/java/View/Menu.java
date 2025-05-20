@@ -4,8 +4,7 @@
  */
 package View;
 import Control.ConnectToSQLServer;
-import View.ChucNang.PanelSach;
-import View.ChucNang.PanelTacGia;
+import View.ChucNang.*;
 import java.awt.CardLayout;
 import java.sql.Connection;
 
@@ -22,8 +21,12 @@ public class Menu extends javax.swing.JFrame {
         initComponents();
         PanelSach panelKhoSach = new PanelSach();
         PanelTacGia panelTacGia = new PanelTacGia();// tạo instance từ class KhoSach
+        PanelNhaXuatBan panelNhaXuatBan = new PanelNhaXuatBan();
+        PanelTheLoai panelTheLoai = new PanelTheLoai();
+        panelContent.add(panelNhaXuatBan, "nhaXuatBan");
         panelContent.add(panelKhoSach, "khoSach");
         panelContent.add(panelTacGia, "tacGia");// thêm vào CardLayout với tên
+        panelContent.add(panelTheLoai, "theLoai");
         panelContent.setVisible(false); // <== Thêm dòng này để ẩn ban đầu
     }
 
@@ -248,7 +251,7 @@ public class Menu extends javax.swing.JFrame {
         panelLogo.setPreferredSize(new java.awt.Dimension(1366, 60));
 
         lblHome.setBackground(new java.awt.Color(42, 71, 89));
-        lblHome.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        lblHome.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblHome.setForeground(new java.awt.Color(238, 238, 238));
         lblHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/library2.png"))); // NOI18N
         lblHome.setText("QUẢN LÝ THƯ VIỆN");
@@ -270,7 +273,7 @@ public class Menu extends javax.swing.JFrame {
             panelLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLogoLayout.createSequentialGroup()
                 .addComponent(lblHome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1086, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1074, Short.MAX_VALUE)
                 .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(14, 14, 14))
         );
@@ -322,7 +325,9 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void btnTheLoaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTheLoaiActionPerformed
-        // TODO add your handling code here:
+        CardLayout cl = (CardLayout)(panelContent.getLayout());
+        panelContent.setVisible(true);
+        cl.show(panelContent, "theLoai");
     }//GEN-LAST:event_btnTheLoaiActionPerformed
 
     private void btnMuonPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMuonPhongActionPerformed
@@ -340,7 +345,9 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTacGiaActionPerformed
 
     private void btnNhaXuatBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhaXuatBanActionPerformed
-        // TODO add your handling code here:
+        CardLayout cl = (CardLayout)(panelContent.getLayout());
+        panelContent.setVisible(true);
+        cl.show(panelContent, "nhaXuatBan");
     }//GEN-LAST:event_btnNhaXuatBanActionPerformed
 
     private void btnTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaiKhoanActionPerformed

@@ -32,4 +32,41 @@ public class NhaXuatBanDAO {
         }
         return nxbList;
     }
+    
+        // Phương thức thêm mới tác giả
+    public boolean addNXB(NhaXuatBan nxb) throws SQLException {
+        String query = "INSERT INTO nhaxuatban (tennxb, sdt, email, diachi) VALUES (?, ?, ?, ?)";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, nxb.getTennxb());
+            stmt.setString(2, nxb.getSdt());
+            stmt.setString(3, nxb.getEmail());
+            stmt.setString(4, nxb.getDiachi());
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    // Phương thức cập nhật thông tin tác giả
+    public boolean updateNXB(NhaXuatBan nxb) throws SQLException {
+        String query = "UPDATE nhaxuatban SET tennxb = ?, sdt = ?, email = ?, diachi = ? WHERE manxb = ?";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, nxb.getTennxb());
+            stmt.setString(2, nxb.getSdt());
+            stmt.setString(3, nxb.getEmail());
+            stmt.setString(4, nxb.getDiachi());
+            stmt.setInt(5, nxb.getManxb());
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    // Phương thức xóa tác giả
+    public boolean deleteNXB(int manxb) throws SQLException {
+        String query = "DELETE FROM nhaxuatban WHERE manxb = ?";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, manxb);
+            return stmt.executeUpdate() > 0;
+        }
+    }
 }
