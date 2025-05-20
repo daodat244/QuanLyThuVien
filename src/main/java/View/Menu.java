@@ -7,6 +7,7 @@ import Control.ConnectToSQLServer;
 import View.ChucNang.*;
 import java.awt.CardLayout;
 import java.sql.Connection;
+import UI.ButtonColorHandler;
 
 /**
  *
@@ -14,9 +15,8 @@ import java.sql.Connection;
  */
 public class Menu extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Menu
-     */
+    private ButtonColorHandler buttonColorHandler;
+
     public Menu() {
         initComponents();
         PanelSach panelKhoSach = new PanelSach();
@@ -24,10 +24,16 @@ public class Menu extends javax.swing.JFrame {
         PanelNhaXuatBan panelNhaXuatBan = new PanelNhaXuatBan();
         PanelTheLoai panelTheLoai = new PanelTheLoai();
         panelContent.add(panelNhaXuatBan, "nhaXuatBan");
-        panelContent.add(panelKhoSach, "khoSach");
+        panelContent.add(panelKhoSach, "sach");
         panelContent.add(panelTacGia, "tacGia");// thêm vào CardLayout với tên
         panelContent.add(panelTheLoai, "theLoai");
         panelContent.setVisible(false); // <== Thêm dòng này để ẩn ban đầu
+        
+        buttonColorHandler = new ButtonColorHandler(
+            btnSach, btnPhieuMuon, btnHocSinh, btnNhanVien, btnTacGia,
+            btnNhaXuatBan, btnTaiKhoan, btnSuKien, btnMuonPhong, btnTheLoai,
+            btnThongKe, btnPhieuTra
+        );
     }
 
     /**
@@ -62,6 +68,7 @@ public class Menu extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(1366, 768));
         setPreferredSize(new java.awt.Dimension(1366, 768));
         setResizable(false);
+        setSize(new java.awt.Dimension(1366, 768));
 
         MenuLayout.setPreferredSize(new java.awt.Dimension(230, 768));
 
@@ -70,6 +77,7 @@ public class Menu extends javax.swing.JFrame {
         btnNhanVien.setForeground(new java.awt.Color(238, 238, 238));
         btnNhanVien.setText("DS NHÂN VIÊN");
         btnNhanVien.setBorder(null);
+        btnNhanVien.setFocusPainted(false);
         btnNhanVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNhanVienActionPerformed(evt);
@@ -81,6 +89,8 @@ public class Menu extends javax.swing.JFrame {
         btnSach.setForeground(new java.awt.Color(238, 238, 238));
         btnSach.setText("KHO SÁCH");
         btnSach.setBorder(null);
+        btnSach.setBorderPainted(false);
+        btnSach.setFocusPainted(false);
         btnSach.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSachActionPerformed(evt);
@@ -92,6 +102,7 @@ public class Menu extends javax.swing.JFrame {
         btnPhieuMuon.setForeground(new java.awt.Color(238, 238, 238));
         btnPhieuMuon.setText("PHIẾU MƯỢN");
         btnPhieuMuon.setBorder(null);
+        btnPhieuMuon.setFocusPainted(false);
         btnPhieuMuon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPhieuMuonActionPerformed(evt);
@@ -103,6 +114,7 @@ public class Menu extends javax.swing.JFrame {
         btnHocSinh.setForeground(new java.awt.Color(238, 238, 238));
         btnHocSinh.setText("DS SINH VIÊN");
         btnHocSinh.setBorder(null);
+        btnHocSinh.setFocusPainted(false);
         btnHocSinh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHocSinhActionPerformed(evt);
@@ -114,6 +126,7 @@ public class Menu extends javax.swing.JFrame {
         btnThongKe.setForeground(new java.awt.Color(238, 238, 238));
         btnThongKe.setText("THỐNG KÊ");
         btnThongKe.setBorder(null);
+        btnThongKe.setFocusPainted(false);
         btnThongKe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThongKeActionPerformed(evt);
@@ -125,6 +138,7 @@ public class Menu extends javax.swing.JFrame {
         btnTaiKhoan.setForeground(new java.awt.Color(238, 238, 238));
         btnTaiKhoan.setText("TÀI KHOẢN");
         btnTaiKhoan.setBorder(null);
+        btnTaiKhoan.setFocusPainted(false);
         btnTaiKhoan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTaiKhoanActionPerformed(evt);
@@ -136,6 +150,7 @@ public class Menu extends javax.swing.JFrame {
         btnNhaXuatBan.setForeground(new java.awt.Color(238, 238, 238));
         btnNhaXuatBan.setText("NHÀ XUẤT BẢN");
         btnNhaXuatBan.setBorder(null);
+        btnNhaXuatBan.setFocusPainted(false);
         btnNhaXuatBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNhaXuatBanActionPerformed(evt);
@@ -147,6 +162,7 @@ public class Menu extends javax.swing.JFrame {
         btnTacGia.setForeground(new java.awt.Color(238, 238, 238));
         btnTacGia.setText("TÁC GIẢ");
         btnTacGia.setBorder(null);
+        btnTacGia.setFocusPainted(false);
         btnTacGia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTacGiaActionPerformed(evt);
@@ -158,6 +174,7 @@ public class Menu extends javax.swing.JFrame {
         btnSuKien.setForeground(new java.awt.Color(238, 238, 238));
         btnSuKien.setText("SỰ KIỆN");
         btnSuKien.setBorder(null);
+        btnSuKien.setFocusPainted(false);
         btnSuKien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSuKienActionPerformed(evt);
@@ -169,6 +186,7 @@ public class Menu extends javax.swing.JFrame {
         btnMuonPhong.setForeground(new java.awt.Color(238, 238, 238));
         btnMuonPhong.setText("MƯỢN PHÒNG HỌC");
         btnMuonPhong.setBorder(null);
+        btnMuonPhong.setFocusPainted(false);
         btnMuonPhong.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMuonPhongActionPerformed(evt);
@@ -180,6 +198,7 @@ public class Menu extends javax.swing.JFrame {
         btnTheLoai.setForeground(new java.awt.Color(238, 238, 238));
         btnTheLoai.setText("THỂ LOẠI SÁCH");
         btnTheLoai.setBorder(null);
+        btnTheLoai.setFocusPainted(false);
         btnTheLoai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTheLoaiActionPerformed(evt);
@@ -191,6 +210,7 @@ public class Menu extends javax.swing.JFrame {
         btnPhieuTra.setForeground(new java.awt.Color(238, 238, 238));
         btnPhieuTra.setText("PHIẾU TRẢ");
         btnPhieuTra.setBorder(null);
+        btnPhieuTra.setFocusPainted(false);
         btnPhieuTra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPhieuTraActionPerformed(evt);
@@ -244,7 +264,7 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(btnThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPhieuTra, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(102, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panelLogo.setBackground(new java.awt.Color(42, 71, 89));
@@ -261,6 +281,7 @@ public class Menu extends javax.swing.JFrame {
         btnLogOut.setForeground(new java.awt.Color(102, 153, 255));
         btnLogOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/out2.png"))); // NOI18N
         btnLogOut.setBorder(null);
+        btnLogOut.setFocusPainted(false);
         btnLogOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLogOutActionPerformed(evt);
@@ -312,8 +333,8 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(panelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(MenuLayout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panelContent, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panelContent, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MenuLayout, javax.swing.GroupLayout.PREFERRED_SIZE, 672, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -328,6 +349,7 @@ public class Menu extends javax.swing.JFrame {
         CardLayout cl = (CardLayout)(panelContent.getLayout());
         panelContent.setVisible(true);
         cl.show(panelContent, "theLoai");
+        buttonColorHandler.changeButtonColor(btnTheLoai);
     }//GEN-LAST:event_btnTheLoaiActionPerformed
 
     private void btnMuonPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMuonPhongActionPerformed
@@ -342,12 +364,14 @@ public class Menu extends javax.swing.JFrame {
         CardLayout cl = (CardLayout)(panelContent.getLayout());
         panelContent.setVisible(true);
         cl.show(panelContent, "tacGia");
+        buttonColorHandler.changeButtonColor(btnTacGia);
     }//GEN-LAST:event_btnTacGiaActionPerformed
 
     private void btnNhaXuatBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhaXuatBanActionPerformed
         CardLayout cl = (CardLayout)(panelContent.getLayout());
         panelContent.setVisible(true);
         cl.show(panelContent, "nhaXuatBan");
+        buttonColorHandler.changeButtonColor(btnNhaXuatBan);
     }//GEN-LAST:event_btnNhaXuatBanActionPerformed
 
     private void btnTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaiKhoanActionPerformed
@@ -369,7 +393,8 @@ public class Menu extends javax.swing.JFrame {
     private void btnSachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSachActionPerformed
         CardLayout cl = (CardLayout)(panelContent.getLayout());
         panelContent.setVisible(true);
-        cl.show(panelContent, "khoSach");
+        cl.show(panelContent, "sach");
+        buttonColorHandler.changeButtonColor(btnSach);
     }//GEN-LAST:event_btnSachActionPerformed
 
     private void btnNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhanVienActionPerformed
