@@ -19,7 +19,10 @@ import java.util.List;
  * @author Asus
  */
 public class SuKienDAO {
-    // Lấy danh sách tất cả sự kiện từ cơ sở dữ liệu
+// Phương thức tiện ích để chuyển đổi Timestamp thành LocalDateTime
+        private LocalDateTime convertTimestampToLocalDateTime(Timestamp timestamp) {
+        return timestamp != null ? timestamp.toLocalDateTime() : null;
+    }
     public List<SuKien> getAllSuKien() throws SQLException {
         List<SuKien> skList = new ArrayList<>();
         String query = "SELECT * FROM sukien";
@@ -27,11 +30,11 @@ public class SuKienDAO {
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
-            while (rs.next()) {
+            while (rs.next()) {                
                 SuKien sk = new SuKien(
                     rs.getInt("masukien"),
                     rs.getString("tensukien"),
-                    rs.getString("tgiantochuc"),
+                    convertTimestampToLocalDateTime(rs.getTimestamp("tgiantochuc")),
                     rs.getString("mota")
                 );
                 skList.add(sk);
@@ -47,7 +50,10 @@ public class SuKienDAO {
              PreparedStatement stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, sk.getTensukien());
-            stmt.setString(2, sk.getTgiantochuc());
+            
+            LocalDateTime tgiantochuc = sk.getTgiantochuc();
+            stmt.setTimestamp(2, tgiantochuc != null ? Timestamp.valueOf(tgiantochuc) : null);
+            
             stmt.setString(3, sk.getMota());
             return stmt.executeUpdate() > 0;
         }
@@ -60,7 +66,8 @@ public class SuKienDAO {
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, sk.getTensukien());
-            stmt.setTimestamp(2, Timestamp.valueOf(sk.getTgiantochuc()));
+            LocalDateTime tgiantochuc = sk.getTgiantochuc();
+            stmt.setTimestamp(2, tgiantochuc != null ? Timestamp.valueOf(tgiantochuc) : null);
             stmt.setString(3, sk.getMota());
             stmt.setInt(4, sk.getMasukien());
             return stmt.executeUpdate() > 0;

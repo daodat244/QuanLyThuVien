@@ -368,10 +368,10 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="btnthemSuKien">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Th&#xea;m s&#x1ef1; ki&#x1ec7;n"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="13" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Th&#xea;m s&#x1ef1; ki&#x1ec7;n"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnthemSuKienActionPerformed"/>
@@ -379,10 +379,10 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnsuaSuKien">
               <Properties>
+                <Property name="text" type="java.lang.String" value="S&#x1eed;a s&#x1ef1; ki&#x1ec7;n"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="13" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="S&#x1eed;a s&#x1ef1; ki&#x1ec7;n"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnsuaSuKienActionPerformed"/>

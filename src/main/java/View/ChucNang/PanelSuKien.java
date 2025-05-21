@@ -10,16 +10,9 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-
-import com.github.lgooddatepicker.components.CalendarPanel;
-import com.github.lgooddatepicker.components.TimePicker;
-import java.sql.Date;
-
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.table.DefaultTableModel;
@@ -363,11 +356,11 @@ public class PanelSuKien extends javax.swing.JPanel {
     }//GEN-LAST:event_btnthemSuKienActionPerformed
 
     private void btnsuaSuKienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsuaSuKienActionPerformed
-        // TODO add your handling code here:
+        updateSuKien();
     }//GEN-LAST:event_btnsuaSuKienActionPerformed
 
     private void btnxoaSuKienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxoaSuKienActionPerformed
-        // TODO add your handling code here:
+        deleteSuKien();
     }//GEN-LAST:event_btnxoaSuKienActionPerformed
 
     private void tableSuKienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableSuKienMouseClicked
@@ -409,11 +402,14 @@ public class PanelSuKien extends javax.swing.JPanel {
             List<SuKien> skList = suKienDAO.getAllSuKien();
             DefaultTableModel model = (DefaultTableModel) tableSuKien.getModel();
             model.setRowCount(0); // Xóa dữ liệu cũ
+            // Định dạng LocalDateTime
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
             for (SuKien suKien : skList) {
+                String formattedDateTime = suKien.getTgiantochuc() != null ? suKien.getTgiantochuc().format(formatter) : "";
                 model.addRow(new Object[]{
                     suKien.getMasukien(),
                     suKien.getTensukien(),
-                    suKien.getTgiantochuc(),
+                    formattedDateTime,
                     suKien.getMota()
                 });
             }
@@ -441,13 +437,13 @@ public class PanelSuKien extends javax.swing.JPanel {
             return;
         }
 
-        // Kết hợp ngày và giờ thành LocalDateTime và định dạng
+        // Kết hợp ngày và giờ thành LocalDateTime
         LocalDateTime dateTime = LocalDateTime.of(selectedDate, selectedTime);
+        suKien.setTgiantochuc(dateTime); // Gán trực tiếp LocalDateTime cho tgiantochuc
+
+        // Định dạng để hiển thị trên txtDateTimeSuKien
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         String formattedDateTime = dateTime.format(formatter);
-        suKien.setTgiantochuc(formattedDateTime); // Giả sử SuKien có thuộc tính dateTime kiểu String
-
-        // Cập nhật txtDateTimeSuKien
         txtDateTimeSuKien.setText(formattedDateTime);
 
         // Thêm vào cơ sở dữ liệu
@@ -457,7 +453,7 @@ public class PanelSuKien extends javax.swing.JPanel {
             DefaultTableModel model = (DefaultTableModel) tableSuKien.getModel();
             model.addRow(new Object[] {
                 suKien.getTensukien(),
-                suKien.getTgiantochuc(),
+                formattedDateTime,
                 suKien.getMota()
             });
             loadTableData(); // Tải lại dữ liệu bảng
@@ -469,6 +465,78 @@ public class PanelSuKien extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(this, "Lỗi khi thêm sự kiện: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
 }
+    
+        private void updateSuKien() {
+        int row = tableSuKien.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một tác giả để sửa!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+        // Tạo đối tượng SuKien
+        SuKien suKien = new SuKien();
+        suKien.setMasukien(Integer.parseInt(tableSuKien.getValueAt(row, 0).toString()));
+        suKien.setTensukien(txtTenSuKien.getText().trim());
+        suKien.setMota(txtMoTaSuKien.getText().trim());
+
+        // Lấy ngày và giờ từ DatePicker và TimePicker
+        LocalDate selectedDate = calendarSuKien.getSelectedDate();
+        LocalTime selectedTime = timeSuKien.getTime();
+
+        // Kiểm tra dữ liệu đầu vào
+        if (selectedDate == null || selectedTime == null || suKien.getTensukien().isEmpty() || suKien.getMota().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ: tên, mô tả, ngày và giờ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Kết hợp ngày và giờ thành LocalDateTime
+        LocalDateTime dateTime = LocalDateTime.of(selectedDate, selectedTime);
+        suKien.setTgiantochuc(dateTime); // Gán trực tiếp LocalDateTime cho tgiantochuc
+
+        // Định dạng để hiển thị trên txtDateTimeSuKien
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        String formattedDateTime = dateTime.format(formatter);
+        txtDateTimeSuKien.setText(formattedDateTime);
+
+
+            if (suKienDAO.updateSuKien(suKien)) {
+                JOptionPane.showMessageDialog(this, "Sửa sự kiện thành công!");
+                loadTableData();
+                clearFields();
+            } else {
+                JOptionPane.showMessageDialog(this, "Sửa sự kiện thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi sửa sự kiện: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void deleteSuKien() {
+        int row = tableSuKien.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sự kiện để xóa!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa sự kiện này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                int masukien = Integer.parseInt(tableSuKien.getValueAt(row, 0).toString());
+                if (suKienDAO.deleteSuKien(masukien)) {
+                    JOptionPane.showMessageDialog(this, "Xóa sự kiện thành công!");
+                    loadTableData();
+                    clearFields();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Xóa sự kiện thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi xóa sự kiện: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 private void clearFields() {
         txtTenSuKien.setText("");
         txtDateTimeSuKien.setText("");
