@@ -23,15 +23,22 @@ public class Menu extends javax.swing.JFrame {
         PanelTacGia panelTacGia = new PanelTacGia();// tạo instance từ class KhoSach
         PanelNhaXuatBan panelNhaXuatBan = new PanelNhaXuatBan();
         PanelTheLoai panelTheLoai = new PanelTheLoai();
+        PanelSuKien panelSuKien = new PanelSuKien();       
+        PanelMuonPhong panelMuonPhong = new PanelMuonPhong();
+        
         panelContent.add(panelNhaXuatBan, "nhaXuatBan");
         panelContent.add(panelKhoSach, "sach");
         panelContent.add(panelTacGia, "tacGia");// thêm vào CardLayout với tên
         panelContent.add(panelTheLoai, "theLoai");
+        panelContent.add(panelSuKien, "suKien");
+        panelContent.add(panelMuonPhong, "muonPhong");
+
+        
         panelContent.setVisible(false); // <== Thêm dòng này để ẩn ban đầu
         
         buttonColorHandler = new ButtonColorHandler(
             btnSach, btnPhieuMuon, btnHocSinh, btnNhanVien, btnTacGia,
-            btnNhaXuatBan, btnTaiKhoan, btnSuKien, btnMuonPhong, btnTheLoai,
+            btnNhaXuatBan, btnTaiKhoan, btnSuKien, btnMuonPhong, btnTheLoai,    
             btnThongKe, btnPhieuTra
         );
     }
@@ -353,11 +360,19 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTheLoaiActionPerformed
 
     private void btnMuonPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMuonPhongActionPerformed
-        // TODO add your handling code here:
+        //(TIENDAT2) TODO add your handling code here:
+        CardLayout cl = (CardLayout) (panelContent.getLayout());
+        panelContent.setVisible(true);
+        cl.show(panelContent, "muonPhong");
+        buttonColorHandler.changeButtonColor(btnMuonPhong);
     }//GEN-LAST:event_btnMuonPhongActionPerformed
 
     private void btnSuKienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuKienActionPerformed
-        // TODO add your handling code here:
+        //(TIENDAT2) TODO add your handling code here:
+        CardLayout cl = (CardLayout) (panelContent.getLayout());
+        panelContent.setVisible(true);
+        cl.show(panelContent, "suKien");
+        buttonColorHandler.changeButtonColor(btnSuKien);
     }//GEN-LAST:event_btnSuKienActionPerformed
 
     private void btnTacGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTacGiaActionPerformed
