@@ -28,6 +28,14 @@ public class PanelSach extends javax.swing.JPanel {
         initComponents();
         loadComboBoxes();
         loadTableData();
+            txtTimKiem.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { searchSach(); }
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { searchSach(); }
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { searchSach(); }
+        });
     }
 
     /**
@@ -58,7 +66,7 @@ public class PanelSach extends javax.swing.JPanel {
         btnXoa = new javax.swing.JButton();
         TimKiem = new javax.swing.JLabel();
         txtTimKiem = new javax.swing.JTextField();
-        cbbTimKiem = new javax.swing.JComboBox<>();
+        cbTimKiem = new javax.swing.JComboBox<>();
         panelTable = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableSach = new javax.swing.JTable();
@@ -208,8 +216,14 @@ public class PanelSach extends javax.swing.JPanel {
         TimKiem.setText("Tìm Kiếm:");
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimKiemActionPerformed(evt);
+            }
+        });
 
-        cbbTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cbTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cbTimKiem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã sách", "Tên sách" }));
 
         javax.swing.GroupLayout panelButtonLayout = new javax.swing.GroupLayout(panelButton);
         panelButton.setLayout(panelButtonLayout);
@@ -225,7 +239,7 @@ public class PanelSach extends javax.swing.JPanel {
                 .addGap(106, 106, 106)
                 .addComponent(TimKiem)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbbTimKiem, 0, 117, Short.MAX_VALUE)
+                .addComponent(cbTimKiem, 0, 117, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31))
@@ -238,7 +252,7 @@ public class PanelSach extends javax.swing.JPanel {
                     .addComponent(TimKiem)
                     .addGroup(panelButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbbTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cbTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -420,6 +434,10 @@ public class PanelSach extends javax.swing.JPanel {
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         deleteSach();
     }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
+        searchSach();
+    }//GEN-LAST:event_txtTimKiemActionPerformed
     
     private void loadComboBoxes() {
         try {
@@ -601,6 +619,67 @@ public class PanelSach extends javax.swing.JPanel {
         }
     }
     
+    private void searchSach() {
+    try {
+        String searchText = txtTimKiem.getText().trim();
+        String searchCriteria = (String) cbTimKiem.getSelectedItem();
+
+        List<Sach> sachList = sachDAO.getAllSachWithDetails();
+        DefaultTableModel model = (DefaultTableModel) tableSach.getModel();
+        model.setRowCount(0);
+
+        for (Sach sach : sachList) {
+            boolean match = false;
+            String tenTacGia = "";
+            String tenNXB = "";
+            String tenTheLoai = "";
+
+            // Lấy tên từ các combo box để hiển thị
+            for (int i = 0; i < cbTacGia.getItemCount(); i++) {
+                if (cbTacGia.getItemAt(i).getMatacgia() == sach.getMatacgia()) {
+                    tenTacGia = cbTacGia.getItemAt(i).getTentacgia();
+                    break;
+                }
+            }
+            for (int i = 0; i < cbNXB.getItemCount(); i++) {
+                if (cbNXB.getItemAt(i).getManxb() == sach.getManxb()) {
+                    tenNXB = cbNXB.getItemAt(i).getTennxb();
+                    break;
+                }
+            }
+            for (int i = 0; i < cbTheLoai.getItemCount(); i++) {
+                if (cbTheLoai.getItemAt(i).getMatheloai() == sach.getMatheloai()) {
+                    tenTheLoai = cbTheLoai.getItemAt(i).getTentheloai();
+                    break;
+                }
+            }
+
+            // Kiểm tra tiêu chí tìm kiếm
+            if (searchCriteria.equals("Mã sách") && !searchText.isEmpty()) {
+                match = String.valueOf(sach.getMasach()).contains(searchText);
+            } else if (searchCriteria.equals("Tên sách") && !searchText.isEmpty()) {
+                match = sach.getTensach().toLowerCase().contains(searchText.toLowerCase());
+            } else if (searchText.isEmpty()) {
+                match = true; // Hiển thị tất cả nếu không có từ khóa
+            }
+
+            if (match) {
+                model.addRow(new Object[]{
+                    sach.getMasach(),
+                    sach.getTensach(),
+                    tenTacGia,
+                    tenNXB,
+                    tenTheLoai,
+                    sach.getNamxb(),
+                    sach.getSotrang()
+                });
+            }
+        }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm sách: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
+}
+    
     private void clearFields() {
         txtTenSach.setText("");
         txtNamXB.setText("");
@@ -624,7 +703,7 @@ public class PanelSach extends javax.swing.JPanel {
     private javax.swing.JComboBox<NhaXuatBan> cbNXB;
     private javax.swing.JComboBox<TacGia> cbTacGia;
     private javax.swing.JComboBox<TheLoai> cbTheLoai;
-    private javax.swing.JComboBox<String> cbbTimKiem;
+    private javax.swing.JComboBox<String> cbTimKiem;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

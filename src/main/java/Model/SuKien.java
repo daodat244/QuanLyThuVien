@@ -13,15 +13,17 @@ import java.time.LocalDateTime;
 public class SuKien {
     private int masukien;
     private String tensukien;
+    private int manxb;
     private LocalDateTime tgiantochuc;
     private String mota;
 
     public SuKien() {
     }
 
-    public SuKien(int masukien, String tensukien, LocalDateTime tgiantochuc, String mota) {
+    public SuKien(int masukien, String tensukien, int manxb, LocalDateTime tgiantochuc, String mota) {
         this.masukien = masukien;
         this.tensukien = tensukien;
+        this.manxb = manxb;
         this.tgiantochuc = tgiantochuc;
         this.mota = mota;
     }
@@ -42,6 +44,14 @@ public class SuKien {
         this.tensukien = tensukien;
     }
 
+    public int getManxb() {
+        return manxb;
+    }
+
+    public void setManxb(int manxb) {
+        this.manxb = manxb;
+    }
+
     public LocalDateTime getTgiantochuc() {
         return tgiantochuc;
     }
@@ -57,6 +67,6 @@ public class SuKien {
     public void setMota(String mota) {
         this.mota = mota;
     }
-    
+
 
 }

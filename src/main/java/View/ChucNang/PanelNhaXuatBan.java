@@ -18,6 +18,14 @@ public class PanelNhaXuatBan extends javax.swing.JPanel {
     public PanelNhaXuatBan() {
         initComponents();
         loadTableData();
+            txtTimKiem.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { searchNXB(); }
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { searchNXB(); }
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { searchNXB(); }
+        });
     }
 
     /**
@@ -189,8 +197,14 @@ public class PanelNhaXuatBan extends javax.swing.JPanel {
         TimKiem.setText("Tìm Kiếm:");
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimKiemActionPerformed(evt);
+            }
+        });
 
         cbTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cbTimKiem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã NXB", "Tên NXB" }));
 
         javax.swing.GroupLayout panelButtonLayout = new javax.swing.GroupLayout(panelButton);
         panelButton.setLayout(panelButtonLayout);
@@ -345,6 +359,10 @@ public class PanelNhaXuatBan extends javax.swing.JPanel {
                 txtDiaChi.setText(tableNXB.getValueAt(row, 4).toString());
                 } 
     }//GEN-LAST:event_tableNXBMouseClicked
+
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
+        searchNXB();
+    }//GEN-LAST:event_txtTimKiemActionPerformed
     
         private void loadTableData() {
             try {
@@ -440,6 +458,41 @@ public class PanelNhaXuatBan extends javax.swing.JPanel {
         }
     }
     
+        private void searchNXB() {
+        try {
+            String searchText = txtTimKiem.getText().trim();
+            String searchCriteria = (String) cbTimKiem.getSelectedItem();
+
+            List<NhaXuatBan> nxbList = nhaXuatBanDAO.getAllNhaXuatBan();
+            DefaultTableModel model = (DefaultTableModel) tableNXB.getModel();
+            model.setRowCount(0);
+
+            for (NhaXuatBan nxb : nxbList) {
+                boolean match = false;
+
+                // Kiểm tra tiêu chí tìm kiếm
+                if (searchCriteria.equals("Mã NXB") && !searchText.isEmpty()) {
+                    match = String.valueOf(nxb.getManxb()).contains(searchText);
+                } else if (searchCriteria.equals("Tên NXB") && !searchText.isEmpty()) {
+                    match = nxb.getTennxb().toLowerCase().contains(searchText.toLowerCase());
+                } else if (searchText.isEmpty()) {
+                    match = true; // Hiển thị tất cả nếu không có từ khóa
+                }
+
+                if (match) {
+                    model.addRow(new Object[]{
+                        nxb.getManxb(),
+                        nxb.getTennxb(),
+                        nxb.getSdt(),
+                        nxb.getEmail(),
+                        nxb.getDiachi()
+                    });
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm nxb: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     private void clearFields() {
         txtTenNXB.setText("");
         txtSdt.setText("");

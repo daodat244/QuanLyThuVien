@@ -297,7 +297,7 @@
                   <EmptySpace min="-2" pref="106" max="-2" attributes="0"/>
                   <Component id="TimKiem" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbbTimKiem" pref="117" max="32767" attributes="0"/>
+                  <Component id="cbTimKiem" pref="117" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="txtTimKiem" min="-2" pref="330" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
@@ -312,7 +312,7 @@
                       <Component id="TimKiem" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Group type="103" alignment="1" groupAlignment="3" attributes="0">
                           <Component id="txtTimKiem" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                          <Component id="cbbTimKiem" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                          <Component id="cbTimKiem" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                       </Group>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnThem" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
@@ -373,14 +373,20 @@
               <Font name="Segoe UI" size="14" style="0"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTimKiemActionPerformed"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JComboBox" name="cbbTimKiem">
+        <Component class="javax.swing.JComboBox" name="cbTimKiem">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="0"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
+              <StringArray count="2">
+                <StringItem index="0" value="M&#xe3; s&#xe1;ch"/>
+                <StringItem index="1" value="T&#xea;n s&#xe1;ch"/>
+              </StringArray>
             </Property>
           </Properties>
           <AuxValues>

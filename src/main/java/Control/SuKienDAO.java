@@ -23,9 +23,12 @@ public class SuKienDAO {
         private LocalDateTime convertTimestampToLocalDateTime(Timestamp timestamp) {
         return timestamp != null ? timestamp.toLocalDateTime() : null;
     }
+// Lấy danh sách tất cả sự kiện từ cơ sở dữ liệu với JOIN để lấy tennxb
     public List<SuKien> getAllSuKien() throws SQLException {
         List<SuKien> skList = new ArrayList<>();
-        String query = "SELECT * FROM sukien";
+        String query = "SELECT sk.*, nxb.tennxb " +
+                       "FROM sukien sk " +
+                       "LEFT JOIN nhaxuatban nxb ON sk.manxb = nxb.manxb";
         try (Connection conn = ConnectToSQLServer.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -34,6 +37,7 @@ public class SuKienDAO {
                 SuKien sk = new SuKien(
                     rs.getInt("masukien"),
                     rs.getString("tensukien"),
+                    rs.getInt("manxb"),
                     convertTimestampToLocalDateTime(rs.getTimestamp("tgiantochuc")),
                     rs.getString("mota")
                 );
@@ -45,31 +49,31 @@ public class SuKienDAO {
 
     // Thêm mới một sự kiện
     public boolean themSuKien(SuKien sk) throws SQLException {
-        String query = "INSERT INTO sukien (tensukien, tgiantochuc, mota) VALUES (?, ?, ?)";
+        String query = "INSERT INTO sukien (tensukien, manxb, tgiantochuc, mota) VALUES (?, ?, ?, ?)";
         try (Connection conn = ConnectToSQLServer.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, sk.getTensukien());
-            
+            stmt.setInt(2, sk.getManxb());
             LocalDateTime tgiantochuc = sk.getTgiantochuc();
-            stmt.setTimestamp(2, tgiantochuc != null ? Timestamp.valueOf(tgiantochuc) : null);
-            
-            stmt.setString(3, sk.getMota());
+            stmt.setTimestamp(3, tgiantochuc != null ? Timestamp.valueOf(tgiantochuc) : null);
+            stmt.setString(4, sk.getMota());
             return stmt.executeUpdate() > 0;
         }
     }
 
     // Cập nhật thông tin sự kiện
     public boolean updateSuKien(SuKien sk) throws SQLException {
-        String query = "UPDATE sukien SET tensukien = ?, tgiantochuc = ?, mota = ? WHERE masukien = ?";
+        String query = "UPDATE sukien SET tensukien = ?, manxb = ?, tgiantochuc = ?, mota = ? WHERE masukien = ?";
         try (Connection conn = ConnectToSQLServer.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            stmt.setString(1, sk.getTensukien());
+            stmt.setString(1, sk.getTensukien());          
+            stmt.setInt(2, sk.getManxb());
             LocalDateTime tgiantochuc = sk.getTgiantochuc();
-            stmt.setTimestamp(2, tgiantochuc != null ? Timestamp.valueOf(tgiantochuc) : null);
-            stmt.setString(3, sk.getMota());
-            stmt.setInt(4, sk.getMasukien());
+            stmt.setTimestamp(3, tgiantochuc != null ? Timestamp.valueOf(tgiantochuc) : null);
+            stmt.setString(4, sk.getMota());
+            stmt.setInt(5, sk.getMasukien());
             return stmt.executeUpdate() > 0;
         }
     }
