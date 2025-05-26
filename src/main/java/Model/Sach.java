@@ -6,21 +6,22 @@ package Model;
 
 /**
  *
- * @author PC
+ * @author TUF
  */
 public class Sach {
     private int masach;
     private String tensach;
     private int matacgia;
-    private int manxb;    
+    private int manxb;
     private int matheloai;
     private int namxb;
     private int sotrang;
+    private int soluong;
 
     public Sach() {
     }
 
-    public Sach(int masach, String tensach, int matacgia, int manxb, int matheloai, int namxb, int sotrang) {
+    public Sach(int masach, String tensach, int matacgia, int manxb, int matheloai, int namxb, int sotrang, int soluong) {
         this.masach = masach;
         this.tensach = tensach;
         this.matacgia = matacgia;
@@ -28,6 +29,7 @@ public class Sach {
         this.matheloai = matheloai;
         this.namxb = namxb;
         this.sotrang = sotrang;
+        this.soluong = soluong;
     }
 
     public int getMasach() {
@@ -85,5 +87,13 @@ public class Sach {
     public void setSotrang(int sotrang) {
         this.sotrang = sotrang;
     }
+        public int getSoluong() {
+        return soluong;
+    }
+
+    public void setSoluong(int soluong) {
+        this.soluong = soluong;
+    }
+    
     
 }

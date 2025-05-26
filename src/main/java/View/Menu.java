@@ -16,6 +16,8 @@ import UI.ButtonColorHandler;
 public class Menu extends javax.swing.JFrame {
 
     private ButtonColorHandler buttonColorHandler;
+    private PanelPhieuMuon panelPhieuMuon; // Thêm biến instance cho PanelPhieuMuon
+    private PanelPhieuTra panelPhieuTra;
 
     public Menu() {
         initComponents();
@@ -25,6 +27,9 @@ public class Menu extends javax.swing.JFrame {
         PanelTheLoai panelTheLoai = new PanelTheLoai();
         PanelSuKien panelSuKien = new PanelSuKien();       
         PanelMuonPhong panelMuonPhong = new PanelMuonPhong();
+        PanelPhieuMuon panelPhieuMuon = new PanelPhieuMuon();
+        PanelPhieuTra panelPhieuTra = new PanelPhieuTra();
+ 
         
         panelContent.add(panelNhaXuatBan, "nhaXuatBan");
         panelContent.add(panelKhoSach, "sach");
@@ -32,6 +37,8 @@ public class Menu extends javax.swing.JFrame {
         panelContent.add(panelTheLoai, "theLoai");
         panelContent.add(panelSuKien, "suKien");
         panelContent.add(panelMuonPhong, "muonPhong");
+        panelContent.add(panelPhieuMuon, "phieuMuon");
+        panelContent.add(panelPhieuTra, "phieutra");
 
         
         panelContent.setVisible(false); // <== Thêm dòng này để ẩn ban đầu
@@ -41,6 +48,9 @@ public class Menu extends javax.swing.JFrame {
             btnNhaXuatBan, btnTaiKhoan, btnSuKien, btnMuonPhong, btnTheLoai,    
             btnThongKe, btnPhieuTra
         );
+    }
+    public PanelPhieuMuon getPanelPhieuMuon() {
+        return panelPhieuMuon;
     }
 
     /**
@@ -402,7 +412,10 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHocSinhActionPerformed
 
     private void btnPhieuMuonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhieuMuonActionPerformed
-        // TODO add your handling code here:
+        CardLayout cl = (CardLayout)(panelContent.getLayout());
+        panelContent.setVisible(true);
+        cl.show(panelContent, "phieuMuon");
+        buttonColorHandler.changeButtonColor(btnPhieuMuon);
     }//GEN-LAST:event_btnPhieuMuonActionPerformed
 
     private void btnSachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSachActionPerformed
@@ -417,7 +430,10 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNhanVienActionPerformed
 
     private void btnPhieuTraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhieuTraActionPerformed
-        // TODO add your handling code here:
+        CardLayout cl = (CardLayout)(panelContent.getLayout());
+        panelContent.setVisible(true);
+        cl.show(panelContent, "phieutra");
+        buttonColorHandler.changeButtonColor(btnPhieuTra);
     }//GEN-LAST:event_btnPhieuTraActionPerformed
 
     /**

@@ -80,10 +80,17 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="txtTenSach" min="-2" pref="263" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="NamXuatBan" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="txtNamXB" min="-2" pref="106" max="-2" attributes="0"/>
+                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="SoLuong" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtSoluong" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="NamXuatBan" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="txtNamXB" min="-2" pref="106" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
@@ -91,7 +98,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="txtSoTrang" pref="142" max="32767" attributes="0"/>
+                          <Component id="txtSoTrang" pref="145" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -143,6 +150,11 @@
                           <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtSoTrang" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="SoLuong" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtSoluong" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -270,6 +282,13 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtSoTrangActionPerformed"/>
           </Events>
         </Component>
+        <Component class="javax.swing.JLabel" name="SoLuong">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="S&#x1ed1; l&#x1b0;&#x1ee3;ng :"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtSoluong">
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="panelButton">
@@ -297,7 +316,7 @@
                   <EmptySpace min="-2" pref="106" max="-2" attributes="0"/>
                   <Component id="TimKiem" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbbTimKiem" pref="117" max="32767" attributes="0"/>
+                  <Component id="cbbTimKiem" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="txtTimKiem" min="-2" pref="330" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
@@ -418,7 +437,7 @@
             <Component class="javax.swing.JTable" name="tableSach">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="7" rowCount="4">
+                  <Table columnCount="8" rowCount="0">
                     <Column editable="false" title="M&#xe3; s&#xe1;ch" type="java.lang.Integer"/>
                     <Column editable="false" title="T&#xea;n s&#xe1;ch" type="java.lang.String"/>
                     <Column editable="false" title="T&#xe1;c gi&#x1ea3;" type="java.lang.String"/>
@@ -426,6 +445,7 @@
                     <Column editable="false" title="Th&#x1ec3; lo&#x1ea1;i" type="java.lang.String"/>
                     <Column editable="false" title="N&#x103;m XB" type="java.lang.Integer"/>
                     <Column editable="false" title="S&#x1ed1; trang" type="java.lang.Integer"/>
+                    <Column editable="true" title="S&#x1ed1; l&#x1b0;&#x1ee3;ng" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="autoResizeMode" type="int" value="4"/>
@@ -462,6 +482,11 @@
                       <Renderer/>
                     </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="20" resizable="false">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                       <Title/>
                       <Editor/>
                       <Renderer/>
@@ -512,7 +537,7 @@
                   <Component id="btnNhapDuLieu" min="-2" pref="33" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnXuatDuLieu" min="-2" pref="33" max="-2" attributes="0"/>
-                  <EmptySpace pref="19" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
