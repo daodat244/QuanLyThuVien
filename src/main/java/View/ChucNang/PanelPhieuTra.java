@@ -10,6 +10,7 @@ import Model.NhanVien;
 import Model.PhieuMuon;
 import Model.PhieuTra;
 import Model.Sach;
+import UI.BasePanel;
 import View.Menu;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -23,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author TUF
  */
-public class PanelPhieuTra extends javax.swing.JPanel {
+public class PanelPhieuTra extends BasePanel {
     private PhieuTraDAO phieuTraDAO = new PhieuTraDAO();
     private DocGiaDAO docGiaDAO = new DocGiaDAO();
     private NhanVienDAO nhanVienDAO = new NhanVienDAO();
@@ -36,6 +37,8 @@ public class PanelPhieuTra extends javax.swing.JPanel {
     public PanelPhieuTra() {
         initComponents();
         loadTableData();
+        styleButton(btntrasach);
+        styleTable(tablePhieuTra);
     }
 
     /**
@@ -48,7 +51,7 @@ public class PanelPhieuTra extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablePhieuTra = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         btntrasach = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -64,7 +67,7 @@ public class PanelPhieuTra extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(1120, 666));
         setMinimumSize(new java.awt.Dimension(1120, 666));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablePhieuTra.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -72,7 +75,7 @@ public class PanelPhieuTra extends javax.swing.JPanel {
                 "Mã phiếu trả", "Mã phiếu", "Tên độc giả", "Tên nhân viên", "Tên sách", "Ngày mượn", "Ngày hẹn trả", "Ngày trả", "Phí phạt", "Ghi chú"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tablePhieuTra);
 
         btntrasach.setText("Trả sách");
         btntrasach.addActionListener(new java.awt.event.ActionListener() {
@@ -291,7 +294,7 @@ if (selectedPhieuMuon == null) {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tablePhieuTra;
     private javax.swing.JLabel tblMaphieu1;
     private javax.swing.JLabel tblMaphieu2;
     private javax.swing.JTextArea tblghichu;
@@ -301,7 +304,7 @@ if (selectedPhieuMuon == null) {
     private void loadTableData() {
         try {
             List<PhieuTra> phieuTraList = phieuTraDAO.getAllPhieuTra();
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            DefaultTableModel model = (DefaultTableModel) tablePhieuTra.getModel();
             model.setRowCount(0);
             for (PhieuTra pt : phieuTraList) {
                 String tendocgia = getTenDocGia(pt.getMadocgia());

@@ -91,37 +91,6 @@ public class PhieuMuonDAO {
         }
     }
 
-    public List<PhieuMuon> searchPhieuMuon(String keyword) throws SQLException {
-        List<PhieuMuon> phieuMuonList = new ArrayList<>();
-        String query = "SELECT pm.*, d.tendocgia, nv.tennv, s.tensach " +
-                      "FROM phieumuon pm " +
-                      "LEFT JOIN docgia d ON pm.madocgia = d.madocgia " +
-                      "LEFT JOIN nhanvien nv ON pm.manv = nv.manv " +
-                      "LEFT JOIN sach s ON pm.masach = s.masach " +
-                      "WHERE d.tendocgia LIKE ? OR nv.tennv LIKE ? OR s.tensach LIKE ?";
-        try (Connection conn = ConnectToSQLServer.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            String searchPattern = "%" + keyword + "%";
-            stmt.setString(1, searchPattern);
-            stmt.setString(2, searchPattern);
-            stmt.setString(3, searchPattern);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    PhieuMuon pm = new PhieuMuon(
-                        rs.getInt("maphieu"),
-                        rs.getInt("madocgia"),
-                        rs.getInt("manv"),
-                        rs.getInt("masach"),
-                        rs.getObject("ngaymuon", LocalDateTime.class),
-                        rs.getObject("ngaytradukien", LocalDateTime.class),
-                        rs.getString("trangthai")
-                    );
-                    phieuMuonList.add(pm);
-                }
-            }
-        }
-        return phieuMuonList;
-    }
 }
 
     

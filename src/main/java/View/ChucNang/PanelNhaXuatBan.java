@@ -4,6 +4,7 @@
  */
 package View.ChucNang;
 
+import UI.BasePanel;
 import Model.DAO.NhaXuatBanDAO;
 import Model.NhaXuatBan;
 import java.sql.SQLException;
@@ -11,13 +12,19 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class PanelNhaXuatBan extends javax.swing.JPanel {
+public class PanelNhaXuatBan extends BasePanel {
 
     private final NhaXuatBanDAO nhaXuatBanDAO = new NhaXuatBanDAO();
     
     public PanelNhaXuatBan() {
         initComponents();
         loadTableData();
+        styleButton(btnThem);
+        styleButton(btnSua);
+        styleButton(btnXoa);
+        styleButton(btnNhapDuLieu);
+        styleButton(btnXuatDuLieu);
+        styleTable(tableNXB);
             txtTimKiem.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) { searchNXB(); }

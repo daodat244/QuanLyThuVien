@@ -6,17 +6,25 @@ package View.ChucNang;
 
 import Model.DAO.TacGiaDAO;
 import Model.TacGia;
+import UI.BasePanel;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-public class PanelTacGia extends javax.swing.JPanel {
+
+public class PanelTacGia extends BasePanel {
 
     private final TacGiaDAO tacGiaDAO = new TacGiaDAO();
     
     public PanelTacGia() {
         initComponents();
         loadTableData();
+        styleButton(btnThem);
+        styleButton(btnSua);
+        styleButton(btnXoa);
+        styleButton(btnNhapDuLieu);
+        styleButton(btnXuatDuLieu);
+        styleTable(tableTacGia);
     }
 
     /**
@@ -152,11 +160,11 @@ public class PanelTacGia extends javax.swing.JPanel {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(26, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnXuatDuLieu, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNhapDuLieu))
-                .addGap(34, 34, 34))
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnNhapDuLieu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnXuatDuLieu, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

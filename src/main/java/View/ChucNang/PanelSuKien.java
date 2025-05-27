@@ -8,6 +8,7 @@ import Model.DAO.SuKienDAO;
 import Model.DAO.NhaXuatBanDAO;
 import Model.NhaXuatBan;
 import Model.SuKien;
+import UI.BasePanel;
 import java.awt.Component;
 import java.sql.SQLException;
 import java.util.List;
@@ -25,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Asus
  */
-public class PanelSuKien extends javax.swing.JPanel {
+public class PanelSuKien extends BasePanel {
 
     private final SuKienDAO suKienDAO = new SuKienDAO();
     private final NhaXuatBanDAO nxbDAO = new NhaXuatBanDAO();
@@ -33,6 +34,12 @@ public class PanelSuKien extends javax.swing.JPanel {
         initComponents();
         loadComboBoxes();
         loadTableData();
+        styleButton(btnthemSuKien);
+        styleButton(btnsuaSuKien);
+        styleButton(btnxoaSuKien);
+        styleButton(btnNhapDuLieu);
+        styleButton(btnXuatDuLieu);
+        styleTable(tableSuKien);
         txtDateTimeSuKien.setEditable(false);       
         timeSuKien.addTimeChangeListener(e -> updateTxtDateTimeSuKien());
     }
@@ -62,8 +69,8 @@ public class PanelSuKien extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         cbNXB = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnNhapDuLieu = new javax.swing.JButton();
+        btnXuatDuLieu = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         btnthemSuKien = new javax.swing.JButton();
         btnsuaSuKien = new javax.swing.JButton();
@@ -200,14 +207,14 @@ public class PanelSuKien extends javax.swing.JPanel {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jButton1.setText("Nhập dữ liệu");
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        btnNhapDuLieu.setText("Nhập dữ liệu");
+        btnNhapDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
-        jButton2.setText("Xuất dữ liệu");
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnXuatDuLieu.setText("Xuất dữ liệu");
+        btnXuatDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        btnXuatDuLieu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnXuatDuLieuActionPerformed(evt);
             }
         });
 
@@ -288,8 +295,8 @@ public class PanelSuKien extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE))
+                    .addComponent(btnXuatDuLieu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnNhapDuLieu, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
@@ -300,9 +307,9 @@ public class PanelSuKien extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(btnNhapDuLieu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(btnXuatDuLieu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -380,9 +387,9 @@ public class PanelSuKien extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnXuatDuLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatDuLieuActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnXuatDuLieuActionPerformed
 
     private void btnthemSuKienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemSuKienActionPerformed
         // TODO add your handling code here:
@@ -635,13 +642,13 @@ private void clearFields() {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnNhapDuLieu;
+    private javax.swing.JButton btnXuatDuLieu;
     private javax.swing.JButton btnsuaSuKien;
     private javax.swing.JButton btnthemSuKien;
     private javax.swing.JButton btnxoaSuKien;
     private com.github.lgooddatepicker.components.CalendarPanel calendarSuKien;
     private javax.swing.JComboBox<NhaXuatBan> cbNXB;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

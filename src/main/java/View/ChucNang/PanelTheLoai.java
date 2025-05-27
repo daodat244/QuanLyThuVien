@@ -6,18 +6,25 @@ package View.ChucNang;
 
 import Model.DAO.TheLoaiDAO;
 import Model.TheLoai;
+import UI.BasePanel;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class PanelTheLoai extends javax.swing.JPanel {
+public class PanelTheLoai extends BasePanel {
 
 private final TheLoaiDAO theLoaiDAO = new TheLoaiDAO();
 
     public PanelTheLoai() {
         initComponents();
         loadTableData();
+        styleButton(btnThem);
+        styleButton(btnSua);
+        styleButton(btnXoa);
+        styleButton(btnNhapDuLieu);
+        styleButton(btnXuatDuLieu);
+        styleTable(tableTheLoai);
     }
 
     @SuppressWarnings("unchecked")
