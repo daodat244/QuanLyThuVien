@@ -58,8 +58,10 @@ public class PanelSach extends javax.swing.JPanel {
         cbTacGia = new javax.swing.JComboBox<>();
         TheLoai = new javax.swing.JLabel();
         cbTheLoai = new javax.swing.JComboBox<>();
-        jLabel1 = new javax.swing.JLabel();
+        SoTrang = new javax.swing.JLabel();
         txtSoTrang = new javax.swing.JTextField();
+        txtSoLuong = new javax.swing.JTextField();
+        NamXuatBan1 = new javax.swing.JLabel();
         panelButton = new javax.swing.JPanel();
         btnThem = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
@@ -112,8 +114,8 @@ public class PanelSach extends javax.swing.JPanel {
 
         cbTheLoai.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        jLabel1.setText("Số trang");
+        SoTrang.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        SoTrang.setText("Số trang");
 
         txtSoTrang.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         txtSoTrang.addActionListener(new java.awt.event.ActionListener() {
@@ -121,6 +123,11 @@ public class PanelSach extends javax.swing.JPanel {
                 txtSoTrangActionPerformed(evt);
             }
         });
+
+        txtSoLuong.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+
+        NamXuatBan1.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        NamXuatBan1.setText("Số lượng");
 
         javax.swing.GroupLayout panelInforLayout = new javax.swing.GroupLayout(panelInfor);
         panelInfor.setLayout(panelInforLayout);
@@ -134,15 +141,19 @@ public class PanelSach extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtTenSach, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelInforLayout.createSequentialGroup()
-                        .addComponent(NamXuatBan)
+                        .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(NamXuatBan)
+                            .addComponent(NamXuatBan1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNamXB, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtSoLuong)
+                            .addComponent(txtNamXB, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))))
                 .addGap(37, 37, 37)
                 .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInforLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(SoTrang)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtSoTrang, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+                        .addComponent(txtSoTrang, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
                         .addGap(80, 80, 80))
                     .addGroup(panelInforLayout.createSequentialGroup()
                         .addComponent(TacGia)
@@ -180,9 +191,13 @@ public class PanelSach extends javax.swing.JPanel {
                         .addComponent(TheLoai)
                         .addComponent(cbTheLoai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
+                        .addComponent(SoTrang)
                         .addComponent(txtSoTrang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NamXuatBan1))
+                .addContainerGap())
         );
 
         panelButton.setBorder(javax.swing.BorderFactory.createTitledBorder("Chức năng"));
@@ -239,7 +254,7 @@ public class PanelSach extends javax.swing.JPanel {
                 .addGap(106, 106, 106)
                 .addComponent(TimKiem)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbTimKiem, 0, 117, Short.MAX_VALUE)
+                .addComponent(cbTimKiem, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31))
@@ -262,20 +277,20 @@ public class PanelSach extends javax.swing.JPanel {
 
         tableSach.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã sách", "Tên sách", "Tác giả", "NXB", "Thể loại", "Năm XB", "Số trang"
+                "Mã sách", "Tên sách", "Tác giả", "NXB", "Thể loại", "Năm XB", "Số trang", "Số lượng"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -308,6 +323,8 @@ public class PanelSach extends javax.swing.JPanel {
             tableSach.getColumnModel().getColumn(5).setPreferredWidth(20);
             tableSach.getColumnModel().getColumn(6).setResizable(false);
             tableSach.getColumnModel().getColumn(6).setPreferredWidth(20);
+            tableSach.getColumnModel().getColumn(7).setResizable(false);
+            tableSach.getColumnModel().getColumn(7).setPreferredWidth(20);
         }
 
         javax.swing.GroupLayout panelTableLayout = new javax.swing.GroupLayout(panelTable);
@@ -350,7 +367,7 @@ public class PanelSach extends javax.swing.JPanel {
                 .addComponent(btnNhapDuLieu, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnXuatDuLieu, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -392,35 +409,60 @@ public class PanelSach extends javax.swing.JPanel {
     }//GEN-LAST:event_txtSoTrangActionPerformed
 
     private void tableSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableSachMouseClicked
-    int row = tableSach.getSelectedRow();
-            if (row >= 0) {
-                txtTenSach.setText(tableSach.getValueAt(row, 1).toString());
-                txtNamXB.setText(tableSach.getValueAt(row, 5).toString());
-                txtSoTrang.setText(tableSach.getValueAt(row, 6).toString());
+int row = tableSach.getSelectedRow();
+    if (row >= 0) {
+        try {
+            // Lấy dữ liệu từ bảng
+            txtTenSach.setText(tableSach.getValueAt(row, 1).toString());
+            txtNamXB.setText(tableSach.getValueAt(row, 5).toString());
+            txtSoTrang.setText(tableSach.getValueAt(row, 6).toString());
+            txtSoLuong.setText(tableSach.getValueAt(row, 7).toString());
 
-                int matacgia = Integer.parseInt(tableSach.getValueAt(row, 2).toString().split(" - ")[0]);
-                int manxb = Integer.parseInt(tableSach.getValueAt(row, 3).toString().split(" - ")[0]);
-                int matheloai = Integer.parseInt(tableSach.getValueAt(row, 4).toString().split(" - ")[0]);
+            // Lấy mã số từ dữ liệu bảng (cột 2, 3, 4 chứa tên, không chứa mã trực tiếp)
+            int matacgia = -1;
+            int manxb = -1;
+            int matheloai = -1;
 
-                for (int i = 0; i < cbTacGia.getItemCount(); i++) {
-                    if (cbTacGia.getItemAt(i).getMatacgia() == matacgia) {
-                        cbTacGia.setSelectedIndex(i);
-                        break;
-                    }
-                }
-                for (int i = 0; i < cbNXB.getItemCount(); i++) {
-                    if (cbNXB.getItemAt(i).getManxb() == manxb) {
-                        cbNXB.setSelectedIndex(i);
-                        break;
-                    }
-                }
-                for (int i = 0; i < cbTheLoai.getItemCount(); i++) {
-                    if (cbTheLoai.getItemAt(i).getMatheloai() == matheloai) {
-                        cbTheLoai.setSelectedIndex(i);
-                        break;
-                    }
+            // Tìm mã số dựa trên tên trong bảng (cột 2, 3, 4)
+            String tenTacGia = tableSach.getValueAt(row, 2).toString();
+            String tenNXB = tableSach.getValueAt(row, 3).toString();
+            String tenTheLoai = tableSach.getValueAt(row, 4).toString();
+
+            // Tìm mã số trong danh sách combo box dựa trên tên
+            for (int i = 0; i < cbTacGia.getItemCount(); i++) {
+                TacGia tacGia = cbTacGia.getItemAt(i);
+                if (tacGia.getTentacgia().equals(tenTacGia)) {
+                    matacgia = tacGia.getMatacgia();
+                    cbTacGia.setSelectedIndex(i);
+                    break;
                 }
             }
+            for (int i = 0; i < cbNXB.getItemCount(); i++) {
+                NhaXuatBan nxb = cbNXB.getItemAt(i);
+                if (nxb.getTennxb().equals(tenNXB)) {
+                    manxb = nxb.getManxb();
+                    cbNXB.setSelectedIndex(i);
+                    break;
+                }
+            }
+            for (int i = 0; i < cbTheLoai.getItemCount(); i++) {
+                TheLoai theLoai = cbTheLoai.getItemAt(i);
+                if (theLoai.getTentheloai().equals(tenTheLoai)) {
+                    matheloai = theLoai.getMatheloai();
+                    cbTheLoai.setSelectedIndex(i);
+                    break;
+                }
+            }
+
+            // Nếu không tìm thấy, đặt về mục đầu tiên hoặc giữ nguyên
+            if (matacgia == -1) cbTacGia.setSelectedIndex(0);
+            if (manxb == -1) cbNXB.setSelectedIndex(0);
+            if (matheloai == -1) cbTheLoai.setSelectedIndex(0);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi chọn sách: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     }//GEN-LAST:event_tableSachMouseClicked
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
@@ -532,7 +574,8 @@ public class PanelSach extends javax.swing.JPanel {
                     tenNXB,
                     tenTheLoai,
                     sach.getNamxb(),
-                    sach.getSotrang()
+                    sach.getSotrang(),
+                    sach.getSoluong()
                 });
             }
         } catch (SQLException ex) {
@@ -549,7 +592,8 @@ public class PanelSach extends javax.swing.JPanel {
             sach.setMatheloai(((TheLoai) cbTheLoai.getSelectedItem()).getMatheloai());
             sach.setNamxb(Integer.parseInt(txtNamXB.getText()));
             sach.setSotrang(Integer.parseInt(txtSoTrang.getText()));
-
+            sach.setSoluong(Integer.parseInt(txtSoLuong.getText()));
+            
             if (sachDAO.addSach(sach)) {
                 JOptionPane.showMessageDialog(this, "Thêm sách thành công!");
                 loadTableData();
@@ -580,7 +624,8 @@ public class PanelSach extends javax.swing.JPanel {
             sach.setMatheloai(((TheLoai) cbTheLoai.getSelectedItem()).getMatheloai());
             sach.setNamxb(Integer.parseInt(txtNamXB.getText()));
             sach.setSotrang(Integer.parseInt(txtSoTrang.getText()));
-
+            sach.setSoluong(Integer.parseInt(txtSoLuong.getText()));
+            
             if (sachDAO.updateSach(sach)) {
                 JOptionPane.showMessageDialog(this, "Sửa sách thành công!");
                 loadTableData();
@@ -671,7 +716,8 @@ public class PanelSach extends javax.swing.JPanel {
                     tenNXB,
                     tenTheLoai,
                     sach.getNamxb(),
-                    sach.getSotrang()
+                    sach.getSotrang(),
+                    sach.getSoluong()
                 });
             }
         }
@@ -691,6 +737,8 @@ public class PanelSach extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel NXB;
     private javax.swing.JLabel NamXuatBan;
+    private javax.swing.JLabel NamXuatBan1;
+    private javax.swing.JLabel SoTrang;
     private javax.swing.JLabel TacGia;
     private javax.swing.JLabel TenSach;
     private javax.swing.JLabel TheLoai;
@@ -704,7 +752,6 @@ public class PanelSach extends javax.swing.JPanel {
     private javax.swing.JComboBox<TacGia> cbTacGia;
     private javax.swing.JComboBox<TheLoai> cbTheLoai;
     private javax.swing.JComboBox<String> cbTimKiem;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelButton;
@@ -712,6 +759,7 @@ public class PanelSach extends javax.swing.JPanel {
     private javax.swing.JPanel panelTable;
     private javax.swing.JTable tableSach;
     private javax.swing.JTextField txtNamXB;
+    private javax.swing.JTextField txtSoLuong;
     private javax.swing.JTextField txtSoTrang;
     private javax.swing.JTextField txtTenSach;
     private javax.swing.JTextField txtTimKiem;

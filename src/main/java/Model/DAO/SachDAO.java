@@ -67,7 +67,7 @@ public class SachDAO {
             stmt.setInt(4, sach.getMatheloai());
             stmt.setInt(5, sach.getNamxb());
             stmt.setInt(6, sach.getSotrang());
-            stmt.setInt(6, sach.getSoluong());
+            stmt.setInt(7, sach.getSoluong());
             stmt.setInt(8, sach.getMasach());
             return stmt.executeUpdate() > 0;
         }
