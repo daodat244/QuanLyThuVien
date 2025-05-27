@@ -4,10 +4,10 @@
  */
 package View.ChucNang;
 
-import Control.SachDAO;
-import Control.TacGiaDAO;
-import Control.NhaXuatBanDAO;
-import Control.TheLoaiDAO;
+import Model.DAO.SachDAO;
+import Model.DAO.TacGiaDAO;
+import Model.DAO.NhaXuatBanDAO;
+import Model.DAO.TheLoaiDAO;
 import Model.Sach;
 import Model.TacGia;
 import Model.NhaXuatBan;

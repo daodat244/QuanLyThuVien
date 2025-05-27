@@ -4,7 +4,7 @@
  */
 package View.ChucNang;
 
-import Control.TacGiaDAO;
+import Model.DAO.TacGiaDAO;
 import Model.TacGia;
 import java.sql.SQLException;
 import java.util.List;

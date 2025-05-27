@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Control;
+package Model.DAO;
 
 
+import Model.ConnectToSQLServer;
 import Model.SuKien;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,10 +15,7 @@ import java.time.LocalDateTime;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-/**
- *
- * @author Asus
- */
+
 public class SuKienDAO {
 // Phương thức tiện ích để chuyển đổi Timestamp thành LocalDateTime
         private LocalDateTime convertTimestampToLocalDateTime(Timestamp timestamp) {

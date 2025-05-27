@@ -4,8 +4,8 @@
  */
 package View.ChucNang;
 
-import Control.SuKienDAO;
-import Control.NhaXuatBanDAO;
+import Model.DAO.SuKienDAO;
+import Model.DAO.NhaXuatBanDAO;
 import Model.NhaXuatBan;
 import Model.SuKien;
 import java.awt.Component;

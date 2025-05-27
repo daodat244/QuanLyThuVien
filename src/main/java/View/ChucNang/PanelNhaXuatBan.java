@@ -4,7 +4,7 @@
  */
 package View.ChucNang;
 
-import Control.NhaXuatBanDAO;
+import Model.DAO.NhaXuatBanDAO;
 import Model.NhaXuatBan;
 import java.sql.SQLException;
 import java.util.List;

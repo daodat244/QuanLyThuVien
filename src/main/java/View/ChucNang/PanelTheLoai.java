@@ -4,7 +4,7 @@
  */
 package View.ChucNang;
 
-import Control.TheLoaiDAO;
+import Model.DAO.TheLoaiDAO;
 import Model.TheLoai;
 import java.sql.SQLException;
 import java.util.List;
