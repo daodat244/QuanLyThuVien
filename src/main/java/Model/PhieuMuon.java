@@ -14,7 +14,7 @@ public class PhieuMuon {
     private int maphieu;
     private int madocgia;
     private int manv;
-    private int masach;
+    private String masach;
     private LocalDateTime ngaymuon;
     private LocalDateTime ngaytradukien;
     private String trangthai;
@@ -22,7 +22,7 @@ public class PhieuMuon {
     public PhieuMuon() {
     }
 
-    public PhieuMuon(int maphieu, int madocgia, int manv, int masach, LocalDateTime ngaymuon, LocalDateTime ngaytradukien, String trangthai) {
+    public PhieuMuon(int maphieu, int madocgia, int manv, String masach, LocalDateTime ngaymuon, LocalDateTime ngaytradukien, String trangthai) {
         this.maphieu = maphieu;
         this.madocgia = madocgia;
         this.manv = manv;
@@ -57,13 +57,22 @@ public class PhieuMuon {
         this.manv = manv;
     }
 
-    public int getMasach() {
+    public String getMasach() {
         return masach;
     }
 
-    public void setMasach(int masach) {
+    public void setMasach(String masach) {
         this.masach = masach;
     }
+
+    public LocalDateTime getNgaytradukien() {
+        return ngaytradukien;
+    }
+
+    public void setNgaytradukien(LocalDateTime ngaytradukien) {
+        this.ngaytradukien = ngaytradukien;
+    }
+
 
     public LocalDateTime getNgaymuon() {
         return ngaymuon;

@@ -16,7 +16,7 @@ public class PhieuTra {
     private int maphieu;
     private int madocgia;
     private int manv;
-    private int masach;
+    private String masach;
     private LocalDateTime ngaymuon;
     private LocalDateTime ngaytradukien;
     private LocalDateTime ngaytrathucte;
@@ -26,7 +26,7 @@ public class PhieuTra {
     public PhieuTra() {
     }
 
-    public PhieuTra(int maphieutra, int maphieu, int madocgia, int manv, int masach, LocalDateTime ngaymuon, LocalDateTime ngaytradukien, LocalDateTime ngaytrathucte, double phiphat, String ghichu) {
+    public PhieuTra(int maphieutra, int maphieu, int madocgia, int manv, String masach, LocalDateTime ngaymuon, LocalDateTime ngaytradukien, LocalDateTime ngaytrathucte, double phiphat, String ghichu) {
         this.maphieutra = maphieutra;
         this.maphieu = maphieu;
         this.madocgia = madocgia;
@@ -71,11 +71,11 @@ public class PhieuTra {
         this.manv = manv;
     }
 
-    public int getMasach() {
+    public String getMasach() {
         return masach;
     }
 
-    public void setMasach(int masach) {
+    public void setMasach(String masach) {
         this.masach = masach;
     }
 

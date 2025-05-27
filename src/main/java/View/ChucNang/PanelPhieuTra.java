@@ -201,7 +201,7 @@ public class PanelPhieuTra extends BasePanel {
     }//GEN-LAST:event_btnKiemtraActionPerformed
 
     private void btntrasachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntrasachActionPerformed
-if (selectedPhieuMuon == null) {
+    if (selectedPhieuMuon == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng kiểm tra mã phiếu mượn trước!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -345,7 +345,7 @@ if (selectedPhieuMuon == null) {
         return nv != null ? nv.getTennv() : null;
     }
 
-    private String getTenSach(int masach) throws SQLException {
+    private String getTenSach(String masach) throws SQLException {
         Sach sach = sachDAO.getSachById(masach);
         return sach != null ? sach.getTensach() : null;
     }

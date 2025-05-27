@@ -83,157 +83,157 @@ public class Menu extends javax.swing.JFrame {
 
         MenuLayout.setPreferredSize(new java.awt.Dimension(230, 768));
 
-        btnNhanVien.setBackground(new java.awt.Color(42, 71, 89));
-        btnNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        btnNhanVien.setForeground(new java.awt.Color(238, 238, 238));
         btnNhanVien.setIcon(new javax.swing.ImageIcon(getClass().getResource("/librarian.png"))); // NOI18N
         btnNhanVien.setText("DS NHÂN VIÊN");
+        btnNhanVien.setBackground(new java.awt.Color(42, 71, 89));
         btnNhanVien.setBorder(null);
         btnNhanVien.setFocusPainted(false);
+        btnNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        btnNhanVien.setForeground(new java.awt.Color(238, 238, 238));
         btnNhanVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNhanVienActionPerformed(evt);
             }
         });
 
-        btnSach.setBackground(new java.awt.Color(42, 71, 89));
-        btnSach.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        btnSach.setForeground(new java.awt.Color(238, 238, 238));
         btnSach.setIcon(new javax.swing.ImageIcon(getClass().getResource("/book.png"))); // NOI18N
         btnSach.setText("KHO SÁCH");
+        btnSach.setBackground(new java.awt.Color(42, 71, 89));
         btnSach.setBorder(null);
         btnSach.setBorderPainted(false);
         btnSach.setFocusPainted(false);
+        btnSach.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        btnSach.setForeground(new java.awt.Color(238, 238, 238));
         btnSach.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSachActionPerformed(evt);
             }
         });
 
-        btnPhieuMuon.setBackground(new java.awt.Color(42, 71, 89));
-        btnPhieuMuon.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        btnPhieuMuon.setForeground(new java.awt.Color(238, 238, 238));
         btnPhieuMuon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/phieuMuon.png"))); // NOI18N
         btnPhieuMuon.setText("PHIẾU MƯỢN");
+        btnPhieuMuon.setBackground(new java.awt.Color(42, 71, 89));
         btnPhieuMuon.setBorder(null);
         btnPhieuMuon.setFocusPainted(false);
+        btnPhieuMuon.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        btnPhieuMuon.setForeground(new java.awt.Color(238, 238, 238));
         btnPhieuMuon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPhieuMuonActionPerformed(evt);
             }
         });
 
-        btnHocSinh.setBackground(new java.awt.Color(42, 71, 89));
-        btnHocSinh.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        btnHocSinh.setForeground(new java.awt.Color(238, 238, 238));
         btnHocSinh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/student.png"))); // NOI18N
         btnHocSinh.setText("DS SINH VIÊN");
+        btnHocSinh.setBackground(new java.awt.Color(42, 71, 89));
         btnHocSinh.setBorder(null);
         btnHocSinh.setFocusPainted(false);
+        btnHocSinh.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        btnHocSinh.setForeground(new java.awt.Color(238, 238, 238));
         btnHocSinh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHocSinhActionPerformed(evt);
             }
         });
 
-        btnThongKe.setBackground(new java.awt.Color(42, 71, 89));
-        btnThongKe.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        btnThongKe.setForeground(new java.awt.Color(238, 238, 238));
         btnThongKe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/thongKe.png"))); // NOI18N
         btnThongKe.setText("THỐNG KÊ");
+        btnThongKe.setBackground(new java.awt.Color(42, 71, 89));
         btnThongKe.setBorder(null);
         btnThongKe.setFocusPainted(false);
+        btnThongKe.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        btnThongKe.setForeground(new java.awt.Color(238, 238, 238));
         btnThongKe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThongKeActionPerformed(evt);
             }
         });
 
-        btnTaiKhoan.setBackground(new java.awt.Color(42, 71, 89));
-        btnTaiKhoan.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        btnTaiKhoan.setForeground(new java.awt.Color(238, 238, 238));
         btnTaiKhoan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/account.png"))); // NOI18N
         btnTaiKhoan.setText("TÀI KHOẢN");
+        btnTaiKhoan.setBackground(new java.awt.Color(42, 71, 89));
         btnTaiKhoan.setBorder(null);
         btnTaiKhoan.setFocusPainted(false);
+        btnTaiKhoan.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        btnTaiKhoan.setForeground(new java.awt.Color(238, 238, 238));
         btnTaiKhoan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTaiKhoanActionPerformed(evt);
             }
         });
 
-        btnNhaXuatBan.setBackground(new java.awt.Color(42, 71, 89));
-        btnNhaXuatBan.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        btnNhaXuatBan.setForeground(new java.awt.Color(238, 238, 238));
         btnNhaXuatBan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nxb.png"))); // NOI18N
         btnNhaXuatBan.setText("NHÀ XUẤT BẢN");
+        btnNhaXuatBan.setBackground(new java.awt.Color(42, 71, 89));
         btnNhaXuatBan.setBorder(null);
         btnNhaXuatBan.setFocusPainted(false);
+        btnNhaXuatBan.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        btnNhaXuatBan.setForeground(new java.awt.Color(238, 238, 238));
         btnNhaXuatBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNhaXuatBanActionPerformed(evt);
             }
         });
 
-        btnTacGia.setBackground(new java.awt.Color(42, 71, 89));
-        btnTacGia.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        btnTacGia.setForeground(new java.awt.Color(238, 238, 238));
         btnTacGia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/author.png"))); // NOI18N
         btnTacGia.setText("TÁC GIẢ");
+        btnTacGia.setBackground(new java.awt.Color(42, 71, 89));
         btnTacGia.setBorder(null);
         btnTacGia.setFocusPainted(false);
+        btnTacGia.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        btnTacGia.setForeground(new java.awt.Color(238, 238, 238));
         btnTacGia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTacGiaActionPerformed(evt);
             }
         });
 
-        btnSuKien.setBackground(new java.awt.Color(42, 71, 89));
-        btnSuKien.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        btnSuKien.setForeground(new java.awt.Color(238, 238, 238));
         btnSuKien.setIcon(new javax.swing.ImageIcon(getClass().getResource("/event.png"))); // NOI18N
         btnSuKien.setText("SỰ KIỆN");
+        btnSuKien.setBackground(new java.awt.Color(42, 71, 89));
         btnSuKien.setBorder(null);
         btnSuKien.setFocusPainted(false);
+        btnSuKien.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        btnSuKien.setForeground(new java.awt.Color(238, 238, 238));
         btnSuKien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSuKienActionPerformed(evt);
             }
         });
 
-        btnMuonPhong.setBackground(new java.awt.Color(42, 71, 89));
-        btnMuonPhong.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        btnMuonPhong.setForeground(new java.awt.Color(238, 238, 238));
         btnMuonPhong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/room.png"))); // NOI18N
         btnMuonPhong.setText("MƯỢN PHÒNG HỌC");
+        btnMuonPhong.setBackground(new java.awt.Color(42, 71, 89));
         btnMuonPhong.setBorder(null);
         btnMuonPhong.setFocusPainted(false);
+        btnMuonPhong.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        btnMuonPhong.setForeground(new java.awt.Color(238, 238, 238));
         btnMuonPhong.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMuonPhongActionPerformed(evt);
             }
         });
 
-        btnTheLoai.setBackground(new java.awt.Color(42, 71, 89));
-        btnTheLoai.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        btnTheLoai.setForeground(new java.awt.Color(238, 238, 238));
         btnTheLoai.setIcon(new javax.swing.ImageIcon(getClass().getResource("/category.png"))); // NOI18N
         btnTheLoai.setText("THỂ LOẠI SÁCH");
+        btnTheLoai.setBackground(new java.awt.Color(42, 71, 89));
         btnTheLoai.setBorder(null);
         btnTheLoai.setFocusPainted(false);
+        btnTheLoai.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        btnTheLoai.setForeground(new java.awt.Color(238, 238, 238));
         btnTheLoai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTheLoaiActionPerformed(evt);
             }
         });
 
-        btnPhieuTra.setBackground(new java.awt.Color(42, 71, 89));
-        btnPhieuTra.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        btnPhieuTra.setForeground(new java.awt.Color(238, 238, 238));
         btnPhieuTra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/phieuTra.png"))); // NOI18N
         btnPhieuTra.setText("PHIẾU TRẢ");
+        btnPhieuTra.setBackground(new java.awt.Color(42, 71, 89));
         btnPhieuTra.setBorder(null);
         btnPhieuTra.setFocusPainted(false);
+        btnPhieuTra.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        btnPhieuTra.setForeground(new java.awt.Color(238, 238, 238));
         btnPhieuTra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPhieuTraActionPerformed(evt);
@@ -249,7 +249,7 @@ public class Menu extends javax.swing.JFrame {
             .addComponent(btnTheLoai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnThongKe, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnSuKien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnMuonPhong, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+            .addComponent(btnMuonPhong, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
             .addComponent(btnNhaXuatBan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnTaiKhoan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnNhanVien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -283,24 +283,24 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(btnThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPhieuTra, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         panelLogo.setBackground(new java.awt.Color(42, 71, 89));
         panelLogo.setPreferredSize(new java.awt.Dimension(1366, 60));
 
+        lblHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/library2.png"))); // NOI18N
+        lblHome.setText("QUẢN LÝ THƯ VIỆN");
         lblHome.setBackground(new java.awt.Color(42, 71, 89));
         lblHome.setFont(new java.awt.Font("Segoe UI", 1, 26)); // NOI18N
         lblHome.setForeground(new java.awt.Color(238, 238, 238));
-        lblHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/library2.png"))); // NOI18N
-        lblHome.setText("QUẢN LÝ THƯ VIỆN");
 
-        btnLogOut.setBackground(new java.awt.Color(42, 71, 89));
-        btnLogOut.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnLogOut.setForeground(new java.awt.Color(102, 153, 255));
         btnLogOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/out2.png"))); // NOI18N
+        btnLogOut.setBackground(new java.awt.Color(42, 71, 89));
         btnLogOut.setBorder(null);
         btnLogOut.setFocusPainted(false);
+        btnLogOut.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnLogOut.setForeground(new java.awt.Color(102, 153, 255));
         btnLogOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLogOutActionPerformed(evt);
@@ -316,9 +316,9 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(panelLogoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addGap(475, 475, 475)
-                .addComponent(lblHome)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblHome)
+                .addGap(468, 468, 468)
                 .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -328,14 +328,14 @@ public class Menu extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panelLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogoLayout.createSequentialGroup()
-                        .addComponent(lblHome)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btnLogOut, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(btnLogOut, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addComponent(lblHome, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
         );
 
         panelContent.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        panelContent.setMaximumSize(new java.awt.Dimension(1120, 666));
+        panelContent.setMinimumSize(new java.awt.Dimension(1120, 666));
+        panelContent.setPreferredSize(new java.awt.Dimension(1120, 666));
         panelContent.setLayout(new java.awt.CardLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -343,19 +343,20 @@ public class Menu extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(MenuLayout, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(MenuLayout, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelContent, javax.swing.GroupLayout.DEFAULT_SIZE, 1139, Short.MAX_VALUE))
+                .addComponent(panelContent, javax.swing.GroupLayout.DEFAULT_SIZE, 1139, Short.MAX_VALUE)
+                .addContainerGap())
             .addComponent(panelLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(MenuLayout, javax.swing.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
-                    .addComponent(panelContent, javax.swing.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)))
+                    .addComponent(MenuLayout, javax.swing.GroupLayout.DEFAULT_SIZE, 702, Short.MAX_VALUE)
+                    .addComponent(panelContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         pack();

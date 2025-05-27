@@ -82,9 +82,9 @@ private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
 
                         int madocgia = getMaDocGiaByTen(tendocgia);
                         int manv = getMaNhanVienByTen(tennv);
-                        int masach = getMaSachByTen(tensach);
+                        String masach = getMaSachByTen(tensach);
 
-                        txtMaSach.setText(masach != -1 ? String.valueOf(masach) : "");
+                        txtMaSach.setText(masach != null ? masach : "");                      
                         txtMaDocGia.setText(madocgia != -1 ? String.valueOf(madocgia) : "");
                         txtManhanvien.setText(manv != -1 ? String.valueOf(manv) : "");
                         tbltensach.setText("Tên sách: " + (tensach.equals("Không xác định") ? "" : tensach));
@@ -425,7 +425,7 @@ deletePhieuMuon();
 
     private void btnKiemtra1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKiemtra1ActionPerformed
         try {
-            int masach = Integer.parseInt(txtMaSach.getText().trim());
+            String masach = txtMaSach.getText().trim();
             String tensach = getTenSach(masach);
             if (tensach != null) {
                 tbltensach.setText("Tên sách: " + tensach);
@@ -485,28 +485,28 @@ try {
 loadTableData();
     }//GEN-LAST:event_btnLammoiActionPerformed
     private void loadTableData() {
-    try {
-        List<PhieuMuon> phieuMuonList = phieuMuonDAO.getAllPhieuMuonWithDetails();
-        DefaultTableModel model = (DefaultTableModel) tablePhieuMuon.getModel();
-        model.setRowCount(0);
-        for (PhieuMuon pm : phieuMuonList) {
-            String tendocgia = getTenDocGia(pm.getMadocgia());
-            String tennv = getTenNhanVien(pm.getManv());
-            String tensach = getTenSach(pm.getMasach());
-            model.addRow(new Object[]{
-                pm.getMaphieu(),
-                tendocgia != null ? tendocgia : "Không xác định",
-                tennv != null ? tennv : "Không xác định",
-                tensach != null ? tensach : "Không xác định",
-                pm.getNgaymuon(),
-                pm.getNgayTraDuKien(),
-                pm.getTrangthai() != null ? pm.getTrangthai() : "Chưa xác định" // Thêm cột trạng thái
-            });
+        try {
+            List<PhieuMuon> phieuMuonList = phieuMuonDAO.getAllPhieuMuonWithDetails();
+            DefaultTableModel model = (DefaultTableModel) tablePhieuMuon.getModel();
+            model.setRowCount(0);
+            for (PhieuMuon pm : phieuMuonList) {
+                String tendocgia = getTenDocGia(pm.getMadocgia());
+                String tennv = getTenNhanVien(pm.getManv());
+                String tensach = getTenSach(pm.getMasach()); // masach là String
+                model.addRow(new Object[]{
+                    pm.getMaphieu(),
+                    tendocgia != null ? tendocgia : "Không xác định",
+                    tennv != null ? tennv : "Không xác định",
+                    tensach != null ? tensach : "Không xác định",
+                    pm.getNgaymuon(),
+                    pm.getNgayTraDuKien(),
+                    pm.getTrangthai() != null ? pm.getTrangthai() : "Chưa xác định"
+                });
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu phiếu mượn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu phiếu mượn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
-}
     
     
     private void addPhieuMuon() {
@@ -522,11 +522,10 @@ loadTableData();
                 return;
             }
 
-            int masach = Integer.parseInt(maSachText);
             int madocgia = Integer.parseInt(maDocGiaText);
             int manv = Integer.parseInt(maNhanVienText);
 
-            if (getTenSach(masach) == null) {
+            if (getTenSach(maSachText) == null) {
                 JOptionPane.showMessageDialog(this, "Mã sách không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -547,7 +546,7 @@ loadTableData();
             PhieuMuon pm = new PhieuMuon();
             pm.setMadocgia(madocgia);
             pm.setManv(manv);
-            pm.setMasach(masach);
+            pm.setMasach(maSachText);
             pm.setNgaymuon(ngayMuon);
             pm.setNgayTraDuKien(ngayTraDuKien);
 
@@ -589,7 +588,7 @@ loadTableData();
             int manv = Integer.parseInt(maNhanVienText);
             int maphieu = (int) tablePhieuMuon.getValueAt(row, 0);
 
-            if (getTenSach(masach) == null) {
+            if (getTenSach(maSachText) == null) {
                 JOptionPane.showMessageDialog(this, "Mã sách không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -611,7 +610,7 @@ loadTableData();
             pm.setMaphieu(maphieu);
             pm.setMadocgia(madocgia);
             pm.setManv(manv);
-            pm.setMasach(masach);
+            pm.setMasach(maSachText);
             pm.setNgaymuon(ngayMuon);
             pm.setNgayTraDuKien(ngayTraDuKien);
 
@@ -712,7 +711,7 @@ private String getTenDocGia(int madocgia) throws SQLException {
         return nv != null ? nv.getTennv() : null;
     }
 
-    private String getTenSach(int masach) throws SQLException {
+    private String getTenSach(String masach) throws SQLException {
         Sach sach = sachDAO.getSachById(masach);
         return sach != null ? sach.getTensach() : null;
     }
@@ -726,8 +725,8 @@ private String getTenDocGia(int madocgia) throws SQLException {
         return nhanVienDAO.getMaNhanVienByTen(tenNhanVien);
     }
 
-    private int getMaSachByTen(String tenSach) throws SQLException {
-        if (tenSach.equals("Không xác định")) return -1;
+    private String getMaSachByTen(String tenSach) throws SQLException {
+        if (tenSach.equals("Không xác định")) return null;
         return sachDAO.getMaSachByTen(tenSach);
     }
 

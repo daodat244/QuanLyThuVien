@@ -34,7 +34,7 @@ public class PhieuMuonDAO {
                     rs.getInt("maphieu"),
                     rs.getInt("madocgia"),
                     rs.getInt("manv"),
-                    rs.getInt("masach"),
+                    rs.getString("masach"),
                     rs.getObject("ngaymuon", LocalDateTime.class),
                     rs.getObject("ngaytradukien", LocalDateTime.class),
                     rs.getString("trangthai")
@@ -51,7 +51,7 @@ public class PhieuMuonDAO {
              PreparedStatement stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, pm.getMadocgia());
             stmt.setInt(2, pm.getManv());
-            stmt.setInt(3, pm.getMasach());
+            stmt.setString(3, pm.getMasach());
             stmt.setObject(4, pm.getNgaymuon());
             stmt.setObject(5, pm.getNgayTraDuKien());
             stmt.setString(6, "Chưa trả");
@@ -65,7 +65,7 @@ public class PhieuMuonDAO {
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, pm.getMadocgia());
             stmt.setInt(2, pm.getManv());
-            stmt.setInt(3, pm.getMasach());
+            stmt.setString(3, pm.getMasach());
             stmt.setObject(4, pm.getNgaymuon());
             stmt.setObject(5, pm.getNgayTraDuKien());
             stmt.setInt(6, pm.getMaphieu());

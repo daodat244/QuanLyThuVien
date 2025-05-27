@@ -2,7 +2,7 @@
 package Model;
 
 public class Sach {
-    private int masach;
+    private String masach;
     private String tensach;
     private int matacgia;
     private int manxb;    
@@ -14,7 +14,7 @@ public class Sach {
     public Sach() {
     }
 
-    public Sach(int masach, String tensach, int matacgia, int manxb, int matheloai, int namxb, int sotrang, int soluong) {
+    public Sach(String masach, String tensach, int matacgia, int manxb, int matheloai, int namxb, int sotrang, int soluong) {
         this.masach = masach;
         this.tensach = tensach;
         this.matacgia = matacgia;
@@ -25,11 +25,11 @@ public class Sach {
         this.soluong = soluong;
     }
 
-    public int getMasach() {
+    public String getMasach() {
         return masach;
     }
 
-    public void setMasach(int masach) {
+    public void setMasach(String masach) {
         this.masach = masach;
     }
 

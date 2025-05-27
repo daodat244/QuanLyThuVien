@@ -25,7 +25,7 @@ public class PhieuTraDAO {
             stmt.setInt(1, pt.getMaphieu());
             stmt.setInt(2, pt.getMadocgia());
             stmt.setInt(3, pt.getManv());
-            stmt.setInt(4, pt.getMasach());
+            stmt.setString(4, pt.getMasach());
             stmt.setObject(5, pt.getNgaymuon());
             stmt.setObject(6, pt.getNgaytradukien());
             stmt.setObject(7, pt.getNgaytrathucte());
@@ -47,7 +47,7 @@ public class PhieuTraDAO {
                     rs.getInt("maphieu"),
                     rs.getInt("madocgia"),
                     rs.getInt("manv"),
-                    rs.getInt("masach"),
+                    rs.getString("masach"),
                     rs.getObject("ngaymuon", LocalDateTime.class),
                     rs.getObject("ngaytradukien", LocalDateTime.class),
                     rs.getString("trangthai")
@@ -69,7 +69,7 @@ public class PhieuTraDAO {
                     rs.getInt("maphieu"),
                     rs.getInt("madocgia"),
                     rs.getInt("manv"),
-                    rs.getInt("masach"),
+                    rs.getString("masach"),
                     rs.getObject("ngaymuon", LocalDateTime.class),
                     rs.getObject("ngaytradukien", LocalDateTime.class),
                     rs.getObject("ngaytrathucte", LocalDateTime.class),

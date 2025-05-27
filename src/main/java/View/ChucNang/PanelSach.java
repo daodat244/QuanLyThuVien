@@ -76,6 +76,8 @@ public class PanelSach extends BasePanel {
         txtSoTrang = new javax.swing.JTextField();
         txtSoLuong = new javax.swing.JTextField();
         NamXuatBan1 = new javax.swing.JLabel();
+        MaSach = new javax.swing.JLabel();
+        txtMaSach = new javax.swing.JTextField();
         panelButton = new javax.swing.JPanel();
         btnThem = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
@@ -143,6 +145,12 @@ public class PanelSach extends BasePanel {
         NamXuatBan1.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         NamXuatBan1.setText("Số lượng");
 
+        MaSach.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        MaSach.setText("Mã sách");
+
+        txtMaSach.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        txtMaSach.setPreferredSize(new java.awt.Dimension(64, 25));
+
         javax.swing.GroupLayout panelInforLayout = new javax.swing.GroupLayout(panelInfor);
         panelInfor.setLayout(panelInforLayout);
         panelInforLayout.setHorizontalGroup(
@@ -151,30 +159,36 @@ public class PanelSach extends BasePanel {
                 .addGap(23, 23, 23)
                 .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInforLayout.createSequentialGroup()
+                        .addComponent(NamXuatBan)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtNamXB, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelInforLayout.createSequentialGroup()
+                        .addComponent(NamXuatBan1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelInforLayout.createSequentialGroup()
+                        .addComponent(MaSach)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtMaSach, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(114, 114, 114)
+                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelInforLayout.createSequentialGroup()
                         .addComponent(TenSach)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtTenSach, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(panelInforLayout.createSequentialGroup()
-                            .addComponent(NamXuatBan)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(txtNamXB, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelInforLayout.createSequentialGroup()
-                            .addComponent(NamXuatBan1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(37, 37, 37)
-                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInforLayout.createSequentialGroup()
-                        .addComponent(SoTrang)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtSoTrang, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                        .addGap(80, 80, 80))
-                    .addGroup(panelInforLayout.createSequentialGroup()
-                        .addComponent(TacGia)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbTacGia, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelInforLayout.createSequentialGroup()
+                                .addComponent(SoTrang)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtSoTrang)
+                                .addGap(34, 34, 34))
+                            .addGroup(panelInforLayout.createSequentialGroup()
+                                .addComponent(TacGia)
+                                .addGap(18, 18, 18)
+                                .addComponent(cbTacGia, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(81, 81, 81)))
+                .addGap(52, 52, 52)
                 .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panelInforLayout.createSequentialGroup()
                         .addComponent(NXB)
@@ -183,35 +197,48 @@ public class PanelSach extends BasePanel {
                     .addGroup(panelInforLayout.createSequentialGroup()
                         .addComponent(TheLoai)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbTheLoai, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(19, 19, 19))
+                        .addComponent(cbTheLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         panelInforLayout.setVerticalGroup(
             panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelInforLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TenSach)
-                    .addComponent(txtTenSach, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TacGia)
-                    .addComponent(cbTacGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(NXB)
-                    .addComponent(cbNXB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(TheLoai)
-                        .addComponent(cbTheLoai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(NamXuatBan)
-                        .addComponent(txtNamXB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(SoTrang)
-                        .addComponent(txtSoTrang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(NamXuatBan1))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInforLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelInforLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(NamXuatBan)
+                            .addComponent(txtNamXB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(NamXuatBan1)))
+                    .addGroup(panelInforLayout.createSequentialGroup()
+                        .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelInforLayout.createSequentialGroup()
+                                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(TenSach)
+                                    .addComponent(txtTenSach, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(MaSach)
+                                    .addComponent(txtMaSach, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(TacGia)
+                                    .addComponent(cbTacGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelInforLayout.createSequentialGroup()
+                                .addGap(0, 5, Short.MAX_VALUE)
+                                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(NXB)
+                                    .addComponent(cbNXB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(TheLoai)
+                                    .addComponent(cbTheLoai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(SoTrang)
+                            .addComponent(txtSoTrang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
@@ -302,7 +329,7 @@ public class PanelSach extends BasePanel {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false, false
@@ -438,6 +465,7 @@ public class PanelSach extends BasePanel {
         if (row >= 0) {
             try {
             // Lấy dữ liệu từ bảng
+            txtMaSach.setText(tableSach.getValueAt(row, 0).toString()); // Thêm dòng này để hiển thị masach
             txtTenSach.setText(tableSach.getValueAt(row, 1).toString());
             txtNamXB.setText(tableSach.getValueAt(row, 5).toString());
             txtSoTrang.setText(tableSach.getValueAt(row, 6).toString());
@@ -547,7 +575,7 @@ public class PanelSach extends BasePanel {
                 DefaultTableModel model = (DefaultTableModel) tableSach.getModel();
                 for (int i = 0; i < model.getRowCount(); i++) {
                     Row row = sheet.createRow(i + 1);
-                    row.createCell(0).setCellValue((int) model.getValueAt(i, 0)); // Mã sách
+                    row.createCell(0).setCellValue((String) model.getValueAt(i, 0));
                     row.createCell(1).setCellValue((String) model.getValueAt(i, 1)); // Tên sách
                     row.createCell(2).setCellValue((String) model.getValueAt(i, 2)); // Tác giả
                     row.createCell(3).setCellValue((String) model.getValueAt(i, 3)); // NXB
@@ -609,7 +637,7 @@ public class PanelSach extends BasePanel {
 
                     try {
                         Sach sach = new Sach();
-                        sach.setMasach((int) row.getCell(0).getNumericCellValue()); // Mã sách
+                        sach.setMasach(row.getCell(0).getStringCellValue()); 
                         sach.setTensach(row.getCell(1).getStringCellValue()); // Tên sách
                         sach.setMatacgia((int) row.getCell(2).getNumericCellValue()); // Mã tác giả
                         sach.setManxb((int) row.getCell(3).getNumericCellValue()); // Mã NXB
@@ -744,7 +772,8 @@ public class PanelSach extends BasePanel {
     private void addSach() {
         try {
             Sach sach = new Sach();
-            sach.setTensach(txtTenSach.getText());
+            sach.setMasach(txtMaSach.getText().trim());
+            sach.setTensach(txtTenSach.getText().trim());
             sach.setMatacgia(((TacGia) cbTacGia.getSelectedItem()).getMatacgia());
             sach.setManxb(((NhaXuatBan) cbNXB.getSelectedItem()).getManxb());
             sach.setMatheloai(((TheLoai) cbTheLoai.getSelectedItem()).getMatheloai());
@@ -775,7 +804,7 @@ public class PanelSach extends BasePanel {
 
         try {
             Sach sach = new Sach();
-            sach.setMasach(Integer.parseInt(tableSach.getValueAt(row, 0).toString()));
+            sach.setMasach(tableSach.getValueAt(row, 0).toString());            
             sach.setTensach(txtTenSach.getText());
             sach.setMatacgia(((TacGia) cbTacGia.getSelectedItem()).getMatacgia());
             sach.setManxb(((NhaXuatBan) cbNXB.getSelectedItem()).getManxb());
@@ -808,7 +837,7 @@ public class PanelSach extends BasePanel {
         int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa sách này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
-                int masach = Integer.parseInt(tableSach.getValueAt(row, 0).toString());
+                String masach = tableSach.getValueAt(row, 0).toString(); // Lấy masach dưới dạng String
                 if (sachDAO.deleteSach(masach)) {
                     JOptionPane.showMessageDialog(this, "Xóa sách thành công!");
                     loadTableData();
@@ -885,6 +914,7 @@ public class PanelSach extends BasePanel {
 }
     
     private void clearFields() {
+        txtMaSach.setText(""); 
         txtTenSach.setText("");
         txtNamXB.setText("");
         txtSoTrang.setText("");
@@ -893,6 +923,7 @@ public class PanelSach extends BasePanel {
         cbTheLoai.setSelectedIndex(0);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel MaSach;
     private javax.swing.JLabel NXB;
     private javax.swing.JLabel NamXuatBan;
     private javax.swing.JLabel NamXuatBan1;
@@ -916,6 +947,7 @@ public class PanelSach extends BasePanel {
     private javax.swing.JPanel panelInfor;
     private javax.swing.JPanel panelTable;
     private javax.swing.JTable tableSach;
+    private javax.swing.JTextField txtMaSach;
     private javax.swing.JTextField txtNamXB;
     private javax.swing.JTextField txtSoLuong;
     private javax.swing.JTextField txtSoTrang;
