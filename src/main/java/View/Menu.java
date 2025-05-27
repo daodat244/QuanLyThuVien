@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package View;
+import View.ChucNang.PanelNhanVien;
 import Control.ConnectToSQLServer;
 import View.ChucNang.*;
 import java.awt.CardLayout;
@@ -25,6 +26,9 @@ public class Menu extends javax.swing.JFrame {
         PanelTheLoai panelTheLoai = new PanelTheLoai();
         PanelSuKien panelSuKien = new PanelSuKien();       
         PanelMuonPhong panelMuonPhong = new PanelMuonPhong();
+        PanelTaiKhoan panelTaiKhoan = new PanelTaiKhoan();
+        PanelDocGia panelDocGia = new PanelDocGia();
+        PanelNhanVien panelNhanVien = new PanelNhanVien();
         
         panelContent.add(panelNhaXuatBan, "nhaXuatBan");
         panelContent.add(panelKhoSach, "sach");
@@ -32,12 +36,15 @@ public class Menu extends javax.swing.JFrame {
         panelContent.add(panelTheLoai, "theLoai");
         panelContent.add(panelSuKien, "suKien");
         panelContent.add(panelMuonPhong, "muonPhong");
+        panelContent.add(panelTaiKhoan, "taiKhoan");
+        panelContent.add(panelDocGia, "docGia");
+        panelContent.add(panelNhanVien, "nhanVien");
 
         
         panelContent.setVisible(false); // <== Thêm dòng này để ẩn ban đầu
         
         buttonColorHandler = new ButtonColorHandler(
-            btnSach, btnPhieuMuon, btnHocSinh, btnNhanVien, btnTacGia,
+            btnSach, btnPhieuMuon, btnDocGia, btnNhanVien, btnTacGia,
             btnNhaXuatBan, btnTaiKhoan, btnSuKien, btnMuonPhong, btnTheLoai,    
             btnThongKe, btnPhieuTra
         );
@@ -56,7 +63,7 @@ public class Menu extends javax.swing.JFrame {
         btnNhanVien = new javax.swing.JButton();
         btnSach = new javax.swing.JButton();
         btnPhieuMuon = new javax.swing.JButton();
-        btnHocSinh = new javax.swing.JButton();
+        btnDocGia = new javax.swing.JButton();
         btnThongKe = new javax.swing.JButton();
         btnTaiKhoan = new javax.swing.JButton();
         btnNhaXuatBan = new javax.swing.JButton();
@@ -116,15 +123,15 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        btnHocSinh.setBackground(new java.awt.Color(42, 71, 89));
-        btnHocSinh.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnHocSinh.setForeground(new java.awt.Color(238, 238, 238));
-        btnHocSinh.setText("DS SINH VIÊN");
-        btnHocSinh.setBorder(null);
-        btnHocSinh.setFocusPainted(false);
-        btnHocSinh.addActionListener(new java.awt.event.ActionListener() {
+        btnDocGia.setBackground(new java.awt.Color(42, 71, 89));
+        btnDocGia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnDocGia.setForeground(new java.awt.Color(238, 238, 238));
+        btnDocGia.setText("DS ĐỘC GIẢ");
+        btnDocGia.setBorder(null);
+        btnDocGia.setFocusPainted(false);
+        btnDocGia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHocSinhActionPerformed(evt);
+                btnDocGiaActionPerformed(evt);
             }
         });
 
@@ -242,7 +249,7 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(btnNhanVien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnTacGia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPhieuMuon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnHocSinh, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDocGia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         MenuLayoutLayout.setVerticalGroup(
@@ -252,7 +259,7 @@ public class Menu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPhieuMuon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnHocSinh, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDocGia, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -301,7 +308,7 @@ public class Menu extends javax.swing.JFrame {
             panelLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLogoLayout.createSequentialGroup()
                 .addComponent(lblHome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1074, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1079, Short.MAX_VALUE)
                 .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(14, 14, 14))
         );
@@ -349,7 +356,7 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
-        // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void btnTheLoaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTheLoaiActionPerformed
@@ -390,16 +397,22 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNhaXuatBanActionPerformed
 
     private void btnTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaiKhoanActionPerformed
-        // TODO add your handling code here:
+        CardLayout cl = (CardLayout)(panelContent.getLayout());
+        panelContent.setVisible(true);
+        cl.show(panelContent, "taiKhoan");
+        buttonColorHandler.changeButtonColor(btnTaiKhoan);
     }//GEN-LAST:event_btnTaiKhoanActionPerformed
 
     private void btnThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThongKeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnThongKeActionPerformed
 
-    private void btnHocSinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHocSinhActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnHocSinhActionPerformed
+    private void btnDocGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDocGiaActionPerformed
+        CardLayout cl = (CardLayout)(panelContent.getLayout());
+        panelContent.setVisible(true);
+        cl.show(panelContent, "docGia");
+        buttonColorHandler.changeButtonColor(btnDocGia);
+    }//GEN-LAST:event_btnDocGiaActionPerformed
 
     private void btnPhieuMuonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhieuMuonActionPerformed
         // TODO add your handling code here:
@@ -413,7 +426,10 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSachActionPerformed
 
     private void btnNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhanVienActionPerformed
-        // TODO add your handling code here:
+        CardLayout cl = (CardLayout)(panelContent.getLayout());
+        panelContent.setVisible(true);
+        cl.show(panelContent, "nhanVien");
+        buttonColorHandler.changeButtonColor(btnNhanVien);
     }//GEN-LAST:event_btnNhanVienActionPerformed
 
     private void btnPhieuTraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhieuTraActionPerformed
@@ -435,7 +451,7 @@ public class Menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel MenuLayout;
-    private javax.swing.JButton btnHocSinh;
+    private javax.swing.JButton btnDocGia;
     private javax.swing.JButton btnLogOut;
     private javax.swing.JButton btnMuonPhong;
     private javax.swing.JButton btnNhaXuatBan;

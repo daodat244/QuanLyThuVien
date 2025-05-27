@@ -153,7 +153,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutActionPerformed
-        // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_btnOutActionPerformed
 
     /**
