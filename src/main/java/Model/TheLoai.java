@@ -46,5 +46,8 @@ public class TheLoai {
         this.mota = mota;
     }
     
-    
+    @Override
+    public String toString() {
+        return tentheloai; // Hiển thị trong JComboBox
+    }
 }

@@ -66,5 +66,8 @@ public class NhaXuatBan {
         this.diachi = diachi;
     }
 
-    
+    @Override
+    public String toString() {
+        return tennxb; // Hiển thị trong JComboBox
+    }
 }

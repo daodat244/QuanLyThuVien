@@ -66,5 +66,8 @@ public class TacGia {
         this.mota = mota;
     }
 
-
+    @Override
+    public String toString() {
+        return tentacgia; // Hiển thị trong JComboBox
+    }
 }

@@ -88,6 +88,5 @@ public class Sach {
     public void setSoluong(int soluong) {
         this.soluong = soluong;
     }
-    
-    
+
 }

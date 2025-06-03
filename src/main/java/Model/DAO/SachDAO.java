@@ -6,7 +6,6 @@ package Model.DAO;
 
 import Model.ConnectToSQLServer;
 import Model.Sach;
-import Model.Sach;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SachDAO {
-    public List<Sach> getAllSachWithDetails() throws SQLException {
-        List<Sach> sachList = new ArrayList<>();
-        String query = "SELECT s.*, t.tentacgia, n.tennxb, tl.tentheloai " +
+    public List<Object[]> getAllSachWithDetails() throws SQLException {
+        List<Object[]> sachList = new ArrayList<>();
+        String query = "SELECT s.masach, s.tensach, s.namxb, s.sotrang, s.soluong, t.tentacgia, n.tennxb, tl.tentheloai " +
                        "FROM sach s " +
                        "LEFT JOIN tacgia t ON s.matacgia = t.matacgia " +
                        "LEFT JOIN nhaxuatban n ON s.manxb = n.manxb " +
@@ -26,17 +25,17 @@ public class SachDAO {
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                Sach sach = new Sach(
+                Object[] row = new Object[]{
                     rs.getString("masach"),
                     rs.getString("tensach"),
-                    rs.getInt("matacgia"),
-                    rs.getInt("manxb"),
-                    rs.getInt("matheloai"),
+                    rs.getString("tentacgia"),
+                    rs.getString("tennxb"),
+                    rs.getString("tentheloai"),
                     rs.getInt("namxb"),
                     rs.getInt("sotrang"),
                     rs.getInt("soluong")
-                );
-                sachList.add(sach);
+                };
+                sachList.add(row);
             }
         }
         return sachList;
