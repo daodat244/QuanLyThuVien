@@ -9,12 +9,15 @@ import Model.DAO.NhaXuatBanDAO;
 import Model.NhaXuatBan;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class PanelNhaXuatBan extends BasePanel {
 
     private final NhaXuatBanDAO nhaXuatBanDAO = new NhaXuatBanDAO();
+    private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);  
     
     public PanelNhaXuatBan() {
         initComponents();
@@ -359,30 +362,30 @@ public class PanelNhaXuatBan extends BasePanel {
 
     private void tableNXBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableNXBMouseClicked
         int row = tableNXB.getSelectedRow();
-            if (row >= 0) {
-                txtTenNXB.setText(tableNXB.getValueAt(row, 1).toString());
-                txtSdt.setText(tableNXB.getValueAt(row, 2).toString());
-                txtEmail.setText(tableNXB.getValueAt(row, 3).toString());
-                txtDiaChi.setText(tableNXB.getValueAt(row, 4).toString());
-                } 
+        if (row >= 0) {
+            txtTenNXB.setText(tableNXB.getValueAt(row, 1).toString());
+            txtSdt.setText(tableNXB.getValueAt(row, 2).toString());
+            txtEmail.setText(tableNXB.getValueAt(row, 3).toString());
+            txtDiaChi.setText(tableNXB.getValueAt(row, 4) != null ? tableNXB.getValueAt(row, 4).toString() : "");
+        }
     }//GEN-LAST:event_tableNXBMouseClicked
 
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
-        searchNXB();
+
     }//GEN-LAST:event_txtTimKiemActionPerformed
     
         private void loadTableData() {
             try {
                 List<NhaXuatBan> nhaxuatbanList = nhaXuatBanDAO.getAllNhaXuatBan();
                 DefaultTableModel model = (DefaultTableModel) tableNXB.getModel();
-                model.setRowCount(0); // Xóa dữ liệu cũ
+                model.setRowCount(0);
                 for (NhaXuatBan nxb : nhaxuatbanList) {
                     model.addRow(new Object[]{
                         nxb.getManxb(),
                         nxb.getTennxb(),
                         nxb.getSdt(),
                         nxb.getEmail(),
-                        nxb.getDiachi()
+                        nxb.getDiachi() != null ? nxb.getDiachi() : "(Trống)"
                     });
                 }
             } catch (SQLException ex) {
@@ -390,116 +393,150 @@ public class PanelNhaXuatBan extends BasePanel {
             }
         }
         
-            private void addNXB() {
-            try {
+    private void addNXB() {
+        try {
             NhaXuatBan nxb = new NhaXuatBan();
-            nxb.setTennxb(txtTenNXB.getText());
-            nxb.setSdt(txtSdt.getText());
-            nxb.setEmail(txtEmail.getText());
-            nxb.setDiachi(txtDiaChi.getText());
-            
-                if (nhaXuatBanDAO.addNXB(nxb)) {
-                    JOptionPane.showMessageDialog(this, "Thêm tác giả thành công!");
-                    loadTableData();
-                    clearFields();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Thêm tác giả thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ cho năm sinh!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Lỗi khi thêm tác giả: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            nxb.setTennxb(txtTenNXB.getText().trim());
+            nxb.setSdt(txtSdt.getText().trim());
+            nxb.setEmail(txtEmail.getText().trim());
+            String diaChi = txtDiaChi.getText().trim();
+            nxb.setDiachi(diaChi.isEmpty() ? null : diaChi);
+
+            if (validateNXB(nxb) && nhaXuatBanDAO.addNXB(nxb)) {
+                JOptionPane.showMessageDialog(this, "Thêm nhà xuất bản thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                loadTableData();
+                clearFields();
+            } else {
+                JOptionPane.showMessageDialog(this, "Thêm nhà xuất bản thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi thêm nhà xuất bản: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    
+    }
+
     private void updateNXB() {
         int row = tableNXB.getSelectedRow();
         if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một tác giả để sửa!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhà xuất bản để sửa!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try {
             NhaXuatBan nxb = new NhaXuatBan();
             nxb.setManxb(Integer.parseInt(tableNXB.getValueAt(row, 0).toString()));
-            nxb.setTennxb(txtTenNXB.getText());
-            nxb.setSdt(txtSdt.getText());
-            nxb.setEmail(txtEmail.getText());
-            nxb.setDiachi(txtDiaChi.getText());
+            nxb.setTennxb(txtTenNXB.getText().trim());
+            nxb.setSdt(txtSdt.getText().trim());
+            nxb.setEmail(txtEmail.getText().trim());
+            String diaChi = txtDiaChi.getText().trim();
+            nxb.setDiachi(diaChi.isEmpty() ? null : diaChi);
 
-            if (nhaXuatBanDAO.updateNXB(nxb)) {
-                JOptionPane.showMessageDialog(this, "Sửa tác giả thành công!");
+            if (validateNXB(nxb) && nhaXuatBanDAO.updateNXB(nxb)) {
+                JOptionPane.showMessageDialog(this, "Sửa nhà xuất bản thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 loadTableData();
                 clearFields();
             } else {
-                JOptionPane.showMessageDialog(this, "Sửa tác giả thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Sửa nhà xuất bản thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ cho năm sinh!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi sửa tác giả: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi khi sửa nhà xuất bản: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void deleteNXB() {
-        int row = tableNXB.getSelectedRow();
+    int row = tableNXB.getSelectedRow();
         if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nxb để xóa!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhà xuất bản để xóa!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa nxb này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa nhà xuất bản này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
                 int manxb = Integer.parseInt(tableNXB.getValueAt(row, 0).toString());
+                // Kiểm tra ràng buộc khóa ngoại
+                if (nhaXuatBanDAO.isNXBInUse(manxb)) {
+                    JOptionPane.showMessageDialog(this, "Không thể xóa nhà xuất bản này vì đang được sử dụng trong sách!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 if (nhaXuatBanDAO.deleteNXB(manxb)) {
-                    JOptionPane.showMessageDialog(this, "Xóa nxb thành công!");
+                    JOptionPane.showMessageDialog(this, "Xóa nhà xuất bản thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                     loadTableData();
                     clearFields();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Xóa nxb thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Xóa nhà xuất bản thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Lỗi khi xóa nxb: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Lỗi khi xóa nhà xuất bản: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Mã nhà xuất bản không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
     
-        private void searchNXB() {
+    private void searchNXB() {
         try {
             String searchText = txtTimKiem.getText().trim();
             String searchCriteria = (String) cbTimKiem.getSelectedItem();
-
             List<NhaXuatBan> nxbList = nhaXuatBanDAO.getAllNhaXuatBan();
             DefaultTableModel model = (DefaultTableModel) tableNXB.getModel();
             model.setRowCount(0);
 
             for (NhaXuatBan nxb : nxbList) {
                 boolean match = false;
+                String manxb = String.valueOf(nxb.getManxb());
+                String tennxb = nxb.getTennxb();
+                String sdt = nxb.getSdt();
+                String email = nxb.getEmail();
+                String diachi = nxb.getDiachi() != null ? nxb.getDiachi() : "(Trống)";
 
-                // Kiểm tra tiêu chí tìm kiếm
                 if (searchCriteria.equals("Mã NXB") && !searchText.isEmpty()) {
-                    match = String.valueOf(nxb.getManxb()).contains(searchText);
+                    match = manxb.contains(searchText);
                 } else if (searchCriteria.equals("Tên NXB") && !searchText.isEmpty()) {
-                    match = nxb.getTennxb().toLowerCase().contains(searchText.toLowerCase());
+                    match = tennxb.toLowerCase().contains(searchText.toLowerCase());
                 } else if (searchText.isEmpty()) {
-                    match = true; // Hiển thị tất cả nếu không có từ khóa
+                    match = true;
                 }
 
                 if (match) {
                     model.addRow(new Object[]{
-                        nxb.getManxb(),
-                        nxb.getTennxb(),
-                        nxb.getSdt(),
-                        nxb.getEmail(),
-                        nxb.getDiachi()
+                        manxb,
+                        tennxb,
+                        sdt,
+                        email,
+                        diachi
                     });
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm nxb: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm nhà xuất bản: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
+        
+        private boolean validateNXB(NhaXuatBan nxb) {
+        if (nxb.getTennxb() == null || nxb.getTennxb().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tên NXB không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (nxb.getSdt() == null || nxb.getSdt().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!nxb.getSdt().matches("\\d{10}")) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (nxb.getEmail() == null || nxb.getEmail().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Email không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!EMAIL_PATTERN.matcher(nxb.getEmail()).matches()) {
+            JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+        
     private void clearFields() {
         txtTenNXB.setText("");
         txtSdt.setText("");

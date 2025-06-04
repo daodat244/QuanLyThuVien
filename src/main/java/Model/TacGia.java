@@ -14,16 +14,20 @@ public class TacGia {
     private int namsinh;
     private String quequan;    
     private String mota;
+    private String sdt;
+    private String email;
 
     public TacGia() {
     }
 
-    public TacGia(int matacgia, String tentacgia, int namsinh, String quequan, String mota) {
+    public TacGia(int matacgia, String tentacgia, int namsinh, String quequan, String mota, String sdt, String email) {
         this.matacgia = matacgia;
         this.tentacgia = tentacgia;
         this.namsinh = namsinh;
         this.quequan = quequan;
         this.mota = mota;
+        this.sdt = sdt;
+        this.email = email;
     }
 
     public int getMatacgia() {
@@ -65,6 +69,24 @@ public class TacGia {
     public void setMota(String mota) {
         this.mota = mota;
     }
+
+    public String getSdt() {
+        return sdt;
+    }
+
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
 
     @Override
     public String toString() {

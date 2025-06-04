@@ -70,4 +70,18 @@ public class NhaXuatBanDAO {
             return stmt.executeUpdate() > 0;
         }
     }
+    
+        public boolean isNXBInUse(int manxb) throws SQLException {
+        String query = "SELECT COUNT(*) FROM Sach WHERE manxb = ?";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, manxb);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -26,7 +26,9 @@ public class TacGiaDAO {
                     rs.getString("tentacgia"),
                     rs.getInt("namsinh"),
                     rs.getString("quequan"),
-                    rs.getString("mota")
+                    rs.getString("mota"),
+                    rs.getString("sdt"),
+                    rs.getString("email")    
                 );
                 tacGiaList.add(tacGia);
             }
@@ -36,27 +38,31 @@ public class TacGiaDAO {
     
     // Phương thức thêm mới tác giả
     public boolean addTacGia(TacGia tacGia) throws SQLException {
-        String query = "INSERT INTO tacgia (tentacgia, namsinh, quequan, mota) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO tacgia (tentacgia, namsinh, quequan, mota, sdt, email) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConnectToSQLServer.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, tacGia.getTentacgia());
             stmt.setInt(2, tacGia.getNamsinh());
             stmt.setString(3, tacGia.getQuequan());
             stmt.setString(4, tacGia.getMota());
+            stmt.setString(5, tacGia.getSdt());
+            stmt.setString(6, tacGia.getEmail());
             return stmt.executeUpdate() > 0;
         }
     }
 
     // Phương thức cập nhật thông tin tác giả
     public boolean updateTacGia(TacGia tacGia) throws SQLException {
-        String query = "UPDATE tacgia SET tentacgia = ?, namsinh = ?, quequan = ?, mota = ? WHERE matacgia = ?";
+        String query = "UPDATE tacgia SET tentacgia = ?, namsinh = ?, quequan = ?, mota = ?, sdt = ?, email = ? WHERE matacgia = ?";
         try (Connection conn = ConnectToSQLServer.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, tacGia.getTentacgia());
             stmt.setInt(2, tacGia.getNamsinh());
             stmt.setString(3, tacGia.getQuequan());
             stmt.setString(4, tacGia.getMota());
-            stmt.setInt(5, tacGia.getMatacgia());
+            stmt.setString(5, tacGia.getSdt());
+            stmt.setString(6, tacGia.getEmail());
+            stmt.setInt(7, tacGia.getMatacgia());
             return stmt.executeUpdate() > 0;
         }
     }
@@ -70,4 +76,18 @@ public class TacGiaDAO {
             return stmt.executeUpdate() > 0;
         }
     }
+    
+    public boolean isTacGiaInUse(int matacgia) throws SQLException {
+        String query = "SELECT COUNT(*) FROM Sach WHERE matacgia = ?";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, matacgia);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }    
 }

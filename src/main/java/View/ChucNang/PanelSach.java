@@ -15,7 +15,6 @@ import Model.NhaXuatBan;
 import Model.TheLoai;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.sql.SQLException;
 import java.util.List;
 import org.apache.poi.ss.usermodel.*;
@@ -24,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 
 public class PanelSach extends BasePanel {
 
@@ -461,61 +461,45 @@ public class PanelSach extends BasePanel {
     }//GEN-LAST:event_txtSoTrangActionPerformed
 
     private void tableSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableSachMouseClicked
-    int row = tableSach.getSelectedRow();
+        int row = tableSach.getSelectedRow();
         if (row >= 0) {
             try {
-            // Lấy dữ liệu từ bảng
-            txtMaSach.setText(tableSach.getValueAt(row, 0).toString()); // Thêm dòng này để hiển thị masach
-            txtTenSach.setText(tableSach.getValueAt(row, 1).toString());
-            txtNamXB.setText(tableSach.getValueAt(row, 5).toString());
-            txtSoTrang.setText(tableSach.getValueAt(row, 6).toString());
-            txtSoLuong.setText(tableSach.getValueAt(row, 7).toString());
+                txtMaSach.setText(tableSach.getValueAt(row, 0).toString());
+                txtTenSach.setText(tableSach.getValueAt(row, 1).toString());
+                txtNamXB.setText(tableSach.getValueAt(row, 5) != null ? tableSach.getValueAt(row, 5).toString() : "");
+                txtSoTrang.setText(tableSach.getValueAt(row, 6) != null ? tableSach.getValueAt(row, 6).toString() : "");
+                txtSoLuong.setText(tableSach.getValueAt(row, 7).toString());
 
-            // Lấy mã số từ dữ liệu bảng (cột 2, 3, 4 chứa tên, không chứa mã trực tiếp)
-            int matacgia = -1;
-            int manxb = -1;
-            int matheloai = -1;
+                String tenTacGia = tableSach.getValueAt(row, 2).toString();
+                String tenNXB = tableSach.getValueAt(row, 3).toString();
+                String tenTheLoai = tableSach.getValueAt(row, 4).toString();
 
-            // Tìm mã số dựa trên tên trong bảng (cột 2, 3, 4)
-            String tenTacGia = tableSach.getValueAt(row, 2).toString();
-            String tenNXB = tableSach.getValueAt(row, 3).toString();
-            String tenTheLoai = tableSach.getValueAt(row, 4).toString();
-
-            // Tìm mã số trong danh sách combo box dựa trên tên
-            for (int i = 0; i < cbTacGia.getItemCount(); i++) {
-                TacGia tacGia = cbTacGia.getItemAt(i);
-                if (tacGia.getTentacgia().equals(tenTacGia)) {
-                    matacgia = tacGia.getMatacgia();
-                    cbTacGia.setSelectedIndex(i);
-                    break;
+                for (int i = 0; i < cbTacGia.getItemCount(); i++) {
+                    TacGia tacGia = cbTacGia.getItemAt(i);
+                    if (tacGia.getTentacgia().equals(tenTacGia)) {
+                        cbTacGia.setSelectedIndex(i);
+                        break;
+                    }
                 }
-            }
-            for (int i = 0; i < cbNXB.getItemCount(); i++) {
-                NhaXuatBan nxb = cbNXB.getItemAt(i);
-                if (nxb.getTennxb().equals(tenNXB)) {
-                    manxb = nxb.getManxb();
-                    cbNXB.setSelectedIndex(i);
-                    break;
+                for (int i = 0; i < cbNXB.getItemCount(); i++) {
+                    NhaXuatBan nxb = cbNXB.getItemAt(i);
+                    if (nxb.getTennxb().equals(tenNXB)) {
+                        cbNXB.setSelectedIndex(i);
+                        break;
+                    }
                 }
-            }
-            for (int i = 0; i < cbTheLoai.getItemCount(); i++) {
-                TheLoai theLoai = cbTheLoai.getItemAt(i);
-                if (theLoai.getTentheloai().equals(tenTheLoai)) {
-                    matheloai = theLoai.getMatheloai();
-                    cbTheLoai.setSelectedIndex(i);
-                    break;
+                for (int i = 0; i < cbTheLoai.getItemCount(); i++) {
+                    TheLoai theLoai = cbTheLoai.getItemAt(i);
+                    if (theLoai.getTentheloai().equals(tenTheLoai)) {
+                        cbTheLoai.setSelectedIndex(i);
+                        break;
+                    }
                 }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi chọn sách: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
-
-            // Nếu không tìm thấy, đặt về mục đầu tiên hoặc giữ nguyên
-            if (matacgia == -1) cbTacGia.setSelectedIndex(0);
-            if (manxb == -1) cbNXB.setSelectedIndex(0);
-            if (matheloai == -1) cbTheLoai.setSelectedIndex(0);
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi chọn sách: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    }
+        txtMaSach.setEditable(false);
     }//GEN-LAST:event_tableSachMouseClicked
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
@@ -696,15 +680,15 @@ public class PanelSach extends BasePanel {
             List<Object[]> sachList = sachDAO.getAllSachWithDetails();
             DefaultTableModel model = (DefaultTableModel) tableSach.getModel();
             model.setRowCount(0);
-            for(Object[] row : sachList){
+            for (Object[] row : sachList) {
                 model.addRow(new Object[]{
                     row[0],
                     row[1],
-                    row[2],
-                    row[3],
-                    row[4],
-                    row[5],
-                    row[6],
+                    row[2] != null ? row[2] : "(Trống)",
+                    row[3] != null ? row[3] : "(Trống)",
+                    row[4] != null ? row[4] : "(Trống)",
+                    row[5] != null ? row[5] : "(Trống)",
+                    row[6] != null ? row[6] : "(Trống)",
                     row[7]
                 });
             }
@@ -721,19 +705,21 @@ public class PanelSach extends BasePanel {
             sach.setMatacgia(((TacGia) cbTacGia.getSelectedItem()).getMatacgia());
             sach.setManxb(((NhaXuatBan) cbNXB.getSelectedItem()).getManxb());
             sach.setMatheloai(((TheLoai) cbTheLoai.getSelectedItem()).getMatheloai());
-            sach.setNamxb(Integer.parseInt(txtNamXB.getText()));
-            sach.setSotrang(Integer.parseInt(txtSoTrang.getText()));
-            sach.setSoluong(Integer.parseInt(txtSoLuong.getText()));
-            
-            if (sachDAO.addSach(sach)) {
-                JOptionPane.showMessageDialog(this, "Thêm sách thành công!");
+            String namXB = txtNamXB.getText().trim();
+            sach.setNamxb(namXB.isEmpty() ? 0 : Integer.parseInt(namXB));
+            String soTrang = txtSoTrang.getText().trim();
+            sach.setSotrang(soTrang.isEmpty() ? 0 : Integer.parseInt(soTrang));
+            sach.setSoluong(Integer.parseInt(txtSoLuong.getText().trim()));
+
+            if (validateSach(sach, true) && sachDAO.addSach(sach)) {
+                JOptionPane.showMessageDialog(this, "Thêm sách thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 loadTableData();
                 clearFields();
             } else {
                 JOptionPane.showMessageDialog(this, "Thêm sách thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ cho Năm XB và Số trang!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ cho Năm XB, Số trang hoặc Số lượng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Lỗi khi thêm sách: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
@@ -748,24 +734,26 @@ public class PanelSach extends BasePanel {
 
         try {
             Sach sach = new Sach();
-            sach.setMasach(tableSach.getValueAt(row, 0).toString());            
-            sach.setTensach(txtTenSach.getText());
+            sach.setMasach(tableSach.getValueAt(row, 0).toString());
+            sach.setTensach(txtTenSach.getText().trim());
             sach.setMatacgia(((TacGia) cbTacGia.getSelectedItem()).getMatacgia());
             sach.setManxb(((NhaXuatBan) cbNXB.getSelectedItem()).getManxb());
             sach.setMatheloai(((TheLoai) cbTheLoai.getSelectedItem()).getMatheloai());
-            sach.setNamxb(Integer.parseInt(txtNamXB.getText()));
-            sach.setSotrang(Integer.parseInt(txtSoTrang.getText()));
-            sach.setSoluong(Integer.parseInt(txtSoLuong.getText()));
-            
-            if (sachDAO.updateSach(sach)) {
-                JOptionPane.showMessageDialog(this, "Sửa sách thành công!");
+            String namXB = txtNamXB.getText().trim();
+            sach.setNamxb(namXB.isEmpty() ? 0 : Integer.parseInt(namXB));
+            String soTrang = txtSoTrang.getText().trim();
+            sach.setSotrang(soTrang.isEmpty() ? 0 : Integer.parseInt(soTrang));
+            sach.setSoluong(Integer.parseInt(txtSoLuong.getText().trim()));
+
+            if (validateSach(sach, false) && sachDAO.updateSach(sach)) {
+                JOptionPane.showMessageDialog(this, "Sửa sách thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 loadTableData();
                 clearFields();
             } else {
                 JOptionPane.showMessageDialog(this, "Sửa sách thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ cho Năm XB và Số trang!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ cho Năm XB, Số trang hoặc Số lượng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Lỗi khi sửa sách: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
@@ -781,9 +769,9 @@ public class PanelSach extends BasePanel {
         int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa sách này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
-                String masach = tableSach.getValueAt(row, 0).toString(); // Lấy masach dưới dạng String
+                String masach = tableSach.getValueAt(row, 0).toString();
                 if (sachDAO.deleteSach(masach)) {
-                    JOptionPane.showMessageDialog(this, "Xóa sách thành công!");
+                    JOptionPane.showMessageDialog(this, "Xóa sách thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                     loadTableData();
                     clearFields();
                 } else {
@@ -796,61 +784,99 @@ public class PanelSach extends BasePanel {
     }
     
     private void searchSach() {
-        try {
-            String searchText = txtTimKiem.getText().trim();
-            String searchCriteria = (String) cbTimKiem.getSelectedItem();
+    try {
+        String searchText = txtTimKiem.getText().trim();
+        String searchCriteria = (String) cbTimKiem.getSelectedItem();
+        List<Object[]> sachList = sachDAO.getAllSachWithDetails();
+        DefaultTableModel model = (DefaultTableModel) tableSach.getModel();
+        model.setRowCount(0);
 
-            List<Object[]> sachList = sachDAO.getAllSachWithDetails();
-            DefaultTableModel model = (DefaultTableModel) tableSach.getModel();
-            model.setRowCount(0);
+        for (Object[] row : sachList) {
+            boolean match = false;
+            String masach = row[0].toString();
+            String tensach = row[1].toString();
+            String tentacgia = row[2].toString();
+            String tennxb = row[3].toString();
+            String tentheloai = row[4].toString();
+            String namxb = row[5] != null && (Integer) row[5] != 0 ? row[5].toString() : "(Trống)";
+            String sotrang = row[6] != null && (Integer) row[6] != 0 ? row[6].toString() : "(Trống)";
+            String soluong = row[7].toString(); // soluong không null
 
-            for (Object[] row : sachList) {
-                boolean match = false;
-
-                // Lấy các giá trị từ mảng Object[] và xử lý kiểu dữ liệu
-                String masach = row[0] != null ? row[0].toString() : "";
-                String tensach = row[1] != null ? row[1].toString() : "";
-                String tentacgia = row[2] != null ? row[2].toString() : "Không xác định";
-                String tennxb = row[3] != null ? row[3].toString() : "Không xác định";
-                String tentheloai = row[4] != null ? row[4].toString() : "Không xác định";
-                Integer namxb = row[5] != null ? (Integer) row[5] : 0;
-                Integer sotrang = row[6] != null ? (Integer) row[6] : 0;
-                Integer soluong = row[7] != null ? (Integer) row[7] : 0;
-
-                // Kiểm tra tiêu chí tìm kiếm
-                if (searchCriteria.equals("Mã sách") && !searchText.isEmpty()) {
-                    match = masach.toLowerCase().contains(searchText.toLowerCase());
-                } else if (searchCriteria.equals("Tên sách") && !searchText.isEmpty()) {
-                    match = tensach.toLowerCase().contains(searchText.toLowerCase());
-                } else if (searchCriteria.equals("Tác giả") && !searchText.isEmpty()) {
-                    match = tentacgia.toLowerCase().contains(searchText.toLowerCase());
-                } else if (searchCriteria.equals("NXB") && !searchText.isEmpty()) {
-                    match = tennxb.toLowerCase().contains(searchText.toLowerCase());
-                } else if (searchCriteria.equals("Thể loại") && !searchText.isEmpty()) {
-                    match = tentheloai.toLowerCase().contains(searchText.toLowerCase());
-                } else if (searchText.isEmpty()) {
-                    match = true;
-                }
-
-                // Nếu thỏa mãn điều kiện tìm kiếm, thêm hàng vào bảng
-                if (match) {
-                    model.addRow(new Object[]{
-                        masach,
-                        tensach,
-                        tentacgia,
-                        tennxb,
-                        tentheloai,
-                        namxb,
-                        sotrang,
-                        soluong
-                    });
-                }
+            if (searchCriteria.equals("Mã sách") && !searchText.isEmpty()) {
+                match = masach.toLowerCase().contains(searchText.toLowerCase());
+            } else if (searchCriteria.equals("Tên sách") && !searchText.isEmpty()) {
+                match = tensach.toLowerCase().contains(searchText.toLowerCase());
+            } else if (searchCriteria.equals("Tác giả") && !searchText.isEmpty()) {
+                match = tentacgia.toLowerCase().contains(searchText.toLowerCase());
+            } else if (searchCriteria.equals("NXB") && !searchText.isEmpty()) {
+                match = tennxb.toLowerCase().contains(searchText.toLowerCase());
+            } else if (searchCriteria.equals("Thể loại") && !searchText.isEmpty()) {
+                match = tentheloai.toLowerCase().contains(searchText.toLowerCase());
+            } else if (searchText.isEmpty()) {
+                match = true;
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm sách: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+            if (match) {
+                model.addRow(new Object[]{
+                    masach,
+                    tensach,
+                    tentacgia,
+                    tennxb,
+                    tentheloai,
+                    namxb,
+                    sotrang,
+                    soluong
+                });
+            }
         }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm sách: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
-    
+    }
+
+    private boolean validateSach(Sach sach, boolean isAdd) {
+        
+        if (sach.getMasach() == null || sach.getMasach().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Mã sách không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (sach.getTensach() == null || sach.getTensach().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tên sách không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (sach.getSoluong() < 0) {
+            JOptionPane.showMessageDialog(this, "Số lượng phải lớn hơn hoặc bằng 0!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (isAdd) {
+            try {
+                Sach existingSach = sachDAO.getSachById(sach.getMasach());
+                if (existingSach != null) {
+                    JOptionPane.showMessageDialog(this, "Mã sách đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra mã sách: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+
+        if (sach.getNamxb() != 0) {
+            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+            if (sach.getNamxb() > currentYear) {
+                JOptionPane.showMessageDialog(this, "Năm xuất bản phải nhỏ hơn hoặc bằng năm hiện tại (" + currentYear + ")!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+
+        if (sach.getSotrang() < 0) {
+            JOptionPane.showMessageDialog(this, "Số trang không được âm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }    
     private void clearFields() {
         txtMaSach.setText(""); 
         txtTenSach.setText("");
