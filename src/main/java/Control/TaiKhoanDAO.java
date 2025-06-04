@@ -49,7 +49,7 @@ public class TaiKhoanDAO {
     }
 
     public boolean updateTK(TaiKhoan tk) throws SQLException {
-        String query = "UPDATE sach SET manv = ?, tendangnhap = ?, matkhau = ?, role = ? WHERE matk = ?";
+        String query = "UPDATE taikhoan SET manv = ?, tendangnhap = ?, matkhau = ?, role = ? WHERE matk = ?";
         try (Connection conn = ConnectToSQLServer.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, tk.getManhanvien());
@@ -62,11 +62,31 @@ public class TaiKhoanDAO {
     }
 
     public boolean deleteTK(int mataikhoan) throws SQLException {
-        String query = "DELETE FROM sach WHERE matk = ?";
+        String query = "DELETE FROM taikhoan WHERE matk = ?";
         try (Connection conn = ConnectToSQLServer.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, mataikhoan);
             return stmt.executeUpdate() > 0;
         }
+    }
+    public TaiKhoan authenticate(String username, String password) throws SQLException {
+        String query = "SELECT * FROM taikhoan WHERE tendangnhap = ? AND matkhau = ?";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new TaiKhoan(
+                        rs.getInt("matk"),
+                        rs.getInt("manv"),
+                        rs.getString("tendangnhap"),
+                        rs.getString("matkhau"),
+                        rs.getString("role")
+                    );
+                }
+            }
+        }
+        return null;
     }
 }

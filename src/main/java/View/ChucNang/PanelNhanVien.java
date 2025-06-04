@@ -1,11 +1,15 @@
 package View.ChucNang;
 
+
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import Control.NhanVienDAO;
 import Model.NhanVien;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 public class PanelNhanVien extends javax.swing.JPanel {
 
@@ -41,7 +45,7 @@ public class PanelNhanVien extends javax.swing.JPanel {
         Email = new javax.swing.JLabel();
         DiaChi = new javax.swing.JLabel();
         txtQueQuan = new javax.swing.JTextField();
-        txtNgaySinh = new javax.swing.JTextField();
+        dtpNgaySinh = new com.github.lgooddatepicker.components.DatePicker();
         jPanel1 = new javax.swing.JPanel();
         btnNhapDuLieu = new javax.swing.JButton();
         btnXuatDuLieu = new javax.swing.JButton();
@@ -61,35 +65,28 @@ public class PanelNhanVien extends javax.swing.JPanel {
 
         panelInfor.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        TenDG.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         TenDG.setText("Tên nhân viên");
+        TenDG.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
         txtTenNV.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         txtTenNV.setPreferredSize(new java.awt.Dimension(64, 25));
 
-        SoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         SoDienThoai.setText("Số điện thoại");
+        SoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
         txtSdt.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         txtSdt.setPreferredSize(new java.awt.Dimension(64, 25));
 
-        Email.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         Email.setText("Ngày sinh");
+        Email.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
-        DiaChi.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         DiaChi.setText("Quê quán");
+        DiaChi.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
         txtQueQuan.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         txtQueQuan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtQueQuanActionPerformed(evt);
-            }
-        });
-
-        txtNgaySinh.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        txtNgaySinh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNgaySinhActionPerformed(evt);
             }
         });
 
@@ -109,7 +106,7 @@ public class PanelNhanVien extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtSdt, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
-                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panelInforLayout.createSequentialGroup()
                         .addComponent(DiaChi)
                         .addGap(18, 18, 18)
@@ -117,8 +114,8 @@ public class PanelNhanVien extends javax.swing.JPanel {
                     .addGroup(panelInforLayout.createSequentialGroup()
                         .addComponent(Email)
                         .addGap(18, 18, 18)
-                        .addComponent(txtNgaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(29, 29, 29))
+                        .addComponent(dtpNgaySinh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(30, 30, 30))
         );
         panelInforLayout.setVerticalGroup(
             panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,7 +125,7 @@ public class PanelNhanVien extends javax.swing.JPanel {
                     .addComponent(TenDG)
                     .addComponent(txtTenNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Email)
-                    .addComponent(txtNgaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dtpNgaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -142,11 +139,11 @@ public class PanelNhanVien extends javax.swing.JPanel {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        btnNhapDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         btnNhapDuLieu.setText("Nhập Dữ liệu");
+        btnNhapDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
-        btnXuatDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         btnXuatDuLieu.setText("Xuất Dữ liệu");
+        btnXuatDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -172,32 +169,32 @@ public class PanelNhanVien extends javax.swing.JPanel {
         panelButton.setBorder(javax.swing.BorderFactory.createTitledBorder("Chức năng"));
         panelButton.setPreferredSize(new java.awt.Dimension(1120, 86));
 
-        btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnThem.setText("Thêm");
+        btnThem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThemActionPerformed(evt);
             }
         });
 
-        btnSua.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnSua.setText("Sửa");
+        btnSua.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnSua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSuaActionPerformed(evt);
             }
         });
 
-        btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnXoa.setText("Xóa");
+        btnXoa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXoaActionPerformed(evt);
             }
         });
 
-        TimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         TimKiem.setText("Tìm Kiếm:");
+        TimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
@@ -206,8 +203,8 @@ public class PanelNhanVien extends javax.swing.JPanel {
             }
         });
 
-        cbTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cbTimKiem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã Nhân Viên", "Tên Nhân Viên" }));
+        cbTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout panelButtonLayout = new javax.swing.GroupLayout(panelButton);
         panelButton.setLayout(panelButtonLayout);
@@ -358,7 +355,12 @@ public class PanelNhanVien extends javax.swing.JPanel {
             if (row >= 0) {
                 txtTenNV.setText(tableNv.getValueAt(row, 1).toString());
                 txtSdt.setText(tableNv.getValueAt(row, 2).toString());
-                txtNgaySinh.setText(tableNv.getValueAt(row, 3).toString());
+                Object dateValue = tableNv.getValueAt(row, 3);
+            if (dateValue instanceof Date) {
+                dtpNgaySinh.setDate(((Date) dateValue).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            } else {
+                dtpNgaySinh.setDate(null);
+            }
                 txtQueQuan.setText(tableNv.getValueAt(row, 4).toString());
             }
             
@@ -367,10 +369,17 @@ public class PanelNhanVien extends javax.swing.JPanel {
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
         searchNV();
     }//GEN-LAST:event_txtTimKiemActionPerformed
-
-    private void txtNgaySinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNgaySinhActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNgaySinhActionPerformed
+    
+         private boolean isValidPhoneNumber(String sdt) {
+        // Kiểm tra số điện thoại: bắt đầu bằng 0, chỉ chứa số, độ dài 10
+        if (sdt == null || sdt.trim().isEmpty()) {
+            return false;
+        }
+        if (!sdt.matches("0[0-9]{9}")) {
+            return false;
+        }
+        return true;
+    }
     
         private void loadTableData() {
             try {
@@ -393,11 +402,26 @@ public class PanelNhanVien extends javax.swing.JPanel {
         
             private void addNV() {
             try {
+                
+                if (txtTenNV.getText().trim().isEmpty() || txtSdt.getText().trim().isEmpty() || txtQueQuan.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Kiểm tra số điện thoại
+            String sdt = txtSdt.getText().trim();
+            if (!isValidPhoneNumber(sdt)) {
+                JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ! Phải bắt đầu bằng 0 và có đúng 10 chữ số.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+                
             NhanVien nv = new NhanVien();
             nv.setTennhanvien(txtTenNV.getText());
             nv.setSdt(txtSdt.getText());
-            nv.setNgaysinh(Integer.parseInt(txtNgaySinh.getText()));
+            LocalDate localDate = dtpNgaySinh.getDate();
+            nv.setNgaysinh(localDate != null ? Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null);
             nv.setQuequan(txtQueQuan.getText());
+            
             
                 if (nhanvienDAO.addNV(nv)) {
                     JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công!");
@@ -419,12 +443,20 @@ public class PanelNhanVien extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhân viên để sửa!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
+       // Kiểm tra số điện thoại
+            String sdt = txtSdt.getText().trim();
+            if (!isValidPhoneNumber(sdt)) {
+                JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ! Phải bắt đầu bằng 0 và có đúng 10 chữ số.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
         try {
             NhanVien nv = new NhanVien();
             nv.setTennhanvien(txtTenNV.getText());
             nv.setSdt(txtSdt.getText());
-            nv.setNgaysinh(Integer.parseInt(txtNgaySinh.getText()));
+            LocalDate localDate = dtpNgaySinh.getDate();
+            nv.setNgaysinh(localDate != null ? Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null);
             nv.setQuequan(txtQueQuan.getText());
 
             if (nhanvienDAO.updateNV(nv)) {
@@ -517,13 +549,13 @@ public class PanelNhanVien extends javax.swing.JPanel {
     private javax.swing.JButton btnXoa;
     private javax.swing.JButton btnXuatDuLieu;
     private javax.swing.JComboBox<String> cbTimKiem;
+    private com.github.lgooddatepicker.components.DatePicker dtpNgaySinh;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelButton;
     private javax.swing.JPanel panelInfor;
     private javax.swing.JTable tableNv;
-    private javax.swing.JTextField txtNgaySinh;
     private javax.swing.JTextField txtQueQuan;
     private javax.swing.JTextField txtSdt;
     private javax.swing.JTextField txtTenNV;

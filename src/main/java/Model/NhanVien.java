@@ -4,6 +4,8 @@
  */
 package Model;
 
+import java.util.Date;
+
 /**
  *
  * @author PC
@@ -11,14 +13,14 @@ package Model;
 public class NhanVien {
     private int manhanvien;
     private String tennhanvien;
-    private String sdt ;
-    private int ngaysinh;    
+    private String sdt;
+    private Date ngaysinh;    
     private String quequan;
     
-    public NhanVien(){
+    public NhanVien() {
     }
 
-    public NhanVien(int manhanvien, String tennhanvien, String sdt, int ngaysinh, String quequan) {
+    public NhanVien(int manhanvien, String tennhanvien, String sdt, Date ngaysinh, String quequan) {
         this.manhanvien = manhanvien;
         this.tennhanvien = tennhanvien;
         this.sdt = sdt;
@@ -50,11 +52,11 @@ public class NhanVien {
         this.sdt = sdt;
     }
 
-    public int getNgaysinh() {
+    public Date getNgaysinh() {
         return ngaysinh;
     }
 
-    public void setNgaysinh(int ngaysinh) {
+    public void setNgaysinh(Date ngaysinh) {
         this.ngaysinh = ngaysinh;
     }
 
@@ -65,5 +67,4 @@ public class NhanVien {
     public void setQuequan(String quequan) {
         this.quequan = quequan;
     }
-    
 }

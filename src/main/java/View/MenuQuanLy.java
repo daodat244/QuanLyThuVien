@@ -14,11 +14,11 @@ import UI.ButtonColorHandler;
  *
  * @author PC
  */
-public class Menu extends javax.swing.JFrame {
+public class MenuQuanLy extends javax.swing.JFrame {
 
     private ButtonColorHandler buttonColorHandler;
 
-    public Menu() {
+    public MenuQuanLy() {
         initComponents();
         PanelSach panelKhoSach = new PanelSach();
         PanelTacGia panelTacGia = new PanelTacGia();// tạo instance từ class KhoSach
@@ -78,9 +78,7 @@ public class Menu extends javax.swing.JFrame {
         panelContent = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1366, 768));
         setMinimumSize(new java.awt.Dimension(1366, 768));
-        setPreferredSize(new java.awt.Dimension(1366, 768));
         setResizable(false);
         setSize(new java.awt.Dimension(1366, 768));
 
@@ -444,7 +442,7 @@ public class Menu extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Menu().setVisible(true);
+                new MenuQuanLy().setVisible(true);
             }
         });
     }

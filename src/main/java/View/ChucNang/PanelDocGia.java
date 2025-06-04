@@ -363,7 +363,28 @@ public class PanelDocGia extends javax.swing.JPanel {
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
         searchDG();
     }//GEN-LAST:event_txtTimKiemActionPerformed
-    
+        
+        private boolean isValidPhoneNumber(String sdt) {
+        // Kiểm tra số điện thoại: bắt đầu bằng 0, chỉ chứa số, độ dài 10
+        if (sdt == null || sdt.trim().isEmpty()) {
+            return false;
+        }
+        if (!sdt.matches("0[0-9]{9}")) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidEmail(String email) {
+        // Kiểm tra email: không rỗng và đúng định dạng
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+        // Biểu thức chính quy kiểm tra định dạng email
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email.matches(emailRegex);
+    }
+        
         private void loadTableData() {
             try {
                 List<DocGia> docgiaList = docgiaDAO.getAllDocGia();
@@ -385,6 +406,21 @@ public class PanelDocGia extends javax.swing.JPanel {
         
             private void addDG() {
             try {
+                
+                // Kiểm tra số điện thoại
+            String sdt = txtSdt.getText().trim();
+            if (!isValidPhoneNumber(sdt)) {
+                JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ! Phải bắt đầu bằng 0 và có đúng 10 chữ số.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Kiểm tra email
+            String email = txtEmail.getText().trim();
+            if (!isValidEmail(email)) {
+                JOptionPane.showMessageDialog(this, "Email không hợp lệ! Vui lòng nhập đúng định dạng (ví dụ: ten@domain.com).", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+                
             DocGia dg = new DocGia();
             dg.setTendocgia(txtTenDG.getText());
             dg.setSdt(txtSdt.getText());
@@ -411,7 +447,21 @@ public class PanelDocGia extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một độc giả để sửa!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
+        // Kiểm tra số điện thoại
+            String sdt = txtSdt.getText().trim();
+            if (!isValidPhoneNumber(sdt)) {
+                JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ! Phải bắt đầu bằng 0 và có đúng 10 chữ số.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
+            // Kiểm tra email
+            String email = txtEmail.getText().trim();
+            if (!isValidEmail(email)) {
+                JOptionPane.showMessageDialog(this, "Email không hợp lệ! Vui lòng nhập đúng định dạng (ví dụ: ten@domain.com).", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        
         try {
             DocGia dg = new DocGia();
             dg.setMadocgia(Integer.parseInt(tableDG.getValueAt(row, 0).toString()));
