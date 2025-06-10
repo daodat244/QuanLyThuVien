@@ -607,45 +607,191 @@ public class PanelSach extends BasePanel {
             File selectedFile = fileChooser.getSelectedFile();
             try (FileInputStream fis = new FileInputStream(selectedFile);
                  Workbook workbook = new XSSFWorkbook(fis)) {
-
-                Sheet sheet = workbook.getSheet("DanhSachSach");
-                if (sheet == null) {
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy sheet 'DanhSachSach' trong file Excel!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
+                Sheet sheet = workbook.getSheetAt(0);
                 int successCount = 0;
-                for (int i = 1; i <= sheet.getLastRowNum(); i++) { // Bỏ qua dòng tiêu đề (i=0)
+                int errorCount = 0;
+                StringBuilder errorMessages = new StringBuilder();
+                List<TacGia> tacGiaList = tacGiaDAO.getAllTacGia();
+                List<NhaXuatBan> nxbList = nxbDAO.getAllNhaXuatBan();
+                List<TheLoai> theLoaiList = theLoaiDAO.getAllTheLoai();
+                int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+                for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                     Row row = sheet.getRow(i);
                     if (row == null) continue;
 
                     try {
                         Sach sach = new Sach();
-                        sach.setMasach(row.getCell(0).getStringCellValue()); 
-                        sach.setTensach(row.getCell(1).getStringCellValue()); // Tên sách
-                        sach.setMatacgia((int) row.getCell(2).getNumericCellValue()); // Mã tác giả
-                        sach.setManxb((int) row.getCell(3).getNumericCellValue()); // Mã NXB
-                        sach.setMatheloai((int) row.getCell(4).getNumericCellValue()); // Mã thể loại
-                        sach.setNamxb((int) row.getCell(5).getNumericCellValue()); // Năm XB
-                        sach.setSotrang((int) row.getCell(6).getNumericCellValue()); // Số trang
-                        sach.setSoluong((int) row.getCell(7).getNumericCellValue()); // Số lượng
+                        // Đọc dữ liệu từ file Excel
+                        String maSach = getCellValue(row.getCell(0));
+                        String tenSach = getCellValue(row.getCell(1));
+                        String tenTacGia = getCellValue(row.getCell(2));
+                        String tenNXB = getCellValue(row.getCell(3));
+                        String tenTheLoai = getCellValue(row.getCell(4));
+                        String namXBStr = getCellValue(row.getCell(5));
+                        String soTrangStr = getCellValue(row.getCell(6));
+                        String soLuongStr = getCellValue(row.getCell(7));
+
+                        // Parse các trường số
+                        int namXB = 0;
+                        try {
+                            if (!namXBStr.isEmpty()) {
+                                namXB = Integer.parseInt(namXBStr);
+                            }
+                        } catch (NumberFormatException e) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Năm xuất bản không hợp lệ.\n");
+                            errorCount++;
+                            continue;
+                        }
+
+                        int soTrang = 0;
+                        try {
+                            if (!soTrangStr.isEmpty()) {
+                                soTrang = Integer.parseInt(soTrangStr);
+                            }
+                        } catch (NumberFormatException e) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Số trang không hợp lệ.\n");
+                            errorCount++;
+                            continue;
+                        }
+
+                        int soLuong;
+                        try {
+                            soLuong = Integer.parseInt(soLuongStr);
+                        } catch (NumberFormatException e) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Số lượng không hợp lệ.\n");
+                            errorCount++;
+                            continue;
+                        }
+
+                        // Kiểm tra dữ liệu
+                        if (maSach == null || maSach.trim().isEmpty()) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Mã sách không được để trống.\n");
+                            errorCount++;
+                            continue;
+                        }
+                        if (tenSach == null || tenSach.trim().isEmpty()) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Tên sách không được để trống.\n");
+                            errorCount++;
+                            continue;
+                        }
+                        if (tenTacGia == null || tenTacGia.trim().isEmpty()) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Tên tác giả không được để trống.\n");
+                            errorCount++;
+                            continue;
+                        }
+                        if (tenNXB == null || tenNXB.trim().isEmpty()) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Tên nhà xuất bản không được để trống.\n");
+                            errorCount++;
+                            continue;
+                        }
+                        if (tenTheLoai == null || tenTheLoai.trim().isEmpty()) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Tên thể loại không được để trống.\n");
+                            errorCount++;
+                            continue;
+                        }
+                        if (soLuongStr == null || soLuongStr.trim().isEmpty()) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Số lượng không được để trống.\n");
+                            errorCount++;
+                            continue;
+                        }
+                        if (namXB != 0 && namXB > currentYear) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Năm xuất bản phải nhỏ hơn hoặc bằng năm hiện tại (").append(currentYear).append(").\n");
+                            errorCount++;
+                            continue;
+                        }
+                        if (soTrang != 0 && soTrang < 0) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Số trang không được âm.\n");
+                            errorCount++;
+                            continue;
+                        }
+                        if (soLuong < 0) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Số lượng phải lớn hơn hoặc bằng 0.\n");
+                            errorCount++;
+                            continue;
+                        }
+                        if (sachDAO.getSachById(maSach) != null) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Mã sách '").append(maSach).append("' đã tồn tại.\n");
+                            errorCount++;
+                            continue;
+                        }
+
+                        // Tìm mã tác giả
+                        int maTacGia = -1;
+                        for (TacGia tg : tacGiaList) {
+                            if (tg.getTentacgia().equalsIgnoreCase(tenTacGia)) {
+                                maTacGia = tg.getMatacgia();
+                                break;
+                            }
+                        }
+                        if (maTacGia == -1) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Tác giả '").append(tenTacGia).append("' không tồn tại.\n");
+                            errorCount++;
+                            continue;
+                        }
+
+                        // Tìm mã nhà xuất bản
+                        int maNXB = -1;
+                        for (NhaXuatBan nxb : nxbList) {
+                            if (nxb.getTennxb().equalsIgnoreCase(tenNXB)) {
+                                maNXB = nxb.getManxb();
+                                break;
+                            }
+                        }
+                        if (maNXB == -1) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Nhà xuất bản '").append(tenNXB).append("' không tồn tại.\n");
+                            errorCount++;
+                            continue;
+                        }
+
+                        // Tìm mã thể loại
+                        int maTheLoai = -1;
+                        for (TheLoai tl : theLoaiList) {
+                            if (tl.getTentheloai().equalsIgnoreCase(tenTheLoai)) {
+                                maTheLoai = tl.getMatheloai();
+                                break;
+                            }
+                        }
+                        if (maTheLoai == -1) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Thể loại '").append(tenTheLoai).append("' không tồn tại.\n");
+                            errorCount++;
+                            continue;
+                        }
+
+                        // Gán dữ liệu cho đối tượng Sach
+                        sach.setMasach(maSach);
+                        sach.setTensach(tenSach);
+                        sach.setMatacgia(maTacGia);
+                        sach.setManxb(maNXB);
+                        sach.setMatheloai(maTheLoai);
+                        sach.setNamxb(namXB);
+                        sach.setSotrang(soTrang);
+                        sach.setSoluong(soLuong);
 
                         // Thêm sách vào cơ sở dữ liệu
                         if (sachDAO.addSach(sach)) {
                             successCount++;
                         } else {
-                            JOptionPane.showMessageDialog(this, "Không thể thêm sách: " + sach.getTensach(), "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                            errorMessages.append("Dòng ").append(i + 1).append(": Không thể thêm sách '").append(tenSach).append("'.\n");
+                            errorCount++;
                         }
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, "Lỗi khi đọc dòng " + (i + 1) + ": " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        errorMessages.append("Dòng ").append(i + 1).append(": Lỗi khi đọc dữ liệu: ").append(ex.getMessage()).append("\n");
+                        errorCount++;
                     }
                 }
 
                 // Làm mới bảng sau khi nhập
                 loadTableData();
-                JOptionPane.showMessageDialog(this, "Đã nhập thành công " + successCount + " sách!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 
-            } catch (IOException ex) {
+                // Hiển thị thông báo kết quả
+                String message = "Đã nhập thành công " + successCount + " sách.\n";
+                if (errorCount > 0) {
+                    message += "Có " + errorCount + " lỗi:\n" + errorMessages.toString();
+                }
+                JOptionPane.showMessageDialog(this, message, "Kết quả nhập dữ liệu", errorCount > 0 ? JOptionPane.WARNING_MESSAGE : JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException | SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Lỗi khi đọc file Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -876,7 +1022,14 @@ public class PanelSach extends BasePanel {
         }
 
         return true;
-    }    
+    }
+
+    private String getCellValue(Cell cell) {
+        if (cell == null) return "";
+        DataFormatter formatter = new DataFormatter();
+    return formatter.formatCellValue(cell).trim();
+    }
+    
     private void clearFields() {
         txtMaSach.setText(""); 
         txtTenSach.setText("");

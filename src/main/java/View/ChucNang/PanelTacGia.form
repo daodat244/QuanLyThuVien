@@ -320,6 +320,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Xu&#x1ea5;t d&#x1eef; li&#x1ec7;u"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnXuatDuLieuActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

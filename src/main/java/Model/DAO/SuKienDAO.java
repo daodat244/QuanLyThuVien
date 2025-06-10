@@ -22,28 +22,29 @@ public class SuKienDAO {
         return timestamp != null ? timestamp.toLocalDateTime() : null;
     }
 // Lấy danh sách tất cả sự kiện từ cơ sở dữ liệu với JOIN để lấy tennxb
-    public List<SuKien> getAllSuKien() throws SQLException {
-        List<SuKien> skList = new ArrayList<>();
-        String query = "SELECT sk.*, nxb.tennxb " +
+    public List<Object[]> getAllSuKienWithDetails() throws SQLException {
+        List<Object[]> result = new ArrayList<>();
+        String query = "SELECT sk.masukien, sk.tensukien, nxb.tennxb, sk.tgiantochuc, sk.mota " +
                        "FROM sukien sk " +
                        "LEFT JOIN nhaxuatban nxb ON sk.manxb = nxb.manxb";
         try (Connection conn = ConnectToSQLServer.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
-            while (rs.next()) {                
-                SuKien sk = new SuKien(
+            while (rs.next()) {
+                Object[] row = new Object[] {
                     rs.getInt("masukien"),
                     rs.getString("tensukien"),
-                    rs.getInt("manxb"),
+                    rs.getString("tennxb"), // tên nhà xuất bản thay vì mã
                     convertTimestampToLocalDateTime(rs.getTimestamp("tgiantochuc")),
                     rs.getString("mota")
-                );
-                skList.add(sk);
+                };
+                result.add(row);
             }
         }
-        return skList;
+        return result;
     }
+
 
     // Thêm mới một sự kiện
     public boolean themSuKien(SuKien sk) throws SQLException {

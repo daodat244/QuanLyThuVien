@@ -1,23 +1,36 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package View.ChucNang;
 
 import UI.BasePanel;
 import Model.DAO.NhaXuatBanDAO;
 import Model.NhaXuatBan;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 
 public class PanelNhaXuatBan extends BasePanel {
 
     private final NhaXuatBanDAO nhaXuatBanDAO = new NhaXuatBanDAO();
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);  
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
+    private static final String PHONE_REGEX = "^0\\d{9}$";
+    private static final Pattern PHONE_PATTERN = Pattern.compile(PHONE_REGEX);
     
     public PanelNhaXuatBan() {
         initComponents();
@@ -151,9 +164,19 @@ public class PanelNhaXuatBan extends BasePanel {
 
         btnNhapDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         btnNhapDuLieu.setText("Nhập Dữ liệu");
+        btnNhapDuLieu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNhapDuLieuActionPerformed(evt);
+            }
+        });
 
         btnXuatDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         btnXuatDuLieu.setText("Xuất Dữ liệu");
+        btnXuatDuLieu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXuatDuLieuActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -373,25 +396,191 @@ public class PanelNhaXuatBan extends BasePanel {
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
 
     }//GEN-LAST:event_txtTimKiemActionPerformed
-    
-        private void loadTableData() {
-            try {
-                List<NhaXuatBan> nhaxuatbanList = nhaXuatBanDAO.getAllNhaXuatBan();
-                DefaultTableModel model = (DefaultTableModel) tableNXB.getModel();
-                model.setRowCount(0);
-                for (NhaXuatBan nxb : nhaxuatbanList) {
-                    model.addRow(new Object[]{
-                        nxb.getManxb(),
-                        nxb.getTennxb(),
-                        nxb.getSdt(),
-                        nxb.getEmail(),
-                        nxb.getDiachi() != null ? nxb.getDiachi() : "(Trống)"
-                    });
+
+    private void btnXuatDuLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatDuLieuActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn nơi lưu file Excel");
+        fileChooser.setSelectedFile(new File("danh_sach_sach.xlsx"));
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".xlsx");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Excel Files (*.xlsx)";
+            }
+        });
+
+        int result = fileChooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            // Đảm bảo file có đuôi .xlsx
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                filePath += ".xlsx";
+                selectedFile = new File(filePath);
+            }
+
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("DanhSachNXB");
+
+                // Tạo dòng tiêu đề
+                Row headerRow = sheet.createRow(0);
+                String[] headers = new String[]{"Mã NXB", "Tên NXB", "Điện thoại", "Email", "Địa chỉ"};
+                for (int i = 0; i < headers.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(headers[i]);
                 }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+                // Ghi dữ liệu từ bảng
+                DefaultTableModel model = (DefaultTableModel) tableNXB.getModel();
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    Row row = sheet.createRow(i + 1);
+                    row.createCell(0).setCellValue((int) model.getValueAt(i, 0));
+                    row.createCell(1).setCellValue((String) model.getValueAt(i, 1));
+                    row.createCell(2).setCellValue((String) model.getValueAt(i, 2));
+                    row.createCell(3).setCellValue((String) model.getValueAt(i, 3));
+                    row.createCell(4).setCellValue((String) model.getValueAt(i, 4));
+                }
+
+                // Tự động điều chỉnh độ rộng cột
+                for (int i = 0; i < headers.length; i++) {
+                    sheet.autoSizeColumn(i);
+                }
+
+                // Ghi file
+                try (FileOutputStream fileOut = new FileOutputStream(selectedFile)) {
+                    workbook.write(fileOut);
+                }
+
+                JOptionPane.showMessageDialog(this, "Xuất dữ liệu NXB thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }//GEN-LAST:event_btnXuatDuLieuActionPerformed
+
+    private void btnNhapDuLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhapDuLieuActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn file Excel để nhập dữ liệu");
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".xlsx");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Excel Files (*.xlsx)";
+            }
+        });
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try (FileInputStream fis = new FileInputStream(selectedFile);
+                 Workbook workbook = new XSSFWorkbook(fis)) {
+                Sheet sheet = workbook.getSheetAt(0);
+                List<String> errors = new ArrayList<>();
+                Set<String> tenNXBSet = new HashSet<>();
+                int addedCount = 0;
+
+                for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                    Row row = sheet.getRow(i);
+                    if (row == null) continue;
+
+                    // Đọc dữ liệu từ các cột
+                    String tennxb = getCellValue(row.getCell(1));
+                    String sdt = getCellValue(row.getCell(2));
+                    String email = getCellValue(row.getCell(3));
+                    String diachi = getCellValue(row.getCell(4));
+
+                    // Kiểm tra trùng tên trong file
+                    if (tennxb != null && !tennxb.trim().isEmpty()) {
+                        if (!tenNXBSet.add(tennxb.trim())) {
+                            errors.add(String.format("Dòng %d: Tên NXB '%s' trùng lặp trong file.", i + 1, tennxb));
+                            continue;
+                        }
+                    }
+
+                    NhaXuatBan nxb = new NhaXuatBan();
+                    nxb.setTennxb(tennxb != null ? tennxb.trim() : "");
+                    nxb.setSdt(sdt != null ? sdt.trim() : "");
+                    nxb.setEmail(email != null ? email.trim() : "");
+                    nxb.setDiachi(diachi != null && !diachi.trim().isEmpty() ? diachi.trim() : null);
+
+                    // Kiểm tra dữ liệu
+                    String validationError = validateNXBForImport(nxb, i + 1);
+                    if (validationError != null) {
+                        errors.add(validationError);
+                        continue;
+                    }
+
+                    // Thêm vào cơ sở dữ liệu
+                    try {
+                        if (nhaXuatBanDAO.addNXB(nxb)) {
+                            addedCount++;
+                        } else {
+                            errors.add(String.format("Dòng %d: Thêm NXB '%s' thất bại.", i + 1, tennxb));
+                        }
+                    } catch (SQLException ex) {
+                        errors.add(String.format("Dòng %d: Lỗi SQL khi thêm NXB '%s': %s", i + 1, tennxb, ex.getMessage()));
+                    }
+                }
+
+                // Cập nhật bảng
+                if (addedCount > 0) {
+                    loadTableData();
+                }
+
+                // Hiển thị kết quả
+                StringBuilder message = new StringBuilder();
+                message.append(String.format("Nhập dữ liệu hoàn tất: %d NXB được thêm thành công.\n", addedCount));
+                if (!errors.isEmpty()) {
+                    message.append("Có lỗi xảy ra:\n");
+                    for (String error : errors) {
+                        message.append(error).append("\n");
+                    }
+                }
+                JOptionPane.showMessageDialog(this, message.toString(), 
+                    errors.isEmpty() ? "Thông báo" : "Lỗi", 
+                    errors.isEmpty() ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi đọc file Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi không xác định: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnNhapDuLieuActionPerformed
+    
+    private String getCellValue(Cell cell) {
+        if (cell == null) return "";
+        DataFormatter formatter = new DataFormatter();
+    return formatter.formatCellValue(cell).trim();
+    }
+        
+    private void loadTableData() {
+        try {
+            List<NhaXuatBan> nhaxuatbanList = nhaXuatBanDAO.getAllNhaXuatBan();
+            DefaultTableModel model = (DefaultTableModel) tableNXB.getModel();
+            model.setRowCount(0);
+            for (NhaXuatBan nxb : nhaxuatbanList) {
+                model.addRow(new Object[]{
+                    nxb.getManxb(),
+                    nxb.getTennxb(),
+                    nxb.getSdt(),
+                    nxb.getEmail(),
+                    nxb.getDiachi() != null ? nxb.getDiachi() : "(Trống)"
+                });
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
         
     private void addNXB() {
         try {
@@ -513,30 +702,67 @@ public class PanelNhaXuatBan extends BasePanel {
         }
     }
         
-        private boolean validateNXB(NhaXuatBan nxb) {
+        private boolean validateNXB(NhaXuatBan nxb) throws SQLException {
         if (nxb.getTennxb() == null || nxb.getTennxb().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tên NXB không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (nhaXuatBanDAO.isTenNXBExists(nxb.getTennxb())) {
+            JOptionPane.showMessageDialog(this, "Tên NXB đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         if (nxb.getSdt() == null || nxb.getSdt().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        if (!nxb.getSdt().matches("\\d{10}")) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        if (!PHONE_PATTERN.matcher(nxb.getSdt()).matches()) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 chữ số và bắt đầu từ số 0!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        if (nxb.getEmail() == null || nxb.getEmail().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Email không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        if (!EMAIL_PATTERN.matcher(nxb.getEmail()).matches()) {
+        if (nxb.getEmail() != null && !nxb.getEmail().trim().isEmpty()) {
+            if (!EMAIL_PATTERN.matcher(nxb.getEmail()).matches()) {
             JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
+            }
         }
         return true;
-    }
-        
+        }
+    
+        private String validateNXBForImport(NhaXuatBan nxb, int rowNum) {
+        try {
+            // Kiểm tra không rỗng
+            if (nxb.getTennxb() == null || nxb.getTennxb().trim().isEmpty()) {
+                return String.format("Dòng %d: Tên NXB không được để trống.", rowNum);
+            }
+            if (nxb.getSdt() == null || nxb.getSdt().trim().isEmpty()) {
+                return String.format("Dòng %d: Số điện thoại không được để trống.", rowNum);
+            }
+            if (nxb.getEmail() == null || nxb.getEmail().trim().isEmpty()) {
+                return String.format("Dòng %d: Email không được để trống.", rowNum);
+            }
+
+            // Kiểm tra định dạng SĐT
+            if (nxb.getSdt() != null && !nxb.getSdt().trim().isEmpty()) {
+                if (!PHONE_PATTERN.matcher(nxb.getSdt()).matches()) {
+                    return String.format("Dòng %d: Số điện thoại phải có 10 số và bắt đầu bằng 0.", rowNum);
+                }
+            }
+
+            // Kiểm tra định dạng Email
+            if (!EMAIL_PATTERN.matcher(nxb.getEmail()).matches()) {
+                return String.format("Dòng %d: Email không hợp lệ.", rowNum);
+            }
+
+            // Kiểm tra tên trùng trong cơ sở dữ liệu
+            if (nhaXuatBanDAO.isTenNXBExists(nxb.getTennxb())) {
+                return String.format("Dòng %d: Tên NXB '%s' đã tồn tại trong cơ sở dữ liệu.", rowNum, nxb.getTennxb());
+            }
+
+            return null;
+        } catch (SQLException ex) {
+            return String.format("Dòng %d: Lỗi khi kiểm tra dữ liệu: %s", rowNum, ex.getMessage());
+        }
+    }    
     private void clearFields() {
         txtTenNXB.setText("");
         txtSdt.setText("");

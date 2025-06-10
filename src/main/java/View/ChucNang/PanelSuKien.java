@@ -10,6 +10,8 @@ import Model.NhaXuatBan;
 import Model.SuKien;
 import UI.BasePanel;
 import java.awt.Component;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -19,9 +21,15 @@ import java.time.LocalTime;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JFileChooser;
 import javax.swing.JList;
 
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 /**
  *
  * @author Asus
@@ -76,8 +84,9 @@ public class PanelSuKien extends BasePanel {
         btnsuaSuKien = new javax.swing.JButton();
         btnxoaSuKien = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField2 = new javax.swing.JTextField();
+        txtTimKiem = new javax.swing.JTextField();
+        btnTimKiem = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableSuKien = new javax.swing.JTable();
 
@@ -213,6 +222,11 @@ public class PanelSuKien extends BasePanel {
 
         btnNhapDuLieu.setText("Nhập dữ liệu");
         btnNhapDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        btnNhapDuLieu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNhapDuLieuActionPerformed(evt);
+            }
+        });
 
         btnXuatDuLieu.setText("Xuất dữ liệu");
         btnXuatDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
@@ -251,11 +265,22 @@ public class PanelSuKien extends BasePanel {
         jLabel5.setText("Tìm kiếm");
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        txtTimKiem.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        txtTimKiem.setText("(Tên sự kiện)");
 
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        jTextField2.setText("(Tên sự kiện)");
+        btnTimKiem.setText("Tìm Kiếm");
+        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemActionPerformed(evt);
+            }
+        });
+
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -263,16 +288,24 @@ public class PanelSuKien extends BasePanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE))
-                    .addComponent(jLabel5)
-                    .addComponent(btnsuaSuKien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnthemSuKien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnxoaSuKien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnxoaSuKien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnsuaSuKien, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnthemSuKien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                                        .addComponent(btnTimKiem)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(12, 12, 12))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,9 +320,11 @@ public class PanelSuKien extends BasePanel {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTimKiem))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnReset)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -383,7 +418,7 @@ public class PanelSuKien extends BasePanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(9, 9, 9)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
@@ -393,6 +428,44 @@ public class PanelSuKien extends BasePanel {
 
     private void btnXuatDuLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatDuLieuActionPerformed
         // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn nơi lưu file Excel");
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            if (!fileToSave.getAbsolutePath().endsWith(".xlsx")) {
+                fileToSave = new File(fileToSave.getAbsolutePath() + ".xlsx");
+            }
+
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("DanhSachSuKien");
+                DefaultTableModel model = (DefaultTableModel) tableSuKien.getModel();
+
+                // Ghi header
+                Row header = sheet.createRow(0);
+                for (int i = 0; i < model.getColumnCount(); i++) {
+                    Cell cell = header.createCell(i);
+                    cell.setCellValue(model.getColumnName(i));
+                }
+
+                // Ghi dữ liệu
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    Row row = sheet.createRow(i + 1);
+                    for (int j = 0; j < model.getColumnCount(); j++) {
+                        Object value = model.getValueAt(i, j);
+                        row.createCell(j).setCellValue(value != null ? value.toString() : "");
+                    }
+                }
+
+                try (FileOutputStream fos = new FileOutputStream(fileToSave)) {
+                    workbook.write(fos);
+                    JOptionPane.showMessageDialog(this, "Xuất file Excel thành công: " + fileToSave.getAbsolutePath());
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi xuất Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnXuatDuLieuActionPerformed
 
     private void btnthemSuKienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemSuKienActionPerformed
@@ -430,6 +503,93 @@ public class PanelSuKien extends BasePanel {
         // TODO add your handling code here:
         
     }//GEN-LAST:event_txtDateTimeSuKienActionPerformed
+
+    private void btnNhapDuLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhapDuLieuActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn file Excel để nhập");
+        int userSelection = fileChooser.showOpenDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+
+            try (Workbook workbook = new XSSFWorkbook(file)) {
+                Sheet sheet = workbook.getSheetAt(0);
+                int successCount = 0, errorCount = 0;
+                StringBuilder errorLog = new StringBuilder();
+
+                boolean skipHeader = true;
+                for (Row row : sheet) {
+                    if (skipHeader) {
+                        skipHeader = false;
+                        continue;
+                    }
+
+                    try {
+                        String tenSuKien = row.getCell(0).toString().trim();
+                        String tenNXB = row.getCell(1).toString().trim();
+                        String tgToChucStr = row.getCell(2).toString().trim();
+                        String moTa = row.getCell(3) != null ? row.getCell(3).toString().trim() : "";
+
+                        // Validate dữ liệu
+                        if (tenSuKien.isEmpty() || tenNXB.isEmpty() || tgToChucStr.isEmpty() || moTa.isEmpty()) {
+                            throw new Exception("Thiếu dữ liệu bắt buộc");
+                        }
+
+                        // Regex kiểm tra tên sự kiện
+                        if (!tenSuKien.matches("^[\\p{L}\\s]+$")) {
+                            throw new Exception("Tên sự kiện không hợp lệ (không được có ký tự đặc biệt, chữ & số phải cách nhau)");
+                        }
+
+                        // Tìm nhà xuất bản theo tên
+                        NhaXuatBanDAO nxbDAO = new NhaXuatBanDAO();
+                        NhaXuatBan nxb = nxbDAO.findByTenNXB(tenNXB);
+                        if (nxb == null) throw new Exception("Không tìm thấy nhà xuất bản: " + tenNXB);
+
+                        // Chuyển đổi thời gian tổ chức
+                        LocalDateTime tgiantochuc = LocalDateTime.parse(tgToChucStr, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+
+                        SuKien sk = new SuKien();
+                        sk.setTensukien(tenSuKien);
+                        sk.setManxb(nxb.getManxb());
+                        sk.setTgiantochuc(tgiantochuc);
+                        sk.setMota(moTa);
+
+                        if (suKienDAO.themSuKien(sk)) {
+                            successCount++;
+                        } else {
+                            throw new Exception("Không thể thêm sự kiện vào CSDL");
+                        }
+                    } catch (Exception exRow) {
+                        errorCount++;
+                        errorLog.append("Dòng ").append(row.getRowNum() + 1).append(": ")
+                                .append(exRow.getMessage()).append("\n");
+                        exRow.printStackTrace();
+                    }
+                }
+
+                loadTableData();
+                JOptionPane.showMessageDialog(this,
+                    "Đã nhập: " + successCount + " dòng, lỗi: " + errorCount +
+                    (errorCount > 0 ? "\n\nChi tiết:\n" + errorLog.toString() : "")
+                );
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi đọc file Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnNhapDuLieuActionPerformed
+
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+        // TODO add your handling code here:
+        searchTheoTenSuKien();
+    }//GEN-LAST:event_btnTimKiemActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        txtTimKiem.setText("");
+        loadTableData();
+    }//GEN-LAST:event_btnResetActionPerformed
         
     private void updateTxtDateTimeSuKien() {
     try {
@@ -446,7 +606,7 @@ public class PanelSuKien extends BasePanel {
     }
 }
 
-        private void loadComboBoxes() {
+    private void loadComboBoxes() {
         try {
             // Tải Nhà Xuất Bản
             List<NhaXuatBan> nxbList = nxbDAO.getAllNhaXuatBan();
@@ -471,32 +631,31 @@ public class PanelSuKien extends BasePanel {
     
     private void loadTableData() {
         try {
-            List<SuKien> skList = suKienDAO.getAllSuKien();
+            List<Object[]> skList = suKienDAO.getAllSuKienWithDetails(); // đã chuẩn hóa DAO để trả về List<Object[]>
             DefaultTableModel model = (DefaultTableModel) tableSuKien.getModel();
             model.setRowCount(0); // Xóa dữ liệu cũ
+
             // Định dạng LocalDateTime
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-            for (SuKien suKien : skList) {
-                String tenNXB = "";
-                    for (int i = 0; i < cbNXB.getItemCount(); i++) {
-                    if (cbNXB.getItemAt(i).getManxb() == suKien.getManxb()) {
-                        tenNXB = cbNXB.getItemAt(i).getTennxb();
-                        break;
-                    }
+
+            for (Object[] row : skList) {
+                String formattedDateTime = "";
+                if (row[3] != null && row[3] instanceof LocalDateTime) {
+                    formattedDateTime = ((LocalDateTime) row[3]).format(formatter);
                 }
-                String formattedDateTime = suKien.getTgiantochuc() != null ? suKien.getTgiantochuc().format(formatter) : "";
-                model.addRow(new Object[]{
-                    suKien.getMasukien(),
-                    suKien.getTensukien(),
-                    tenNXB,
-                    formattedDateTime,
-                    suKien.getMota()
+                model.addRow(new Object[] {
+                    row[0], // masukien
+                    row[1], // tensukien
+                    row[2], // tennxb (đã lấy từ SQL, không cần tra lại)
+                    formattedDateTime, // tgiantochuc định dạng
+                    row[4]  // mota
                 });
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu sự kiện: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     
 
     private void addSuKien() {
@@ -529,7 +688,28 @@ public class PanelSuKien extends BasePanel {
 
             // Gán manxb từ nhà xuất bản được chọn
             suKien.setManxb(selectedNXB.getManxb());
+            
+            // Kiểm tra hợp lệ cho tensukien
+            String tenSuKien = txtTenSuKien.getText().trim();
+            if (tenSuKien.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập tên sự kiện!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
+            // 1. Không được chứa ký tự đặc biệt (chỉ cho phép chữ cái, số và khoảng trắng)
+            if (!tenSuKien.matches("[\\p{L}\\p{N} ]+")) {
+                JOptionPane.showMessageDialog(this, "Tên sự kiện không được chứa ký tự đặc biệt!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 2. Không được dính liền chữ và số (ví dụ: "Sự kiện1" => sai, "Sự kiện 1" => đúng)
+            if (tenSuKien.matches(".*[a-zA-Z]\\d.*") || tenSuKien.matches(".*\\d[a-zA-Z].*")) {
+                JOptionPane.showMessageDialog(this, "Tên sự kiện không được để chữ và số dính liền nhau (phải có khoảng cách giữa chữ và số)!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            suKien.setTensukien(tenSuKien);
+            
             // Định dạng để hiển thị trên txtDateTimeSuKien
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
             String formattedDateTime = dateTime.format(formatter);
@@ -568,9 +748,26 @@ public class PanelSuKien extends BasePanel {
             // Tạo đối tượng SuKien
             SuKien suKien = new SuKien();
             suKien.setMasukien(Integer.parseInt(tableSuKien.getValueAt(row, 0).toString()));
-            suKien.setTensukien(txtTenSuKien.getText().trim());
             suKien.setMota(txtMoTaSuKien.getText().trim());
 
+            String tenSuKien = txtTenSuKien.getText().trim();
+            if (tenSuKien.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập tên sự kiện!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!tenSuKien.matches("[\\p{L}\\p{N} ]+")) {
+                JOptionPane.showMessageDialog(this, "Tên sự kiện không được chứa ký tự đặc biệt!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (tenSuKien.matches(".*[a-zA-Z]\\d.*") || tenSuKien.matches(".*\\d[a-zA-Z].*")) {
+                JOptionPane.showMessageDialog(this, "Tên sự kiện không được để chữ và số dính liền nhau (phải có khoảng cách giữa chữ và số)!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            suKien.setTensukien(tenSuKien);
+            
             // Lấy ngày và giờ từ DatePicker và TimePicker
             LocalDate selectedDate = calendarSuKien.getSelectedDate();
             LocalTime selectedTime = timeSuKien.getTime();
@@ -637,6 +834,43 @@ public class PanelSuKien extends BasePanel {
             }
         }
     }
+    
+    // Tìm kiếm phiếu mượn theo tên độc giả (Sửa tìm kiếm)
+    private void searchTheoTenSuKien() {
+    String keyword = txtTimKiem.getText().trim().toLowerCase();
+        if (keyword.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên sự kiện cần tìm!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            List<Object[]> mpList = suKienDAO.getAllSuKienWithDetails();
+            DefaultTableModel model = (DefaultTableModel) tableSuKien.getModel();
+            model.setRowCount(0);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+            for (Object[] row : mpList) {
+                int maSuKien = (int) row[0];
+                String tenSuKien = (String) row[1];
+                String tenNhaTaiTro = (String) row[2];
+                LocalDateTime tgToChuc = (LocalDateTime) row[3];
+                String moTa = (String) row[4];
+
+                if (!tenSuKien.toLowerCase().contains(keyword)) continue;
+
+                model.addRow(new Object[]{
+                    maSuKien,
+                    tenSuKien,
+                    tenNhaTaiTro,
+                    tgToChuc != null ? tgToChuc.format(formatter) : "",
+                    moTa
+                });
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
 private void clearFields() {
         txtTenSuKien.setText("");
@@ -647,13 +881,14 @@ private void clearFields() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnNhapDuLieu;
+    private javax.swing.JButton btnReset;
+    private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnXuatDuLieu;
     private javax.swing.JButton btnsuaSuKien;
     private javax.swing.JButton btnthemSuKien;
     private javax.swing.JButton btnxoaSuKien;
     private com.github.lgooddatepicker.components.CalendarPanel calendarSuKien;
     private javax.swing.JComboBox<NhaXuatBan> cbNXB;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -667,11 +902,11 @@ private void clearFields() {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTable tableSuKien;
     private com.github.lgooddatepicker.components.TimePicker timeSuKien;
     private javax.swing.JTextField txtDateTimeSuKien;
     private javax.swing.JTextArea txtMoTaSuKien;
     private javax.swing.JTextField txtTenSuKien;
+    private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 }

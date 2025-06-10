@@ -7,11 +7,23 @@ package View.ChucNang;
 import Model.DAO.TacGiaDAO;
 import Model.TacGia;
 import UI.BasePanel;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Pattern;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class PanelTacGia extends BasePanel {
 
@@ -199,6 +211,11 @@ public class PanelTacGia extends BasePanel {
 
         btnXuatDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnXuatDuLieu.setText("Xuất dữ liệu");
+        btnXuatDuLieu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXuatDuLieuActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -392,9 +409,113 @@ public class PanelTacGia extends BasePanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNhapDuLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhapDuLieuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnNhapDuLieuActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn file Excel để nhập dữ liệu tác giả");
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".xlsx");
+            }
 
+            @Override
+            public String getDescription() {
+                return "Excel Files (*.xlsx)";
+            }
+        });
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try (FileInputStream fis = new FileInputStream(selectedFile);
+                 Workbook workbook = new XSSFWorkbook(fis)) {
+                Sheet sheet = workbook.getSheetAt(0);
+                int successCount = 0;
+                int errorCount = 0;
+                StringBuilder errorMessages = new StringBuilder();
+                int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+                for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                    Row row = sheet.getRow(i);
+                    if (row == null) continue;
+
+                    try {
+                        TacGia tacGia = new TacGia();
+                        // Đọc dữ liệu từ file Excel
+                        String tenTacGia = getCellValue(row.getCell(1));
+                        String namSinhStr = getCellValue(row.getCell(2));
+                        String queQuan = getCellValue(row.getCell(3));
+                        String moTa = getCellValue(row.getCell(4));
+                        String sdt = getCellValue(row.getCell(5));
+                        String email = getCellValue(row.getCell(6));
+
+                        // Gán dữ liệu cho đối tượng TacGia
+                        tacGia.setTentacgia(tenTacGia.isEmpty() ? null : tenTacGia);
+                        tacGia.setNamsinh(namSinhStr.isEmpty() ? 0 : Integer.parseInt(namSinhStr));
+                        tacGia.setQuequan(queQuan.isEmpty() ? null : queQuan);
+                        tacGia.setMota(moTa.isEmpty() ? null : moTa);
+                        tacGia.setSdt(sdt.isEmpty() ? null : sdt);
+                        tacGia.setEmail(email.isEmpty() ? null : email);
+
+                        // Kiểm tra dữ liệu
+                        if (tacGia.getTentacgia() == null || tacGia.getTentacgia().trim().isEmpty()) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Tên tác giả không được để trống.\n");
+                            errorCount++;
+                            continue;
+                        }
+
+                        if (tacGia.getNamsinh() != 0 && (tacGia.getNamsinh() < 1400 || tacGia.getNamsinh() > currentYear)) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Năm sinh phải từ 1400 đến ").append(currentYear).append(".\n");
+                            errorCount++;
+                            continue;
+                        }
+
+                        if (tacGia.getSdt() != null && !tacGia.getSdt().trim().isEmpty() && !tacGia.getSdt().matches("0\\d{9}")) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Số điện thoại phải có 10 chữ số và bắt đầu bằng 0.\n");
+                            errorCount++;
+                            continue;
+                        }
+
+                        if (tacGia.getEmail() != null && !tacGia.getEmail().trim().isEmpty() && !EMAIL_PATTERN.matcher(tacGia.getEmail()).matches()) {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Email không hợp lệ.\n");
+                            errorCount++;
+                            continue;
+                        }
+
+                        // Thêm tác giả vào cơ sở dữ liệu
+                        if (tacGiaDAO.addTacGia(tacGia)) {
+                            successCount++;
+                        } else {
+                            errorMessages.append("Dòng ").append(i + 1).append(": Không thể thêm tác giả '").append(tenTacGia).append("'.\n");
+                            errorCount++;
+                        }
+                    } catch (Exception ex) {
+                        errorMessages.append("Dòng ").append(i + 1).append(": Lỗi khi đọc dữ liệu: ").append(ex.getMessage()).append("\n");
+                        errorCount++;
+                    }
+                }
+
+                // Làm mới bảng sau khi nhập
+                loadTableData();
+
+                // Hiển thị thông báo kết quả
+                String message = "Đã nhập thành công " + successCount + " tác giả.\n";
+                if (errorCount > 0) {
+                    message += "Có " + errorCount + " lỗi:\n" + errorMessages.toString();
+                }
+                JOptionPane.showMessageDialog(this, message, "Kết quả nhập dữ liệu", errorCount > 0 ? JOptionPane.WARNING_MESSAGE : JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi đọc file Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnNhapDuLieuActionPerformed
+    
+    private String getCellValue(Cell cell) {
+        if (cell == null) return "";
+        DataFormatter formatter = new DataFormatter();
+    return formatter.formatCellValue(cell).trim();
+    }
+    
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         addTacGia();
     }//GEN-LAST:event_btnThemActionPerformed
@@ -422,6 +543,75 @@ public class PanelTacGia extends BasePanel {
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
 
     }//GEN-LAST:event_txtTimKiemActionPerformed
+
+    private void btnXuatDuLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatDuLieuActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn nơi lưu file Excel");
+        fileChooser.setSelectedFile(new File("danh_sach_tacgia.xlsx"));
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".xlsx");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Excel Files (*.xlsx)";
+            }
+        });
+
+        int result = fileChooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            // Đảm bảo file có đuôi .xlsx
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                filePath += ".xlsx";
+                selectedFile = new File(filePath);
+            }
+
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("DanhSachTacGia");
+
+                // Tạo dòng tiêu đề
+                Row headerRow = sheet.createRow(0);
+                String[] headers = new String[]{"Mã tác giả", "Tên tác giả", "Năm sinh", "Quê quán", "Mô tả", "SĐT", "Email"};
+                for (int i = 0; i < headers.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(headers[i]);
+                }
+
+                // Ghi dữ liệu từ bảng
+                DefaultTableModel model = (DefaultTableModel) tableTacGia.getModel();
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    Row row = sheet.createRow(i + 1);
+                    row.createCell(0).setCellValue((int) model.getValueAt(i, 0));
+                    row.createCell(1).setCellValue((String) model.getValueAt(i, 1));
+                    row.createCell(2).setCellValue((int) model.getValueAt(i, 2));
+                    row.createCell(3).setCellValue((String) model.getValueAt(i, 3));
+                    row.createCell(4).setCellValue((String) model.getValueAt(i, 4));
+                    row.createCell(4).setCellValue((String) model.getValueAt(i, 5));
+                    row.createCell(4).setCellValue((String) model.getValueAt(i, 6));
+                    row.createCell(4).setCellValue((String) model.getValueAt(i, 7));
+                }
+
+                // Tự động điều chỉnh độ rộng cột
+                for (int i = 0; i < headers.length; i++) {
+                    sheet.autoSizeColumn(i);
+                }
+
+                // Ghi file
+                try (FileOutputStream fileOut = new FileOutputStream(selectedFile)) {
+                    workbook.write(fileOut);
+                }
+
+                JOptionPane.showMessageDialog(this, "Xuất dữ liệu tác giả thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnXuatDuLieuActionPerformed
 
     private void loadTableData() {
         try {
@@ -620,6 +810,7 @@ public class PanelTacGia extends BasePanel {
 
         return true;
     }    
+
     private void clearFields() {
         txtTenTacGia.setText("");
         txtNamSinh.setText("");

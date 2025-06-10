@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Model.DAO;
 
 import Model.ConnectToSQLServer;
@@ -71,6 +67,20 @@ public class NhaXuatBanDAO {
         }
     }
     
+    public boolean isTenNXBExists(String tennxb) throws SQLException {
+        String query = "SELECT COUNT(*) FROM nhaxuatban WHERE tennxb = ?";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, tennxb);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+    
         public boolean isNXBInUse(int manxb) throws SQLException {
         String query = "SELECT COUNT(*) FROM Sach WHERE manxb = ?";
         try (Connection conn = ConnectToSQLServer.getConnection();
@@ -83,5 +93,25 @@ public class NhaXuatBanDAO {
             }
         }
         return false;
+    }
+        
+    public NhaXuatBan findByTenNXB(String tenNXB) throws SQLException {
+        String query = "SELECT * FROM nhaxuatban WHERE tennxb = ?";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, tenNXB);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    NhaXuatBan nxb = new NhaXuatBan();
+                    nxb.setManxb(rs.getInt("manxb"));
+                    nxb.setTennxb(rs.getString("tennxb"));
+                    // nxb.setEmail(...); nếu có
+                    return nxb;
+                }
+            }
+        }
+        return null;
     }
 }

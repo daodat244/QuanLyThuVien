@@ -1,18 +1,43 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Model;
 
+
+import java.time.LocalDateTime;
+
+/**
+ *
+ * @author Asus
+ */
 public class MuonPhong {
+    private int maphieump;
     private int maphong;
-    private String tenphong;
-    private String mota;
-    
-    
-    public MuonPhong(){
+    private int madocgia;
+    private LocalDateTime tgianmuon;
+    private LocalDateTime tgiantra;
+    private String ghichu;
+
+    public MuonPhong() {
     }
-    public MuonPhong(int maphong, String tenphong, String mota) {
+    
+    public MuonPhong(int maphieump, int maphong, int madocgia, LocalDateTime tgianmuon, LocalDateTime tgiantra, String ghichu) {
+        this.maphieump = maphieump;
         this.maphong = maphong;
-        this.tenphong = tenphong;
-        this.mota = mota;
+        this.madocgia = madocgia;
+        this.tgianmuon = tgianmuon;
+        this.tgiantra = tgiantra;
+        this.ghichu = ghichu;
+    }
+    
+    
+    public int getMaphieump() {
+        return maphieump;
+    }
+    
+    public void setMaphieump(int maphieump) {
+        this.maphieump = maphieump;
     }
     
     public int getMaphong() {
@@ -23,19 +48,35 @@ public class MuonPhong {
         this.maphong = maphong;
     }
 
-    public String getTenphong() {
-        return tenphong;
+    public int getMadocgia() {
+        return madocgia;
     }
 
-    public void setTenphong(String tenphong) {
-        this.tenphong = tenphong;
+    public void setMadocgia(int madocgia) {
+        this.madocgia = madocgia;
     }
 
-    public String getMota() {
-        return mota;
+    public LocalDateTime getTgianmuon() {
+        return tgianmuon;
     }
 
-    public void setMota(String mota) {
-        this.mota = mota;
+    public void setTgianmuon(LocalDateTime tgianmuon) {
+        this.tgianmuon = tgianmuon;
+    }
+    
+    public LocalDateTime getTgiantra() {
+        return tgiantra;
+    }
+
+    public void setTgiantra(LocalDateTime tgiantra) {
+        this.tgiantra = tgiantra;
+    }
+    
+    public String getGhichu() {
+        return ghichu;
+    }
+
+    public void setGhichu(String ghichu) {
+        this.ghichu = ghichu;
     }
 }

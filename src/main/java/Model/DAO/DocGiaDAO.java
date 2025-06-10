@@ -10,14 +10,39 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
- * @author TUF
+ * @author Asus
  */
 public class DocGiaDAO {
 
-public DocGia getDocGiaById(int madocgia) throws SQLException {
+    // Lấy toàn bộ danh sách độc giả
+    public List<DocGia> getAllDocGia() throws SQLException {
+        List<DocGia> dgList = new ArrayList<>();
+        String query = "SELECT madocgia, tendocgia, sdt, email, diachi FROM docgia";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                DocGia dg = new DocGia(
+                    rs.getInt("madocgia"),
+                    rs.getString("tendocgia"),
+                    rs.getString("sdt"),
+                    rs.getString("email"),
+                    rs.getString("diachi")
+                );
+                dgList.add(dg);
+            }
+        }
+        return dgList;
+    }
+
+    // Tìm độc giả theo mã
+    public DocGia getDocGiaById(int madocgia) throws SQLException {
     String query = "SELECT madocgia, tendocgia FROM DocGia WHERE madocgia = ?";
     try (Connection conn = ConnectToSQLServer.getConnection();
          PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -39,7 +64,26 @@ public DocGia getDocGiaById(int madocgia) throws SQLException {
     }
     return null;
 }
-public int getMaDocGiaByTen(String tenDocGia) throws SQLException {
+    public DocGia getDocGiaByTen(String tenDocGia) throws SQLException {
+    String sql = "SELECT * FROM DocGia WHERE TenDocGia = ?";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, tenDocGia);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new DocGia(
+                        rs.getInt("madocgia"), 
+                        rs.getString("tendocgia"),
+                        rs.getString("sdt"),
+                        rs.getString("email"),
+                        rs.getString("diachi")
+                    );
+                }
+        }
+        return null;
+    }
+    
+    public int getMaDocGiaByTen(String tenDocGia) throws SQLException {
     String query = "SELECT madocgia FROM DocGia WHERE tendocgia = ?";
     try (Connection conn = ConnectToSQLServer.getConnection();
          PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -58,5 +102,6 @@ public int getMaDocGiaByTen(String tenDocGia) throws SQLException {
         throw e;
     }
     return -1; // Trả về -1 nếu không tìm thấy
+    }
 }
-}
+

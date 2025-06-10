@@ -1,21 +1,26 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Model;
 
+import java.math.BigDecimal;
 /**
  *
- * @author TUF
+ * @author Asus
  */
 public class DocGia {
-private int madocgia;
-private String tendocgia;
-private int sdt;
-private String email;
-private String diachi;
+    private int madocgia;
+    private String tendocgia;
+    private String sdt;
+    private String email;
+    private String diachi;
 
     public DocGia() {
     }
 
-    public DocGia(int madocgia, String tendocgia, int sdt, String email, String diachi) {
+    
+    public DocGia(int madocgia, String tendocgia, String sdt, String email, String diachi) {
         this.madocgia = madocgia;
         this.tendocgia = tendocgia;
         this.sdt = sdt;
@@ -39,11 +44,11 @@ private String diachi;
         this.tendocgia = tendocgia;
     }
 
-    public int getSdt() {
+    public String getSdt() {
         return sdt;
     }
 
-    public void setSdt(int sdt) {
+    public void setSdt(String sdt) {
         this.sdt = sdt;
     }
 
@@ -62,5 +67,7 @@ private String diachi;
     public void setDiachi(String diachi) {
         this.diachi = diachi;
     }
-
+    
+    
+    
 }
