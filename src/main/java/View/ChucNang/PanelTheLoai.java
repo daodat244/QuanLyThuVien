@@ -5,16 +5,23 @@
 package View.ChucNang;
 
 import Model.DAO.TheLoaiDAO;
-import Model.TheLoai;
 import UI.BasePanel;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import Model.TheLoai;
+import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
 import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class PanelTheLoai extends BasePanel {
 
-private final TheLoaiDAO theLoaiDAO = new TheLoaiDAO();
+    private final TheLoaiDAO theLoaiDAO = new TheLoaiDAO();
 
     public PanelTheLoai() {
         initComponents();
@@ -105,9 +112,19 @@ private final TheLoaiDAO theLoaiDAO = new TheLoaiDAO();
 
         btnNhapDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         btnNhapDuLieu.setText("Nhập Dữ liệu");
+        btnNhapDuLieu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNhapDuLieuActionPerformed(evt);
+            }
+        });
 
         btnXuatDuLieu.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         btnXuatDuLieu.setText("Xuất Dữ liệu");
+        btnXuatDuLieu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXuatDuLieuActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -300,49 +317,165 @@ private final TheLoaiDAO theLoaiDAO = new TheLoaiDAO();
 
     private void tableTheLoaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableTheLoaiMouseClicked
         int row = tableTheLoai.getSelectedRow();
-                if (row >= 0) {
-                    txtTenTheLoai.setText(tableTheLoai.getValueAt(row, 1).toString());
-                    txaMoTa.setText(tableTheLoai.getValueAt(row, 2).toString());
-                }
+        if (row >= 0) {
+            txtTenTheLoai.setText(tableTheLoai.getValueAt(row, 1).toString());
+            txaMoTa.setText(tableTheLoai.getValueAt(row, 2).toString());
+        }
     }//GEN-LAST:event_tableTheLoaiMouseClicked
 
-        private void loadTableData() {
-            try {
-                List<TheLoai> theloaiList = theLoaiDAO.getAllTheLoai();
-                DefaultTableModel model = (DefaultTableModel) tableTheLoai.getModel();
-                model.setRowCount(0); // Xóa dữ liệu cũ
-                for (TheLoai theLoai : theloaiList) {
-                    model.addRow(new Object[]{
-                        theLoai.getMatheloai(),
-                        theLoai.getTentheloai(),
-                        theLoai.getMota(),
-                    });
+    private void btnNhapDuLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhapDuLieuActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn file Excel để nhập dữ liệu thể loại");
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".xlsx");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Excel Files (*.xlsx)";
+            }
+        });
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try (FileInputStream fis = new FileInputStream(selectedFile); Workbook workbook = new XSSFWorkbook(fis)) {
+
+                Sheet sheet = workbook.getSheetAt(0);
+                int successCount = 0;
+                for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                    Row row = sheet.getRow(i);
+                    if (row == null) {
+                        continue;
+                    }
+
+                    try {
+                        TheLoai theLoai = new TheLoai();
+                        theLoai.setMatheloai((int) row.getCell(0).getNumericCellValue());
+                        theLoai.setTentheloai(row.getCell(1).getStringCellValue());
+                        theLoai.setMota(row.getCell(2).getStringCellValue());
+
+                        if (theLoaiDAO.addTheLoai(theLoai)) {
+                            successCount++;
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Không thể thêm thể loại: " + theLoai.getTentheloai(), "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Lỗi khi đọc dòng " + (i + 1) + ": " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+                loadTableData(); // Làm mới bảng nếu có
+                JOptionPane.showMessageDialog(this, "Đã nhập thành công " + successCount + " thể loại!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi đọc file Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
-        
-            private void addTheLoai() {
-            try {
+    }//GEN-LAST:event_btnNhapDuLieuActionPerformed
+
+    private void btnXuatDuLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatDuLieuActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn nơi lưu file Excel");
+        fileChooser.setSelectedFile(new File("danh_sach_the_loai.xlsx"));
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".xlsx");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Excel Files (*.xlsx)";
+            }
+        });
+
+        int result = fileChooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            // Đảm bảo file có đuôi .xlsx
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                filePath += ".xlsx";
+                selectedFile = new File(filePath);
+            }
+
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("DanhSachTheLoai");
+
+                // Tạo dòng tiêu đề
+                Row headerRow = sheet.createRow(0);
+                String[] headers = new String[]{"Mã thể loại", "Tên thể loại", "Mô tả"};
+                for (int i = 0; i < headers.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(headers[i]);
+                }
+
+                // Ghi dữ liệu từ bảng
+                DefaultTableModel model = (DefaultTableModel) tableTheLoai.getModel();
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    Row row = sheet.createRow(i + 1);
+                    row.createCell(0).setCellValue((int) model.getValueAt(i, 0));
+                    row.createCell(1).setCellValue((String) model.getValueAt(i, 1)); // Tên thể loại
+                    row.createCell(2).setCellValue((String) model.getValueAt(i, 2)); // Tác mô tả
+                }
+
+                // Tự động điều chỉnh độ rộng cột
+                for (int i = 0; i < headers.length; i++) {
+                    sheet.autoSizeColumn(i);
+                }
+
+                // Ghi file
+                try (FileOutputStream fileOut = new FileOutputStream(selectedFile)) {
+                    workbook.write(fileOut);
+                }
+
+                JOptionPane.showMessageDialog(this, "Xuất dữ liệu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnXuatDuLieuActionPerformed
+
+    private void loadTableData() {
+        try {
+            List<TheLoai> theloaiList = theLoaiDAO.getAllTheLoai();
+            DefaultTableModel model = (DefaultTableModel) tableTheLoai.getModel();
+            model.setRowCount(0); // Xóa dữ liệu cũ
+            for (TheLoai theLoai : theloaiList) {
+                model.addRow(new Object[]{
+                    theLoai.getMatheloai(),
+                    theLoai.getTentheloai(),
+                    theLoai.getMota(),});
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void addTheLoai() {
+        try {
             TheLoai theLoai = new TheLoai();
             theLoai.setTentheloai(txtTenTheLoai.getText());
             theLoai.setMota(txaMoTa.getText());
 
-                if (theLoaiDAO.addTheLoai(theLoai)) {
-                    JOptionPane.showMessageDialog(this, "Thêm thể loại thành công!");
-                    loadTableData();
-                    clearFields();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Thêm thể loại thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ cho năm sinh!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Lỗi khi thêm thể loại: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            if (theLoaiDAO.addTheLoai(theLoai)) {
+                JOptionPane.showMessageDialog(this, "Thêm thể loại thành công!");
+                loadTableData();
+                clearFields();
+            } else {
+                JOptionPane.showMessageDialog(this, "Thêm thể loại thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ cho năm sinh!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi thêm thể loại: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    
+    }
+
     private void updateTheLoai() {
         int row = tableTheLoai.getSelectedRow();
         if (row < 0) {
@@ -392,7 +525,7 @@ private final TheLoaiDAO theLoaiDAO = new TheLoaiDAO();
             }
         }
     }
-    
+
     private void clearFields() {
         txtTenTheLoai.setText("");
         txaMoTa.setText("");

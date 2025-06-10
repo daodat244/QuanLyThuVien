@@ -1,4 +1,3 @@
-
 package View.ChucNang;
 
 import UI.BasePanel;
@@ -7,24 +6,37 @@ import Model.Sach;
 import Model.DocGia;
 import Model.NhanVien; // Giả sử có lớp này
 import Model.PhieuMuon;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 /**
  *
  * @author TUF
  */
 public class PanelPhieuMuon extends BasePanel {
-private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
+
+    private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
     private DocGiaDAO docGiaDAO = new DocGiaDAO();
     private NhanVienDAO nhanVienDAO = new NhanVienDAO();
     private SachDAO sachDAO = new SachDAO();
+
     /**
      * Creates new form PanelPhieuMuon
      */
@@ -34,40 +46,40 @@ private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
         styleButton(btnThem);
         styleButton(btnSua);
         styleButton(btnXoa);
-        styleButton(btnLammoi);
         styleButton(btnKiemtra1);
         styleButton(btnKiemtra2);
         styleButton(btnKiemtra3);
         styleTable(tablePhieuMuon);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         tablePhieuMuon.getColumnModel().getColumn(4).setCellRenderer(new DefaultTableCellRenderer() {
-        @Override
-        protected void setValue(Object value) {
-            if (value instanceof LocalDateTime) {
-                setText(((LocalDateTime) value).format(formatter));
-            } else {
-                super.setValue(value);
+            @Override
+            protected void setValue(Object value) {
+                if (value instanceof LocalDateTime) {
+                    setText(((LocalDateTime) value).format(formatter));
+                } else {
+                    super.setValue(value);
+                }
             }
-        }
-    });
-    tablePhieuMuon.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
-        @Override
-        protected void setValue(Object value) {
-            if (value instanceof LocalDateTime) {
-                setText(((LocalDateTime) value).format(formatter));
-            } else {
-                super.setValue(value);
+        });
+        tablePhieuMuon.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            protected void setValue(Object value) {
+                if (value instanceof LocalDateTime) {
+                    setText(((LocalDateTime) value).format(formatter));
+                } else {
+                    super.setValue(value);
+                }
             }
-        }
-    });
-    tablePhieuMuon.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
-    @Override
-    protected void setValue(Object value) {
-        setText(value != null ? value.toString() : "Chưa xác định");
-        setHorizontalAlignment(CENTER); // Căn giữa văn bản
-    }
-});
-    tablePhieuMuon.getSelectionModel().addListSelectionListener(e -> {
+        });
+        tablePhieuMuon.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            protected void setValue(Object value) {
+                setText(value != null ? value.toString() : "Chưa xác định");
+                setHorizontalAlignment(CENTER); // Căn giữa văn bản
+            }
+
+        });
+        tablePhieuMuon.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int selectedRow = tablePhieuMuon.getSelectedRow();
                 if (selectedRow >= 0) {
@@ -78,53 +90,55 @@ private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
                         String tensach = (String) tablePhieuMuon.getValueAt(selectedRow, 3);
                         LocalDateTime ngaymuon = (LocalDateTime) tablePhieuMuon.getValueAt(selectedRow, 4);
                         LocalDateTime ngaytra = (LocalDateTime) tablePhieuMuon.getValueAt(selectedRow, 5);
-                        
 
                         int madocgia = getMaDocGiaByTen(tendocgia);
                         int manv = getMaNhanVienByTen(tennv);
                         String masach = getMaSachByTen(tensach);
 
-                        txtMaSach.setText(masach != null ? masach : "");                      
+                        txtMaSach.setText(masach != null ? masach : "");
                         txtMaDocGia.setText(madocgia != -1 ? String.valueOf(madocgia) : "");
                         txtManhanvien.setText(manv != -1 ? String.valueOf(manv) : "");
                         tbltensach.setText("Tên sách: " + (tensach.equals("Không xác định") ? "" : tensach));
                         tbltendocgia.setText("Tên độc giả: " + (tendocgia.equals("Không xác định") ? "" : tendocgia));
                         tbltennv.setText("Tên nhân viên: " + (tennv.equals("Không xác định") ? "" : tennv));
 
-                if (ngaymuon != null) {
-                        date.setDateTimePermissive(ngaymuon); // Cập nhật ngày mượn vào date
-                    } else {
-                        date.clear();
+                        if (ngaymuon != null) {
+                            date.setDateTimePermissive(ngaymuon); // Cập nhật ngày mượn vào date
+                        } else {
+                            date.clear();
+                        }
+                        if (ngaytra != null) {
+                            date1.setDateTimePermissive(ngaytra); // Cập nhật ngày hẹn trả vào date1
+                        } else {
+                            date1.clear();
+                        }
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(this, "Lỗi khi lấy thông tin phiếu mượn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    } catch (ClassCastException ex) {
+                        JOptionPane.showMessageDialog(this, "Lỗi kiểu dữ liệu ngày mượn hoặc ngày trả: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
                     }
-                    if (ngaytra != null) {
-                        date1.setDateTimePermissive(ngaytra); // Cập nhật ngày hẹn trả vào date1
-                    } else {
-                        date1.clear();
-                    }
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(this, "Lỗi khi lấy thông tin phiếu mượn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-                } catch (ClassCastException ex) {
-                    JOptionPane.showMessageDialog(this, "Lỗi kiểu dữ liệu ngày mượn hoặc ngày trả: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
             }
-        }
-    });
-    
+        });
+
         txtTimKiem.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             @Override
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { searchPhieuMuon(); }
-            @Override
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { searchPhieuMuon(); }
-            @Override
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { searchPhieuMuon(); }
-        });
-}
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                searchPhieuMuon();
+            }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                searchPhieuMuon();
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                searchPhieuMuon();
+            }
+        });
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -135,7 +149,6 @@ private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
         btnXoa = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
         btnThem = new javax.swing.JButton();
-        btnLammoi = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         txtMaSach = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -156,6 +169,8 @@ private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
         jPanel3 = new javax.swing.JPanel();
         txtTimKiem = new javax.swing.JTextField();
         cbTimKiem = new javax.swing.JComboBox<>();
+        btnnhapdulieu = new javax.swing.JButton();
+        btnxuatdulieu = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1120, 666));
         setMinimumSize(new java.awt.Dimension(1120, 666));
@@ -203,38 +218,28 @@ private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
             }
         });
 
-        btnLammoi.setText("Làm mới bảng");
-        btnLammoi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLammoiActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnLammoi, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
+                .addContainerGap(168, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLammoi, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(173, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255)));
@@ -354,6 +359,25 @@ private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
         });
 
         cbTimKiem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã phiếu", "Tên sinh viên", "Tên nhân viên", "Tên sách" }));
+        cbTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbTimKiemActionPerformed(evt);
+            }
+        });
+
+        btnnhapdulieu.setText("Nhập dữ liệu");
+        btnnhapdulieu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnnhapdulieuActionPerformed(evt);
+            }
+        });
+
+        btnxuatdulieu.setText("Xuất dữ liệu");
+        btnxuatdulieu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnxuatdulieuActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -361,9 +385,13 @@ private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(cbTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnnhapdulieu))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnxuatdulieu)
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -373,7 +401,11 @@ private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(198, 198, 198))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnnhapdulieu, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnxuatdulieu, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -394,33 +426,32 @@ private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
-searchPhieuMuon();
+        searchPhieuMuon();
     }//GEN-LAST:event_txtTimKiemActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-addPhieuMuon();
+        addPhieuMuon();
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-updatePhieuMuon();        
+        updatePhieuMuon();
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-deletePhieuMuon();       
+        deletePhieuMuon();
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnKiemtra1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKiemtra1ActionPerformed
@@ -456,35 +487,113 @@ deletePhieuMuon();
     }//GEN-LAST:event_btnKiemtra2ActionPerformed
 
     private void btnKiemtra3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKiemtra3ActionPerformed
-try {
-        String manvText = txtManhanvien.getText().trim();
-        if (manvText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        try {
+            String manvText = txtManhanvien.getText().trim();
+            if (manvText.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-        int manv = Integer.parseInt(manvText);
-        String tennv = getTenNhanVien(manv);
-        if (tennv != null) {
-            tbltennv.setText("Tên nhân viên: " + tennv);
-        } else {
-            tbltennv.setText("Tên nhân viên: Không tìm thấy");
+            int manv = Integer.parseInt(manvText);
+            String tennv = getTenNhanVien(manv);
+            if (tennv != null) {
+                tbltennv.setText("Tên nhân viên: " + tennv);
+            } else {
+                tbltennv.setText("Tên nhân viên: Không tìm thấy");
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Mã nhân viên phải là số nguyên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (RuntimeException ex) {
+            String errorMessage = ex.getMessage() != null ? ex.getMessage() : "Không có thông tin lỗi cụ thể";
+            JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra mã nhân viên: " + errorMessage, "Lỗi", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        } catch (SQLException ex) {
+            Logger.getLogger(PanelPhieuMuon.class.getName()).log(Level.SEVERE, null, ex);
         }
-    } catch (NumberFormatException ex) {
-        JOptionPane.showMessageDialog(this, "Mã nhân viên phải là số nguyên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-    } catch (RuntimeException ex) {
-        String errorMessage = ex.getMessage() != null ? ex.getMessage() : "Không có thông tin lỗi cụ thể";
-        JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra mã nhân viên: " + errorMessage, "Lỗi", JOptionPane.ERROR_MESSAGE);
-        ex.printStackTrace();
-    } catch (SQLException ex) {
-        Logger.getLogger(PanelPhieuMuon.class.getName()).log(Level.SEVERE, null, ex);
-    }
     }//GEN-LAST:event_btnKiemtra3ActionPerformed
 
-    private void btnLammoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLammoiActionPerformed
-loadTableData();
-    }//GEN-LAST:event_btnLammoiActionPerformed
-    private void loadTableData() {
+    private void cbTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTimKiemActionPerformed
+
+    }//GEN-LAST:event_cbTimKiemActionPerformed
+
+    private void btnnhapdulieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnhapdulieuActionPerformed
+        importFromExcel();
+    }//GEN-LAST:event_btnnhapdulieuActionPerformed
+
+    private void btnxuatdulieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxuatdulieuActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn nơi lưu file Excel");
+        fileChooser.setSelectedFile(new File("danh_sach_phieu_muon.xlsx"));
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".xlsx");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Excel Files (*.xlsx)";
+            }
+        });
+
+        int result = fileChooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            // Đảm bảo file có đuôi .xlsx
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                filePath += ".xlsx";
+                selectedFile = new File(filePath);
+            }
+
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("DanhSachPhieuMuon");
+
+                // Tạo dòng tiêu đề
+                Row headerRow = sheet.createRow(0);
+                String[] headers = new String[]{"Mã Phiếu", "Tên độc giả", "Tên nhân viên", "Tên sách", "Ngày mượn", "Ngày hẹn trả", "Trạng thái"};
+                for (int i = 0; i < headers.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(headers[i]);
+                }
+
+                // Định dạng ngày giờ
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+                // Ghi dữ liệu từ bảng
+                DefaultTableModel model = (DefaultTableModel) tablePhieuMuon.getModel();
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    Row row = sheet.createRow(i + 1);
+                    row.createCell(0).setCellValue((int) model.getValueAt(i, 0)); // Mã phiếu
+                    row.createCell(1).setCellValue((String) model.getValueAt(i, 1)); // Tên độc giả
+                    row.createCell(2).setCellValue((String) model.getValueAt(i, 2)); // Tên nhân viên
+                    row.createCell(3).setCellValue((String) model.getValueAt(i, 3)); // Tên sách
+                    LocalDateTime ngayMuon = (LocalDateTime) model.getValueAt(i, 4); // Ngày mượn
+                    row.createCell(4).setCellValue(ngayMuon != null ? ngayMuon.format(formatter) : "");
+                    LocalDateTime ngayTraDuKien = (LocalDateTime) model.getValueAt(i, 5); // Ngày hẹn trả
+                    row.createCell(5).setCellValue(ngayTraDuKien != null ? ngayTraDuKien.format(formatter) : "");
+                    row.createCell(6).setCellValue((String) model.getValueAt(i, 6)); // Trạng thái
+                }
+
+                // Tự động điều chỉnh độ rộng cột
+                for (int i = 0; i < headers.length; i++) {
+                    sheet.autoSizeColumn(i);
+                }
+
+                // Ghi file
+                try (FileOutputStream fileOut = new FileOutputStream(selectedFile)) {
+                    workbook.write(fileOut);
+                }
+
+                JOptionPane.showMessageDialog(this, "Xuất dữ liệu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+    }//GEN-LAST:event_btnxuatdulieuActionPerformed
+    public void loadTableData() {
         try {
             List<PhieuMuon> phieuMuonList = phieuMuonDAO.getAllPhieuMuonWithDetails();
             DefaultTableModel model = (DefaultTableModel) tablePhieuMuon.getModel();
@@ -507,8 +616,7 @@ loadTableData();
             JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu phiếu mượn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    
+
     private void addPhieuMuon() {
         try {
             String maSachText = txtMaSach.getText().trim();
@@ -543,6 +651,13 @@ loadTableData();
                 return;
             }
 
+            // Kiểm tra số lượng sách còn không
+            Sach sach = sachDAO.getSachById(maSachText);
+            if (sach.getSoluong() <= 0) {
+                JOptionPane.showMessageDialog(this, "Sách này đã hết hàng!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             PhieuMuon pm = new PhieuMuon();
             pm.setMadocgia(madocgia);
             pm.setManv(manv);
@@ -551,7 +666,12 @@ loadTableData();
             pm.setNgayTraDuKien(ngayTraDuKien);
 
             if (phieuMuonDAO.addPhieuMuon(pm)) {
-                JOptionPane.showMessageDialog(this, "Thêm phiếu mượn thành công!");
+                // Giảm số lượng sách sau khi thêm phiếu thành công
+                if (sachDAO.giamSoLuongSach(maSachText)) {
+                    JOptionPane.showMessageDialog(this, "Thêm phiếu mượn thành công và đã cập nhật số lượng sách!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Thêm phiếu mượn thành công nhưng không thể cập nhật số lượng sách!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                }
                 loadTableData();
                 clearFields();
             } else {
@@ -563,7 +683,7 @@ loadTableData();
             JOptionPane.showMessageDialog(this, "Lỗi khi thêm phiếu mượn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private void updatePhieuMuon() {
         int row = tablePhieuMuon.getSelectedRow();
         if (row < 0) {
@@ -583,7 +703,6 @@ loadTableData();
                 return;
             }
 
-            int masach = Integer.parseInt(maSachText);
             int madocgia = Integer.parseInt(maDocGiaText);
             int manv = Integer.parseInt(maNhanVienText);
             int maphieu = (int) tablePhieuMuon.getValueAt(row, 0);
@@ -630,7 +749,8 @@ loadTableData();
             ex.printStackTrace();
         }
     }
-private void deletePhieuMuon() {
+
+    private void deletePhieuMuon() {
         int row = tablePhieuMuon.getSelectedRow();
         if (row < 0) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu mượn để xóa!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
@@ -672,7 +792,7 @@ private void deletePhieuMuon() {
                 // Kiểm tra tiêu chí tìm kiếm
                 if (searchCriteria.equals("Mã phiếu") && !searchText.isEmpty()) {
                     match = String.valueOf(pm.getMaphieu()).contains(searchText);
-                } else if (searchCriteria.equals("Tên độc giả") && !searchText.isEmpty()) {
+                } else if (searchCriteria.equals("Tên sinh viên") && !searchText.isEmpty()) {
                     match = tendocgia.toLowerCase().contains(searchText.toLowerCase());
                 } else if (searchCriteria.equals("Tên nhân viên") && !searchText.isEmpty()) {
                     match = tennv.toLowerCase().contains(searchText.toLowerCase());
@@ -698,10 +818,116 @@ private void deletePhieuMuon() {
             JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm phiếu mượn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-public void refreshTableData() {
-    loadTableData();
-}
-private String getTenDocGia(int madocgia) throws SQLException {
+
+    private void importFromExcel() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn file Excel để nhập dữ liệu phiếu mượn");
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".xlsx");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Excel Files (*.xlsx)";
+            }
+        });
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try (FileInputStream fis = new FileInputStream(selectedFile); Workbook workbook = new XSSFWorkbook(fis)) {
+
+                Sheet sheet = workbook.getSheet("DanhSachPhieuMuon");
+                if (sheet == null) {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy sheet 'DanhSachPhieuMuon' trong file Excel!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                int successCount = 0;
+                int duplicateCount = 0;
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+                for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                    Row row = sheet.getRow(i);
+                    if (row == null) {
+                        continue;
+                    }
+
+                    try {
+                        int madocgia = (int) row.getCell(0).getNumericCellValue();
+                        int manv = (int) row.getCell(1).getNumericCellValue();
+                        String masach = row.getCell(2).getStringCellValue();
+                        String ngaymuonStr = row.getCell(3).getStringCellValue();
+                        String ngaytradukienStr = row.getCell(4).getStringCellValue();
+                        String trangthai = row.getCell(5).getStringCellValue();
+
+                        LocalDateTime ngaymuon = LocalDateTime.parse(ngaymuonStr, formatter);
+                        LocalDateTime ngaytradukien = LocalDateTime.parse(ngaytradukienStr, formatter);
+
+                        // Kiểm tra dữ liệu hợp lệ
+                        if (madocgia <= 0 || manv <= 0 || masach.isEmpty() || ngaymuon == null || ngaytradukien == null) {
+                            JOptionPane.showMessageDialog(this, "Dữ liệu không hợp lệ tại dòng " + (i + 1), "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                            continue;
+                        }
+
+                        // Kiểm tra mã tồn tại
+                        if (docGiaDAO.getDocGiaById(madocgia) == null) {
+                            JOptionPane.showMessageDialog(this, "Mã độc giả " + madocgia + " tại dòng " + (i + 1) + " không tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                            continue;
+                        }
+
+                        if (nhanVienDAO.getNhanVienById(manv) == null) {
+                            JOptionPane.showMessageDialog(this, "Mã nhân viên " + manv + " tại dòng " + (i + 1) + " không tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                            continue;
+                        }
+
+                        if (sachDAO.getSachById(masach) == null) {
+                            JOptionPane.showMessageDialog(this, "Mã sách " + masach + " tại dòng " + (i + 1) + " không tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                            continue;
+                        }
+
+                        // Kiểm tra trùng
+                        if (phieuMuonDAO.isPhieuMuonExists(madocgia, masach, ngaymuon)) {
+                            duplicateCount++;
+                            JOptionPane.showMessageDialog(this, "Phiếu mượn tại dòng " + (i + 1) + " đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                            continue;
+                        }
+
+                        // Tạo đối tượng và thêm vào DB
+                        PhieuMuon pm = new PhieuMuon();
+                        pm.setMadocgia(madocgia);
+                        pm.setManv(manv);
+                        pm.setMasach(masach);
+                        pm.setNgaymuon(ngaymuon);
+                        pm.setNgaytradukien(ngaytradukien);
+                        pm.setTrangthai(trangthai);
+
+                        if (phieuMuonDAO.addPhieuMuon(pm)) {
+                            successCount++;
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Không thể thêm phiếu mượn tại dòng " + (i + 1), "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Lỗi tại dòng " + (i + 1) + ": " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+                loadTableData(); // Cập nhật lại bảng
+                String message = "Đã nhập thành công " + successCount + " phiếu mượn!";
+                if (duplicateCount > 0) {
+                    message += "\n" + duplicateCount + " phiếu mượn bị bỏ qua do trùng dữ liệu.";
+                }
+                JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi đọc file Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private String getTenDocGia(int madocgia) throws SQLException {
         DocGia docGia = docGiaDAO.getDocGiaById(madocgia);
         return docGia != null ? docGia.getTendocgia() : null;
     }
@@ -715,18 +941,25 @@ private String getTenDocGia(int madocgia) throws SQLException {
         Sach sach = sachDAO.getSachById(masach);
         return sach != null ? sach.getTensach() : null;
     }
+
     private int getMaDocGiaByTen(String tenDocGia) throws SQLException {
-        if (tenDocGia.equals("Không xác định")) return -1;
+        if (tenDocGia.equals("Không xác định")) {
+            return -1;
+        }
         return docGiaDAO.getMaDocGiaByTen(tenDocGia);
     }
 
     private int getMaNhanVienByTen(String tenNhanVien) throws SQLException {
-        if (tenNhanVien.equals("Không xác định")) return -1;
+        if (tenNhanVien.equals("Không xác định")) {
+            return -1;
+        }
         return nhanVienDAO.getMaNhanVienByTen(tenNhanVien);
     }
 
     private String getMaSachByTen(String tenSach) throws SQLException {
-        if (tenSach.equals("Không xác định")) return null;
+        if (tenSach.equals("Không xác định")) {
+            return null;
+        }
         return sachDAO.getMaSachByTen(tenSach);
     }
 
@@ -739,17 +972,18 @@ private String getTenDocGia(int madocgia) throws SQLException {
         tbltensach.setText("Tên sách: ");
         tbltendocgia.setText("Tên độc giả: ");
         tbltennv.setText("Tên nhân viên: ");
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnKiemtra1;
     private javax.swing.JButton btnKiemtra2;
     private javax.swing.JButton btnKiemtra3;
-    private javax.swing.JButton btnLammoi;
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
+    private javax.swing.JButton btnnhapdulieu;
+    private javax.swing.JButton btnxuatdulieu;
     private javax.swing.JComboBox<String> cbTimKiem;
     private com.github.lgooddatepicker.components.DateTimePicker date;
     private com.github.lgooddatepicker.components.DateTimePicker date1;
@@ -772,17 +1006,4 @@ private String getTenDocGia(int madocgia) throws SQLException {
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 
-    private static class dateTimePicker {
-
-        private static Object getDate() {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        }
-
-        private static void setDate(Object object) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        }
-
-        public dateTimePicker() {
-        }
-    }
 }

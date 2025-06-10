@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package View.ChucNang;
+
 import Model.ConnectToSQLServer;
 import Model.DAO.*;
 import Model.DocGia;
@@ -11,26 +12,37 @@ import Model.PhieuMuon;
 import Model.PhieuTra;
 import Model.Sach;
 import UI.BasePanel;
-import View.Menu;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 /**
  *
  * @author TUF
  */
 public class PanelPhieuTra extends BasePanel {
+
     private PhieuTraDAO phieuTraDAO = new PhieuTraDAO();
     private DocGiaDAO docGiaDAO = new DocGiaDAO();
     private NhanVienDAO nhanVienDAO = new NhanVienDAO();
     private PhieuMuonDAO phieuMuonDAO = new PhieuMuonDAO();
     private SachDAO sachDAO = new SachDAO();
     private PhieuMuon selectedPhieuMuon;
+
     /**
      * Creates new form PhieuTra
      */
@@ -63,6 +75,7 @@ public class PanelPhieuTra extends BasePanel {
         txtMaphieu = new javax.swing.JTextField();
         tblMaphieu1 = new javax.swing.JLabel();
         tblMaphieu2 = new javax.swing.JLabel();
+        btnxuatdulieu = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1120, 666));
         setMinimumSize(new java.awt.Dimension(1120, 666));
@@ -109,28 +122,42 @@ public class PanelPhieuTra extends BasePanel {
 
         tblMaphieu2.setText("Mã phiếu :");
 
+        btnxuatdulieu.setText("Xuất dữ liệu");
+        btnxuatdulieu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnxuatdulieuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(72, 72, 72)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btntrasach))
-            .addComponent(tblMaphieu1)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tblMaphieu2)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(txtMaphieu, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnKiemtra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(tblMaphieu1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(72, 72, 72)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btntrasach)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnxuatdulieu))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tblMaphieu2)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(txtMaphieu, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(btnKiemtra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(109, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,10 +175,15 @@ public class PanelPhieuTra extends BasePanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btntrasach, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
-                        .addGap(27, 27, 27))
-                    .addComponent(jLabel4)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 7, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnxuatdulieu, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btntrasach, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE))
+                        .addGap(27, 27, 27))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -201,7 +233,7 @@ public class PanelPhieuTra extends BasePanel {
     }//GEN-LAST:event_btnKiemtraActionPerformed
 
     private void btntrasachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntrasachActionPerformed
-    if (selectedPhieuMuon == null) {
+        if (selectedPhieuMuon == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng kiểm tra mã phiếu mượn trước!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -209,6 +241,12 @@ public class PanelPhieuTra extends BasePanel {
         LocalDateTime ngaytrathucte = date.getDateTimePermissive();
         if (ngaytrathucte == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày trả!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        LocalDateTime ngaymuon = selectedPhieuMuon.getNgaymuon();
+        if (ngaytrathucte.isBefore(ngaymuon)) {
+            JOptionPane.showMessageDialog(this, "Ngày trả thực tế không được nhỏ hơn ngày mượn!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -230,39 +268,40 @@ public class PanelPhieuTra extends BasePanel {
 
                 // Bước 2: Thêm bản ghi vào phieutra
                 PhieuTra pt = new PhieuTra(
-                    0, // maphieutra sẽ tự tăng
-                    selectedPhieuMuon.getMaphieu(),
-                    selectedPhieuMuon.getMadocgia(),
-                    selectedPhieuMuon.getManv(),
-                    selectedPhieuMuon.getMasach(),
-                    selectedPhieuMuon.getNgaymuon(),
-                    selectedPhieuMuon.getNgayTraDuKien(),
-                    ngaytrathucte,
-                    phiphat,
-                    tblghichu.getText().trim()
+                        0,
+                        selectedPhieuMuon.getMaphieu(),
+                        selectedPhieuMuon.getMadocgia(),
+                        selectedPhieuMuon.getManv(),
+                        selectedPhieuMuon.getMasach(),
+                        selectedPhieuMuon.getNgaymuon(),
+                        selectedPhieuMuon.getNgayTraDuKien(),
+                        ngaytrathucte,
+                        phiphat,
+                        tblghichu.getText().trim()
                 );
 
-                if (phieuTraDAO.addPhieuTra(pt, conn)) {
-                    conn.commit(); // Xác nhận giao dịch
-                    JOptionPane.showMessageDialog(this, "Trả sách thành công! Phí phạt: " + phiphat + " VNĐ");
-                    loadTableData(); // Làm mới bảng trong PanelPhieuTra
-                    clearFields();
-
-                    // Làm mới bảng trong PanelPhieuMuon
-                    Menu menu = (Menu) SwingUtilities.getWindowAncestor(this);
-                    if (menu != null) {
-                        PanelPhieuMuon panelPhieuMuon = menu.getPanelPhieuMuon();
-                        if (panelPhieuMuon != null) {
-                            panelPhieuMuon.refreshTableData();
-                        }
-                    }
-                } else {
-                    conn.rollback(); // Hoàn tác nếu thất bại
+                if (!phieuTraDAO.addPhieuTra(pt, conn)) {
+                    conn.rollback();
                     JOptionPane.showMessageDialog(this, "Trả sách thất bại khi thêm vào phieutra!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
+
+                // ✅ Bước 3: Tăng số lượng sách lên 1
+                if (!sachDAO.tangSoLuongSach(selectedPhieuMuon.getMasach())) {
+                    throw new SQLException("Không thể cập nhật số lượng sách sau khi trả.");
+                }
+
+                // ✅ Nếu tất cả đều thành công
+                conn.commit();
+                JOptionPane.showMessageDialog(this, "Trả sách thành công! Phí phạt: " + phiphat + " VNĐ");
+                loadTableData();
+                clearFields();
+
             } catch (SQLException ex) {
                 try {
-                    if (conn != null) conn.rollback(); // Hoàn tác nếu có lỗi
+                    if (conn != null) {
+                        conn.rollback();
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -270,7 +309,7 @@ public class PanelPhieuTra extends BasePanel {
             } finally {
                 try {
                     if (conn != null) {
-                        conn.setAutoCommit(true); // Khôi phục chế độ auto-commit
+                        conn.setAutoCommit(true);
                         conn.close();
                     }
                 } catch (SQLException e) {
@@ -284,10 +323,88 @@ public class PanelPhieuTra extends BasePanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMaphieuActionPerformed
 
+    private void btnxuatdulieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxuatdulieuActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn nơi lưu file Excel");
+        fileChooser.setSelectedFile(new File("danh_sach_phieu_tra.xlsx"));
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".xlsx");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Excel Files (*.xlsx)";
+            }
+        });
+
+        int result = fileChooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            // Đảm bảo file có đuôi .xlsx
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                filePath += ".xlsx";
+                selectedFile = new File(filePath);
+            }
+
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("DanhSachPhieuTra");
+
+                // Tạo dòng tiêu đề
+                Row headerRow = sheet.createRow(0);
+                String[] headers = new String[]{"Mã phiếu trả", " Mã phiếu", "Tên độc giả", "Tên nhân viên", "Tên sách", "Ngày mượn", "Ngày hẹn trả", " Ngày trả", "Phí phạt", "Ghi chú"};
+                for (int i = 0; i < headers.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(headers[i]);
+                }
+
+                // Định dạng ngày giờ
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+                // Ghi dữ liệu từ bảng
+                DefaultTableModel model = (DefaultTableModel) tablePhieuTra.getModel();
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    Row row = sheet.createRow(i + 1);
+                    row.createCell(0).setCellValue((int) model.getValueAt(i, 0)); // Mã phiếu trả
+                    row.createCell(1).setCellValue((int) model.getValueAt(i, 1)); // Mã phiếu
+                    row.createCell(2).setCellValue((String) model.getValueAt(i, 2)); // Tên độc giả
+                    row.createCell(3).setCellValue((String) model.getValueAt(i, 3)); // Tên nhân viên
+                    row.createCell(4).setCellValue((String) model.getValueAt(i, 4)); // Tên sách
+                    LocalDateTime ngayMuon = (LocalDateTime) model.getValueAt(i, 5); // Ngày mượn
+                    row.createCell(5).setCellValue(ngayMuon != null ? ngayMuon.format(formatter) : "");
+                    LocalDateTime ngayTraDuKien = (LocalDateTime) model.getValueAt(i, 6); // Ngày hẹn trả
+                    row.createCell(6).setCellValue(ngayTraDuKien != null ? ngayTraDuKien.format(formatter) : "");
+                    LocalDateTime ngayTraThucTe = (LocalDateTime) model.getValueAt(i, 7); // Ngày trả
+                    row.createCell(7).setCellValue(ngayTraThucTe != null ? ngayTraThucTe.format(formatter) : "");
+                    row.createCell(8).setCellValue((double) model.getValueAt(i, 8)); // phí phạt
+                    row.createCell(9).setCellValue((String) model.getValueAt(i, 9)); // Ghi chú
+                }
+
+                // Tự động điều chỉnh độ rộng cột
+                for (int i = 0; i < headers.length; i++) {
+                    sheet.autoSizeColumn(i);
+                }
+
+                // Ghi file
+                try (FileOutputStream fileOut = new FileOutputStream(selectedFile)) {
+                    workbook.write(fileOut);
+                }
+
+                JOptionPane.showMessageDialog(this, "Xuất dữ liệu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnxuatdulieuActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnKiemtra;
     private javax.swing.JButton btntrasach;
+    private javax.swing.JButton btnxuatdulieu;
     private com.github.lgooddatepicker.components.DateTimePicker date;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -327,6 +444,7 @@ public class PanelPhieuTra extends BasePanel {
             JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu phiếu trả: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     private void clearFields() {
         txtMaphieu.setText("");
         tblMaphieu2.setText("");

@@ -90,7 +90,30 @@ public class PhieuMuonDAO {
             return stmt.executeUpdate() > 0;
         }
     }
-
+    public int getLastInsertedPhieuMuonId() throws SQLException {
+    String query = "SELECT MAX(maphieu) FROM phieumuon";
+    try (Connection conn = ConnectToSQLServer.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query);
+         ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+    }
+    return -1; // Trả về -1 nếu không tìm thấy
 }
-
-    
+public boolean isPhieuMuonExists(int madocgia, String masach, LocalDateTime ngaymuon) throws SQLException {
+    String query = "SELECT COUNT(*) FROM phieumuon WHERE madocgia = ? AND masach = ? AND ngaymuon = ?";
+    try (Connection conn = ConnectToSQLServer.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+        stmt.setInt(1, madocgia);
+        stmt.setString(2, masach);
+        stmt.setObject(3, ngaymuon);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+    }
+    return false;
+}
+}

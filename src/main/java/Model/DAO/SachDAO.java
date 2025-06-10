@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Model.DAO;
 
 import Model.ConnectToSQLServer;
@@ -125,5 +122,21 @@ public class SachDAO {
             throw e;
         }
         return null; // Thay -1 bằng null vì masach giờ là String
+    }
+    
+    public boolean giamSoLuongSach(String masach) throws SQLException {
+    String sql = "UPDATE sach SET soluong = soluong - 1 WHERE masach = ? AND soluong > 0";
+        try (Connection conn = ConnectToSQLServer.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, masach);
+            return ps.executeUpdate() > 0;
+        }
+    }
+    
+    public boolean tangSoLuongSach(String masach) throws SQLException {
+    String sql = "UPDATE sach SET soluong = soluong + 1 WHERE masach = ?";
+        try (Connection conn = ConnectToSQLServer.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, masach);
+            return ps.executeUpdate() > 0;
+        }
     }
 }

@@ -5,30 +5,33 @@ import java.awt.CardLayout;
 import UI.ButtonColorHandler;
 import javax.swing.SwingUtilities;
 
-/**
- *
- * @author PC
- */
+
 public class Menu extends javax.swing.JFrame {
 
     private ButtonColorHandler buttonColorHandler;
     private PanelPhieuMuon panelPhieuMuon;
     private PanelPhieuTra panelPhieuTra;
+    private PanelSach panelSach;
+    private PanelTacGia panelTacGia;
+    private PanelNhaXuatBan panelNhaXuatBan;
+    private PanelTheLoai panelTheLoai;
+    private PanelSuKien panelSuKien;
+    private PanelMuonPhong panelMuonPhong;
 
     public Menu() {
         initComponents();
-        PanelSach panelKhoSach = new PanelSach();
-        PanelTacGia panelTacGia = new PanelTacGia();// tạo instance từ class KhoSach
-        PanelNhaXuatBan panelNhaXuatBan = new PanelNhaXuatBan();
-        PanelTheLoai panelTheLoai = new PanelTheLoai();
-        PanelSuKien panelSuKien = new PanelSuKien();       
-        PanelMuonPhong panelMuonPhong = new PanelMuonPhong();
-        PanelPhieuMuon panelPhieuMuon = new PanelPhieuMuon();
-        PanelPhieuTra panelPhieuTra = new PanelPhieuTra();
+        panelSach = new PanelSach();
+        panelTacGia = new PanelTacGia();
+        panelNhaXuatBan = new PanelNhaXuatBan();
+        panelTheLoai = new PanelTheLoai();
+        panelSuKien = new PanelSuKien();       
+        panelMuonPhong = new PanelMuonPhong();
+        panelPhieuMuon = new PanelPhieuMuon();
+        panelPhieuTra = new PanelPhieuTra();
         
         panelContent.add(panelNhaXuatBan, "nhaXuatBan");
-        panelContent.add(panelKhoSach, "sach");
-        panelContent.add(panelTacGia, "tacGia");// thêm vào CardLayout với tên
+        panelContent.add(panelSach, "sach");
+        panelContent.add(panelTacGia, "tacGia");
         panelContent.add(panelTheLoai, "theLoai");
         panelContent.add(panelSuKien, "suKien");
         panelContent.add(panelMuonPhong, "muonPhong");
@@ -36,16 +39,13 @@ public class Menu extends javax.swing.JFrame {
         panelContent.add(panelPhieuTra, "phieuTra");
 
         
-        panelContent.setVisible(false); // <== Thêm dòng này để ẩn ban đầu
+        panelContent.setVisible(false); 
         
         buttonColorHandler = new ButtonColorHandler(
             btnSach, btnPhieuMuon, btnHocSinh, btnNhanVien, btnTacGia,
             btnNhaXuatBan, btnTaiKhoan, btnSuKien, btnMuonPhong, btnTheLoai,    
             btnThongKe, btnPhieuTra
         );
-    }
-        public PanelPhieuMuon getPanelPhieuMuon() {
-        return panelPhieuMuon;
     }
 
     /**
@@ -420,6 +420,7 @@ public class Menu extends javax.swing.JFrame {
         panelContent.setVisible(true);
         cl.show(panelContent, "phieuMuon");
         buttonColorHandler.changeButtonColor(btnPhieuMuon);
+        panelPhieuMuon.loadTableData();
     }//GEN-LAST:event_btnPhieuMuonActionPerformed
 
     private void btnSachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSachActionPerformed
@@ -427,6 +428,7 @@ public class Menu extends javax.swing.JFrame {
         panelContent.setVisible(true);
         cl.show(panelContent, "sach");
         buttonColorHandler.changeButtonColor(btnSach);
+        panelSach.loadTableData();
     }//GEN-LAST:event_btnSachActionPerformed
 
     private void btnNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhanVienActionPerformed

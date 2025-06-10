@@ -821,7 +821,7 @@ public class PanelSach extends BasePanel {
         }
     }
     
-    private void loadTableData() {
+    public void loadTableData() {
         try {
             List<Object[]> sachList = sachDAO.getAllSachWithDetails();
             DefaultTableModel model = (DefaultTableModel) tableSach.getModel();
