@@ -16,13 +16,16 @@ import java.sql.SQLException;
 public class Login extends javax.swing.JFrame {
     
     private final TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
-
+    private MenuQuanLy menuQuanLy;
+    private MenuNhanVien menuNhanVien;
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
         setLocationRelativeTo(null);
+        menuQuanLy = new MenuQuanLy();
+        menuNhanVien = new MenuNhanVien();
     }
 
     /**
@@ -176,9 +179,9 @@ public class Login extends javax.swing.JFrame {
             if (tk != null) {
                 this.dispose(); // Đóng form đăng nhập
                 if ("Quản lý".equalsIgnoreCase(tk.getRole())) {
-                    new MenuQuanLy().setVisible(true);
+                    menuQuanLy.setVisible(true);
                 } else if ("Nhân viên".equalsIgnoreCase(tk.getRole())) {
-                    new MenuNhanVien().setVisible(true);
+                    menuNhanVien.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(this, "Vai trò không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     new Login().setVisible(true);

@@ -20,6 +20,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
     private PanelNhanVien panelNhanVien;
     private PanelTaiKhoan panelTaiKhoan;
     private PanelDocGia panelDocGia;
+    private PanelThongKe panelThongKe;
 
     public MenuQuanLy() {
         initComponents();
@@ -34,6 +35,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
         panelDocGia = new PanelDocGia();
         panelTaiKhoan = new PanelTaiKhoan();
         panelNhanVien = new PanelNhanVien();
+        panelThongKe = new PanelThongKe();
         
         panelContent.add(panelNhaXuatBan, "nhaXuatBan");
         panelContent.add(panelSach, "sach");
@@ -46,6 +48,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
         panelContent.add(panelDocGia, "docGia");
         panelContent.add(panelNhanVien, "nhanVien");
         panelContent.add(panelTaiKhoan, "taiKhoan");
+        panelContent.add(panelThongKe, "thongKe");
 
         
         panelContent.setVisible(false); 
@@ -420,7 +423,10 @@ public class MenuQuanLy extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTaiKhoanActionPerformed
 
     private void btnThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThongKeActionPerformed
-        // TODO add your handling code here:
+        CardLayout cl = (CardLayout) (panelContent.getLayout());
+        panelContent.setVisible(true);
+        cl.show(panelContent, "thongKe");
+        buttonColorHandler.changeButtonColor(btnThongKe);
     }//GEN-LAST:event_btnThongKeActionPerformed
 
     private void btnDocGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDocGiaActionPerformed
