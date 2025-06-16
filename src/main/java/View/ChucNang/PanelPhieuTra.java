@@ -460,7 +460,7 @@ public class PanelPhieuTra extends BasePanel {
 
     private String getTenNhanVien(int manv) throws SQLException {
         NhanVien nv = nhanVienDAO.getNhanVienById(manv);
-        return nv != null ? nv.getTennv() : null;
+        return nv != null ? nv.getTennhanvien(): null;
     }
 
     private String getTenSach(String masach) throws SQLException {

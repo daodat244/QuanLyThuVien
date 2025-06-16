@@ -1,7 +1,3 @@
-/*
- * Click nbfs://.netbeans.org/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click https://netbeans.org/projects/templates to edit this template
- */
 package Model.DAO;
 
 import Model.ConnectToSQLServer;
@@ -10,14 +6,98 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- *
- * @author TUF
- */
 public class NhanVienDAO {
+    public List<NhanVien> getAllNhanVien() throws SQLException {
+        List<NhanVien> nvList = new ArrayList<>();
+        String query = "SELECT * FROM nhanvien";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                NhanVien nv = new NhanVien(
+                    rs.getInt("manv"),
+                    rs.getString("tennv"),
+                    rs.getString("sdt"),
+                    rs.getDate("ngaysinh"),
+                    rs.getString("quequan"),
+                    rs.getString("gioitinh")
+                );
+                nvList.add(nv);
+            }
+        }
+        return nvList;
+    }
 
-    public NhanVien getNhanVienById(int manv) throws SQLException {
+    // Phương thức thêm mới nhân viên
+    public boolean addNV(NhanVien nv) throws SQLException {
+        String query = "INSERT INTO nhanvien (tennv, sdt, ngaysinh, quequan, gioitinh) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, nv.getTennhanvien());
+            stmt.setString(2, nv.getSdt());
+            stmt.setDate(3, nv.getNgaysinh() != null ? new java.sql.Date(nv.getNgaysinh().getTime()) : null);
+            stmt.setString(4, nv.getQuequan());
+            stmt.setString(5, nv.getGioitinh());
+            
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    // Phương thức cập nhật thông tin nhân viên
+    public boolean updateNV(NhanVien nv) throws SQLException {
+    String query = "UPDATE nhanvien SET tennv = ?, sdt = ?, ngaysinh = ?, quequan = ?, gioitinh = ? WHERE manv = ?";
+    try (Connection conn = ConnectToSQLServer.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+        stmt.setString(1, nv.getTennhanvien());
+        stmt.setString(2, nv.getSdt());
+        stmt.setDate(3, nv.getNgaysinh() != null ? new java.sql.Date(nv.getNgaysinh().getTime()) : null);
+        stmt.setString(4, nv.getQuequan());
+        stmt.setString(5, nv.getGioitinh());
+        stmt.setInt(6, nv.getManhanvien());
+        return stmt.executeUpdate() > 0;
+    }
+}
+    // Phương thức xóa nhân viên
+    public boolean deleteNV(int manhanvien) throws SQLException {
+        String query = "DELETE FROM nhanvien WHERE manv = ?";
+        try (Connection conn = ConnectToSQLServer.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, manhanvien);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+    
+    public boolean isNhanVienExists(int manhanvien) throws SQLException {
+    String sql = "SELECT COUNT(*) FROM nhanvien WHERE manhanvien = ?";
+    try (Connection conn = ConnectToSQLServer.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, manhanvien);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+    }
+    return false;
+}
+    
+    public boolean isDuplicatePhone(String sdt, int manhanvien) throws SQLException {
+    String query = "SELECT COUNT(*) FROM nhanvien WHERE sdt = ? AND manv != ?";
+    try (Connection conn = ConnectToSQLServer.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+        stmt.setString(1, sdt);
+        stmt.setInt(2, manhanvien);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+        return false;
+    }
+}
+  
+        public NhanVien getNhanVienById(int manv) throws SQLException {
         String query = "SELECT * FROM nhanvien WHERE manv = ?";
         try (Connection conn = ConnectToSQLServer.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -26,10 +106,10 @@ public class NhanVienDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     NhanVien nhanVien = new NhanVien();
-                    nhanVien.setManv(rs.getInt("manv"));
-                    nhanVien.setTennv(rs.getString("tennv"));
-                    nhanVien.setSdt((int) rs.getLong("sdt"));
-                    nhanVien.setNgaysinh(rs.getDate("ngaysinh").toLocalDate().atStartOfDay());
+                    nhanVien.setManhanvien(rs.getInt("manv"));
+                    nhanVien.setTennhanvien(rs.getString("tennv"));
+                    nhanVien.setSdt(rs.getString("sdt"));
+                    nhanVien.setNgaysinh(rs.getDate("ngaysinh"));
                     nhanVien.setQuequan(rs.getString("quequan"));
                     System.out.println("Found staff: manv = " + rs.getInt("manv") + ", tennv = " + rs.getString("tennv"));
                     return nhanVien;

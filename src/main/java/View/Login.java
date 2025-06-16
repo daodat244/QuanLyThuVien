@@ -4,17 +4,25 @@
  */
 package View;
 
+import Model.DAO.TaiKhoanDAO;
+import Model.TaiKhoan;
+import javax.swing.*;
+import java.sql.SQLException;
+
 /**
  *
  * @author PC
  */
 public class Login extends javax.swing.JFrame {
+    
+    private final TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
 
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -149,11 +157,42 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        // TODO add your handling code here:
+       String username = txtUserName.getText().trim();
+        String password = new String(jPasswordField1.getPassword()).trim();
+
+        // Kiểm tra đầu vào
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (!username.matches("^[A-Za-z0-9_.]+$")) {
+            JOptionPane.showMessageDialog(this, "Tên đăng nhập chỉ được chứa chữ cái, số, dấu chấm hoặc dấu gạch dưới!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            TaiKhoan tk = taiKhoanDAO.authenticate(username, password);
+            if (tk != null) {
+                this.dispose(); // Đóng form đăng nhập
+                if ("Quản lý".equalsIgnoreCase(tk.getRole())) {
+                    new MenuQuanLy().setVisible(true);
+                } else if ("Nhân viên".equalsIgnoreCase(tk.getRole())) {
+                    new MenuNhanVien().setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Vai trò không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    new Login().setVisible(true);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi đăng nhập: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutActionPerformed
-        // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_btnOutActionPerformed
 
     /**
@@ -181,6 +220,7 @@ public class Login extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
